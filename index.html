@@ -66,6 +66,14 @@
   .day:disabled { cursor:not-allowed; opacity:.3; }
   .day.range { background:rgba(255,162,76,.35); }
   .day.sel { background:var(--accent); color:#1a1208; font-weight:800; }
+  .day.busy { background:rgba(255,90,90,.2); color:rgba(255,255,255,.5); text-decoration:line-through; }
+  .day.busy:disabled { opacity:1; cursor:not-allowed; }
+  .day.busy.outok { cursor:pointer; text-decoration:none; background:linear-gradient(135deg,rgba(255,255,255,.1) 50%,rgba(255,90,90,.35) 50%); color:#fff; }
+  .callegend { display:flex; gap:14px; flex-wrap:wrap; margin-top:10px; font-size:12px; opacity:.85; }
+  .callegend i { display:inline-block; width:12px; height:12px; border-radius:4px; vertical-align:-2px; margin-right:5px; background:rgba(255,255,255,.18); }
+  .callegend i.b { background:rgba(255,90,90,.45); } .callegend i.s { background:var(--accent); }
+  .hp { position:absolute; left:-9999px; width:1px; height:1px; opacity:0; }
+  .bookok { text-align:center; padding:18px 6px; } .bookok h3 { font-size:22px; margin-bottom:8px; color:var(--accent); } .bookok p { opacity:.9; line-height:1.5; }
   .sum { background:rgba(255,162,76,.16); border:1px solid rgba(255,162,76,.4); border-radius:12px; padding:12px 14px; font-size:14px; }
   .sum b { font-size:20px; color:var(--accent); }
   .msgr { display:flex; gap:10px; }
@@ -97,6 +105,10 @@
   .walkctl button { width:42px; height:42px; border-radius:50%; border:0; background:rgba(255,255,255,.16); color:#fff; font-size:22px; cursor:pointer; touch-action:manipulation; }
   .walkctl button:hover { background:var(--accent); color:#1a1208; }
   .walkbtns { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
+  #walkExit { grid-column:1 / -1; }
+  .ghost .s, .ghost .l { pointer-events:none; } .ghost .s { display:none; }
+  #setnja { display:block; min-height:0; padding:0; height:170vh; height:170svh; }
+  #setnja .stick { position:sticky; top:0; height:100vh; height:100svh; display:flex; align-items:center; justify-content:flex-end; padding:90px 6vw 60px; }
   .walkbtns .ghost { margin-top:0; }
   #walkNote { min-height:3em; }
   .planinline { margin-top:14px; } .planinline svg { width:100%; height:auto; max-height:40vh; display:block; margin:0 auto; }
@@ -195,6 +207,18 @@
     .walkbtns .ghost { font-size:12.5px; padding:9px 4px; }
     #setnja .note { margin-top:6px; font-size:11.5px; text-align:center; opacity:.85; }
   }
+  @media (max-width:760px) {
+    #setnja .stick { padding:84px 10px 10px; align-items:flex-end; justify-content:center; }
+    #setnja .walkctl { display:none; }
+    #setnja #walkNote { display:none; min-height:0; margin-top:6px; } #setnja #walkNote.nophoto { display:block; }
+    #setnja .walkbtns { grid-template-columns:repeat(3, 1fr); gap:6px; margin-top:8px; }
+    #setnja #walkExit { grid-column:auto; }
+    .ghost .l { display:none; } .ghost .s { display:inline; }
+    #setnja .walkbtns .ghost { padding:10px 4px; font-size:13px; }
+    #planView .note { display:none; }
+    .planinline svg { max-height:30vh; }
+    #walkStart { margin-top:10px; padding:12px; }
+  }
 </style>
 </head>
 <body>
@@ -262,7 +286,8 @@
   </div>
 </section>
 
-<section id="setnja" class="right" data-key="3">
+<section id="setnja" class="right" data-key="3" data-hold="1">
+  <div class="stick" id="walkStick">
   <div class="panel" style="max-width:480px">
     <div id="planView">
       <div class="eyebrow">Stan</div>
@@ -278,10 +303,10 @@
       <p>Izaberite prostoriju i kamera vas vodi kroz stan, kao da hodate kroz vrata.</p>
       <div class="walknav" id="walkNav"></div>
       <div class="walkctl"><button type="button" id="walkPrev" aria-label="Prethodna">‹</button><span id="walkName"></span><button type="button" id="walkNext" aria-label="Sljedeća">›</button></div>
-      <div class="walkbtns"><button type="button" class="ghost" id="cmpBtn">↔ 3D / foto</button><button type="button" class="ghost" id="planBtn2">▦ Mapa stana</button></div>
-      <button type="button" class="ghost" id="walkExit">✕ Izađi iz šetnje</button>
+      <div class="walkbtns"><button type="button" class="ghost" id="cmpBtn"><span class="l">↔ 3D / foto</span><span class="s">↔ Foto</span></button><button type="button" class="ghost" id="planBtn2"><span class="l">▦ Mapa stana</span><span class="s">▦ Mapa</span></button><button type="button" class="ghost" id="walkExit"><span class="l">✕ Izađi iz šetnje</span><span class="s">✕ Izađi</span></button></div>
       <p class="note" id="walkNote"><span class="mouse">Prevucite mišem da pogledate oko sebe · strelice ← → za prelazak.</span><span class="touch">Povucite prstom lijevo/desno da pogledate oko sebe.</span></p>
     </div>
+  </div>
   </div>
 </section>
 
@@ -316,13 +341,16 @@
       <div>
         <div class="calhead"><button type="button" id="calPrev" aria-label="Prethodni mjesec">‹</button><span id="calTitle"></span><button type="button" id="calNext" aria-label="Sljedeći mjesec">›</button></div>
         <div class="calgrid" id="calGrid"></div>
+        <div class="callegend"><span><i></i>Slobodno</span><span><i class="b"></i>Zauzeto</span><span><i class="s"></i>Odabrano</span></div>
       </div>
       <form id="bookForm">
-        <input placeholder="Ime i prezime" required>
-        <div class="row"><input type="email" placeholder="Email" required><input type="tel" placeholder="Telefon"></div>
-        <select id="guests"><option value="90">1–2 osobe</option><option value="110">3–4 osobe</option></select>
+        <input id="bkName" name="name" placeholder="Ime i prezime" required maxlength="100" autocomplete="name">
+        <div class="row"><input id="bkEmail" name="email" type="email" placeholder="Email" required autocomplete="email"><input id="bkPhone" name="phone" type="tel" placeholder="Telefon" autocomplete="tel"></div>
+        <select id="guests" aria-label="Broj osoba"><option value="2">1–2 osobe · 90 KM/noć</option><option value="4">3–4 osobe · 110 KM/noć</option></select>
+        <input id="bkNote" name="note" placeholder="Napomena (opcionalno)" maxlength="500">
+        <input class="hp" id="bkHp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
         <div class="sum" id="calSum">Odaberite datum dolaska i odlaska.</div>
-        <button class="btn" style="margin-top:2px">Pošalji upit</button>
+        <button class="btn" id="bkSubmit" style="margin-top:2px">Pošalji upit</button>
         <div class="msgr"><button type="button" class="fab wa" data-toast="WhatsApp kontakt uskoro">WhatsApp</button><button type="button" class="fab vb" data-toast="Viber kontakt uskoro">Viber</button></div>
       </form>
     </div>
@@ -950,10 +978,11 @@
     { pos: V(-12, 2.8, 17),   look: V(6, 3.2, 0),     sky: C(0xa9d5ee), dusk: 0.0 },     // 1 prices
     { pos: V(0.9, 1.7, 8),    look: V(-2.5, 1.9, 0),  sky: C(0xa7dcff), dusk: 0.15 },    // 2 in front of the entrance
     { pos: V(0.15, 1.65, -4.5), look: V(3, 1.5, -4.83), sky: C(0xb0c6d6), dusk: 0.35 },  // 3 stairwell, facing the flat door (floor plan + "start" button)
-    { pos: V(-13, 3, 22),     look: V(9, 3.4, 0),     sky: C(0xff9a6b), dusk: 0.75 },    // 4 location, evening
-    { pos: V(2, 2.4, 27),     look: V(5, 4.6, 0),     sky: C(0x1d1a3a), dusk: 1.0 },     // 5 night, booking
+    { pos: V(0.9, 1.7, 8),    look: V(-2.5, 1.9, 0),  sky: C(0xb7cfe3), dusk: 0.5 },     // 4 back out in front of the entrance
+    { pos: V(-13, 3, 22),     look: V(9, 3.4, 0),     sky: C(0xff9a6b), dusk: 0.75 },    // 5 location, evening
+    { pos: V(2, 2.4, 27),     look: V(5, 4.6, 0),     sky: C(0x1d1a3a), dusk: 1.0 },     // 6 night, booking
   ];
-  if (SMALL) { keys[0].look.x = 5; keys[0].pos.z += 8; keys[1].pos.set(-8, 2.6, 20); keys[1].look.set(3, 3.0, 0); keys[2].look.set(-0.6, 0.9, 0); keys[4].pos.z += 5; keys[5].pos.z += 7; [0, 1, 4].forEach(i => keys[i].look.y -= 1.4); }
+  if (SMALL) { keys[0].look.x = 5; keys[0].pos.z += 8; keys[1].pos.set(-8, 2.6, 20); keys[1].look.set(3, 3.0, 0); keys[2].look.set(-0.6, 0.9, 0); keys[4].look.set(-0.6, 0.9, 0); keys[5].pos.z += 5; keys[6].pos.z += 7; [0, 1, 5].forEach(i => keys[i].look.y -= 1.4); }
   const N = keys.length;
 
   // =====================================================================
@@ -1030,10 +1059,16 @@
     return a.dusk + (b.dusk - a.dusk) * t;
   }
   function onScroll() {
-    const secs = [...document.querySelectorAll('section[data-key]')].map(s => ({ y: s.getBoundingClientRect().top + scrollY, k: parseFloat(s.dataset.key) })).sort((a, b) => a.y - b.y);
+    const secs = [];
+    document.querySelectorAll('section[data-key]').forEach(el => {
+      const r = el.getBoundingClientRect(), top = r.top + scrollY, k = parseFloat(el.dataset.key);
+      secs.push({ y: top, k });
+      if (el.dataset.hold) secs.push({ y: top + Math.max(0, r.height - innerHeight), k });      // plateau: the camera stays put while the section is on screen
+    });
+    secs.sort((a, b) => a.y - b.y);
     const y = scrollY;
     if (!secs.length || y <= secs[0].y) { target = secs.length ? secs[0].k : 0; return; }
-    for (let i = 0; i < secs.length - 1; i++) if (y < secs[i + 1].y) { target = secs[i].k + (secs[i + 1].k - secs[i].k) * (y - secs[i].y) / (secs[i + 1].y - secs[i].y); return; }
+    for (let i = 0; i < secs.length - 1; i++) if (y < secs[i + 1].y) { const d = secs[i + 1].y - secs[i].y; target = d < 1 ? secs[i + 1].k : secs[i].k + (secs[i + 1].k - secs[i].k) * (y - secs[i].y) / d; return; }
     target = secs[secs.length - 1].k;
   }
   addEventListener('scroll', onScroll, { passive: true });
@@ -1052,9 +1087,9 @@
   const lampDay = new THREE.Color(0xcfcfcf), lampNight = new THREE.Color(0xffd9a0), tmpC = new THREE.Color();
   function frame() {
     const dt = Math.min(clock.getDelta(), 0.05), t = clock.elapsedTime;
-    progress += (target - progress) * 0.06;
+    progress += ((walking ? 3 : target) - progress) * 0.06;
     smx += (mx - smx) * 0.05; smy += (my - smy) * 0.05;
-    blend += ((walking ? 1 : 0) - blend) * (1 - Math.exp(-dt * 2.6));
+    blend += ((walking && Math.abs(progress - 3) < 0.06 ? 1 : 0) - blend) * (1 - Math.exp(-dt * 2.6));   // the camera first settles at the flat door, then walks in
     const ww = blend, eb = ease(Math.min(1, Math.max(0, blend)));   // 1 when the walkthrough is running
 
     if (walking && !W.intro && blend > 0.35) { W.intro = true; W.x = NODES.HS[0]; W.z = NODES.HS[1]; W.yaw = Math.PI; goRoom(pending); }   // step through the flat's front door
@@ -1114,12 +1149,25 @@
   $$('#navList a').forEach(a => a.addEventListener('click', () => document.body.classList.remove('menu-open')));
   document.addEventListener('click', e => { if (!e.target.closest('nav')) document.body.classList.remove('menu-open'); });
 
-  // ---- booking calendar (UI only for now: no availability data yet) ----
+  // ---- booking calendar: zauzete noci dolaze iz api/availability.php ----
   const MN = ['Januar', 'Februar', 'Mart', 'April', 'Maj', 'Juni', 'Juli', 'August', 'Septembar', 'Oktobar', 'Novembar', 'Decembar'];
   const DW = ['Pon', 'Uto', 'Sri', 'Čet', 'Pet', 'Sub', 'Ned'];
   const today = new Date(); today.setHours(0, 0, 0, 0);
   let view = new Date(today.getFullYear(), today.getMonth(), 1), a = null, b = null;
-  const fmt = d => String(d.getDate()).padStart(2, '0') + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.';
+  let booked = new Set(), rates = { '2': 90, '4': 110 }, maxNights = 30, apiOk = false;
+  const pad = n => String(n).padStart(2, '0');
+  const iso = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  const fmt = d => pad(d.getDate()) + '.' + pad(d.getMonth() + 1) + '.';
+  const addD = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+  // sve noci od 'from' do 'to' (iskljucivo) slobodne?
+  function rangeFree(from, to) { for (let d = from; d < to; d = addD(d, 1)) if (booked.has(iso(d))) return false; return true; }
+  function loadAvail() {
+    return fetch('api/availability.php', { cache: 'no-store' }).then(r => r.json()).then(j => {
+      booked = new Set(j.booked); rates = j.rates; maxNights = j.max_nights; apiOk = true;
+      if (a && (booked.has(iso(a)) || (b && !rangeFree(a, b)))) { a = b = null; }
+      drawCal(); sum();
+    }).catch(() => { apiOk = false; $('#calSum').textContent = 'Kalendar zauzetosti trenutno nije dostupan. Pokušajte kasnije ili nas kontaktirajte direktno.'; });
+  }
   function drawCal() {
     $('#calTitle').textContent = MN[view.getMonth()] + ' ' + view.getFullYear();
     const g = $('#calGrid'); g.innerHTML = DW.map(d => '<div class="dow">' + d + '</div>').join('');
@@ -1127,24 +1175,46 @@
     const n = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
     for (let i = 1; i <= n; i++) {
       const d = new Date(view.getFullYear(), view.getMonth(), i), el = document.createElement('button'); el.type = 'button'; el.className = 'day'; el.textContent = i;
-      if (d < today) el.disabled = true;
+      const busy = booked.has(iso(d)), pickingEnd = a && !b && d > a;
+      const canEnd = pickingEnd && rangeFree(a, d) && (d - a) / 864e5 <= maxNights;     // odlazak smije biti na dan kad je sljedeca noc zauzeta
+      if (busy) el.classList.add('busy');
+      if (d < today || !apiOk) el.disabled = true;
+      else if (pickingEnd) { if (!canEnd) el.disabled = true; else if (busy) el.classList.add('outok'); }
+      else if (busy) el.disabled = true;
       if (a && +a === +d || b && +b === +d) el.classList.add('sel'); else if (a && b && d > a && d < b) el.classList.add('range');
-      el.addEventListener('click', () => { if (!a || b || d <= a) { a = d; b = null; } else b = d; drawCal(); sum(); });
+      el.addEventListener('click', () => { if (pickingEnd && canEnd) b = d; else { a = d; b = null; } drawCal(); sum(); });
       g.appendChild(el);
     }
   }
   function sum() {
     const el = $('#calSum');
+    if (!apiOk) return;
     if (!a) { el.textContent = 'Odaberite datum dolaska i odlaska.'; return; }
     if (!b) { el.textContent = 'Dolazak: ' + fmt(a) + ' — odaberite datum odlaska.'; return; }
-    const nights = Math.round((b - a) / 864e5), rate = +$('#guests').value;
+    const nights = Math.round((b - a) / 864e5), rate = rates[$('#guests').value];
     el.innerHTML = fmt(a) + ' → ' + fmt(b) + ' · ' + nights + (nights === 1 ? ' noć' : ' noći') + ' × ' + rate + ' KM<br>Okvirno: <b>' + nights * rate + ' KM</b>';
   }
   $('#calPrev').onclick = () => { view = new Date(view.getFullYear(), view.getMonth() - 1, 1); drawCal(); };
   $('#calNext').onclick = () => { view = new Date(view.getFullYear(), view.getMonth() + 1, 1); drawCal(); };
   $('#guests').onchange = sum;
-  $('#bookForm').addEventListener('submit', e => { e.preventDefault(); toast('Sistem rezervacija je u izradi — upit još nije poslan.'); });
-  drawCal();
+  $('#bookForm').addEventListener('submit', e => {
+    e.preventDefault();
+    if (!apiOk) { toast('Slanje trenutno nije moguće.'); return; }
+    if (!a || !b) { toast('Odaberite datum dolaska i odlaska.'); return; }
+    const btn = $('#bkSubmit'); btn.disabled = true;
+    fetch('api/book.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+      name: $('#bkName').value, email: $('#bkEmail').value, phone: $('#bkPhone').value, note: $('#bkNote').value, website: $('#bkHp').value,
+      guests: $('#guests').value, check_in: iso(a), check_out: iso(b) }) })
+      .then(r => r.json().then(j => ({ ok: r.ok, j })))
+      .then(({ ok, j }) => {
+        if (!ok) { toast(j.error || 'Greška pri slanju.'); btn.disabled = false; loadAvail(); return; }
+        const nights = j.nights, from = fmt(a), to = fmt(b);
+        $('#bookForm').innerHTML = '<div class="bookok"><h3>Upit je poslan ✓</h3><p>' + from + ' → ' + to + ' · ' + nights + (nights === 1 ? ' noć' : ' noći') + ' · okvirno ' + j.price + ' KM</p><p style="margin-top:10px">Termin je privremeno rezervisan. Javit ćemo vam se na email radi potvrde. Plaćanje je gotovinom po dolasku.</p></div>';
+        a = b = null; loadAvail();
+      })
+      .catch(() => { toast('Greška u vezi. Pokušajte ponovo.'); btn.disabled = false; });
+  });
+  drawCal(); loadAvail();
 
   // ---- map: tap to enable (so the iframe does not hijack page scroll on phones) ----
   $('#mapTap').addEventListener('click', () => $('#mapWrap').classList.add('active'));
@@ -1167,6 +1237,7 @@
     $('#walkName').textContent = window.__walk.names[wi];
     const has = !!REF[wi];
     $('#cmpBtn').disabled = !has; if (!has && cmpOn) cmpOn = false;
+    $('#walkNote').classList.toggle('nophoto', !has);
     $('#walkNote').innerHTML = has ? '<span class="mouse">Prevucite mišem da pogledate oko sebe · strelice ← → za prelazak.</span><span class="touch">Povucite prstom lijevo/desno da pogledate oko sebe.</span>' : 'Ova prostorija je okvirni prikaz — fotografije još nemamo.';
     paintRef(); cmpRender(); refVis();
   }
@@ -1208,7 +1279,7 @@
     const show = cmpOn && walking && secVisible && !!REF[wi];
     if (show) { cmpImg.src = REF[wi].src; cmpImg.alt = REF[wi].cap; }
     cmp.classList.toggle('show', show); cmpH.classList.toggle('show', show); document.body.classList.toggle('cmp-on', show);
-    cmpBtn.classList.toggle('on', cmpOn); cmpBtn.textContent = cmpOn ? '✕ Zatvori' : '↔ 3D / foto';
+    cmpBtn.classList.toggle('on', cmpOn); cmpBtn.innerHTML = cmpOn ? '<span class="l">✕ Zatvori</span><span class="s">✕ Zatvori</span>' : '<span class="l">↔ 3D / foto</span><span class="s">↔ Foto</span>';
     cmp.style.clipPath = 'inset(0 ' + (100 - cmpPos) + '% 0 0)'; cmpH.style.left = cmpPos + '%'; $('#cmpKnob').setAttribute('aria-valuenow', Math.round(cmpPos));
   }
   cmpBtn.addEventListener('click', () => { cmpOn = !cmpOn; cmpRender(); });
@@ -1218,11 +1289,11 @@
   addEventListener('pointerup', () => { drag = false; });
   $('#cmpKnob').addEventListener('keydown', e => { if (e.key === 'ArrowLeft') { cmpPos = Math.max(4, cmpPos - 4); cmpRender(); } if (e.key === 'ArrowRight') { cmpPos = Math.min(96, cmpPos + 4); cmpRender(); } });
   if ('IntersectionObserver' in window) {
-    new IntersectionObserver(en => { secVisible = en[0].isIntersecting && en[0].intersectionRatio > 0.35; refVis(); cmpRender(); }, { threshold: [0, 0.35, 0.7] }).observe($('#setnja'));
+    new IntersectionObserver(en => { secVisible = en[0].isIntersecting && en[0].intersectionRatio > 0.35; refVis(); cmpRender(); }, { threshold: [0, 0.35, 0.7] }).observe($('#walkStick'));
     // hide the floating chat buttons while the booking form (which has its own) or the walkthrough bar is on screen
     const fabs = $('.fabs'), seen = new Set();
     const io = new IntersectionObserver(en => { en.forEach(x => { if (x.isIntersecting && x.intersectionRatio > 0.25) seen.add(x.target.id); else seen.delete(x.target.id); }); fabs.style.display = seen.size ? 'none' : ''; }, { threshold: [0, 0.25, 0.5] });
-    io.observe($('#rezervacija')); io.observe($('#setnja'));
+    io.observe($('#rezervacija')); io.observe($('#walkStick'));
   }
 
   // ---- floor plan (from the scan): inline in the section and as a full-screen map ----
