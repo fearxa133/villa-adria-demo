@@ -152,7 +152,7 @@
 <script>
 (function(){
   const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-  let tier=parseInt(new URLSearchParams(location.search).get('t'),10); if(![1,2,3].includes(tier)) tier=1;
+  let tier=parseInt(new URLSearchParams(location.search).get('t'),10); if(tier>3) tier=3; if(![1,2,3].includes(tier)) tier=1;
   function apply(){
     $$('[data-min]').forEach(e=>e.hidden = tier < +e.dataset.min);
     $$('[data-max]').forEach(e=>e.hidden = tier > +e.dataset.max);

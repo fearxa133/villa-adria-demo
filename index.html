@@ -139,6 +139,14 @@
   .prow { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px; font-size:14px; }
   .prow input { width:90px; padding:8px 10px; }
   .dash .btn { margin-top:6px; padding:10px 20px; font-size:14px; }
+  .walknav { display:grid; gap:10px; margin-top:18px; }
+  .walknav button { display:flex; align-items:center; gap:14px; text-align:left; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); color:#fff; border-radius:14px; padding:14px 18px; font-size:16px; font-weight:700; cursor:pointer; transition:.2s; }
+  .walknav button i { font-style:normal; width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,.18); display:flex; align-items:center; justify-content:center; font-size:14px; }
+  .walknav button.on { background:var(--accent); color:#1a1208; border-color:var(--accent); }
+  .walknav button.on i { background:rgba(0,0,0,.18); }
+  .walkctl { display:flex; align-items:center; justify-content:space-between; margin-top:16px; gap:10px; font-weight:700; }
+  .walkctl button { width:42px; height:42px; border-radius:50%; border:0; background:rgba(255,255,255,.16); color:#fff; font-size:22px; cursor:pointer; }
+  .walkctl button:hover { background:var(--accent); color:#1a1208; }
   @media (max-width:860px) { .book, .grid2 { grid-template-columns:1fr; } .dash { grid-template-columns:1fr; } .side { flex-direction:row; flex-wrap:wrap; } .side .out { margin-top:0; } .kpis { grid-template-columns:1fr 1fr; } .main { padding:18px; } }
   @media (max-width:760px) { nav ul { display:none; } section.right { justify-content:flex-start; } .panel { padding:26px 24px; } .tiers { left:12px; right:12px; align-items:center; } .tiers .pills { overflow-x:auto; max-width:100%; } .tiers .note { text-align:center; } .navr .adminbtn { display:none; } }
 </style>
@@ -169,7 +177,7 @@
   </div>
 </nav>
 <div class="tiers" id="tiers">
-  <div class="pills"><button data-t="1">Onepage</button><button data-t="2">+ Rezervacije</button><button data-t="3">+ Admin panel</button></div>
+  <div class="pills"><button data-t="1">Onepage</button><button data-t="2">+ Rezervacije</button><button data-t="3">+ Admin panel</button><button data-t="4">+ Virtualna šetnja</button></div>
   <div class="note" id="tierNote"></div>
 </div>
 <div class="toast" id="toast"></div>
@@ -262,6 +270,17 @@
         <div class="msgr"><button type="button" class="fab wa" data-toast="Demo: ovdje se otvara WhatsApp chat">WhatsApp</button><button type="button" class="fab vb" data-toast="Demo: ovdje se otvara Viber chat">Viber</button></div>
       </form>
     </div>
+  </div>
+</section>
+
+<section id="setnja" class="right" data-min="4" data-key="6">
+  <div class="panel" style="max-width:480px">
+    <div class="eyebrow">Virtualna šetnja</div>
+    <h2>Prošetajte kroz stan.</h2>
+    <p>Izaberite prostoriju i uđite unutra, kao da ste već stigli.</p>
+    <div class="walknav" id="walkNav"></div>
+    <div class="walkctl"><button type="button" id="walkPrev" aria-label="Prethodna">‹</button><span id="walkName"></span><button type="button" id="walkNext" aria-label="Sljedeća">›</button></div>
+    <p class="note">Prevucite mišem da pogledate oko sebe · strelice ← → za prelaz između prostorija.</p>
   </div>
 </section>
 
@@ -529,6 +548,76 @@
   // ceiling glow strip
   glow(8.0, 0.05, 0.05, 0xffd9a0, 0, 3.98, -2.85, room);
 
+  // ---------- Walkthrough rooms: hallway + kitchen (modelled after the listing photos) ----------
+  function canvasTex(w, h, draw) { const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h); return new THREE.CanvasTexture(c); }
+  const bwTex = canvasTex(160, 200, (g, w, h) => { g.fillStyle = '#e6e2da'; g.fillRect(0, 0, w, h); g.fillStyle = '#3a3a3a'; for (let i = 0; i < 9; i++) { const bh = 40 + (i * 37 % 70); g.fillRect(8 + i * 17, h - 30 - bh, 13, bh); } g.fillStyle = '#777'; g.fillRect(0, h - 30, w, 30); g.fillStyle = '#222'; g.fillRect(70, 30, 3, 90); });
+  const welcomeTex = canvasTex(256, 90, (g, w, h) => { g.fillStyle = '#1d1d1f'; g.fillRect(0, 0, w, h); g.fillStyle = '#e3c27a'; g.font = 'italic 40px Georgia, serif'; g.textAlign = 'center'; g.fillText('Welcome', w / 2, 52); g.font = '14px Arial'; g.fillText('LED Vječna Vatra', w / 2, 76); });
+  const zebraTex = canvasTex(64, 256, (g, w, h) => { for (let i = 0; i < 16; i++) { g.fillStyle = i % 2 ? '#8e949c' : '#eef0f2'; g.fillRect(0, i * 16, w, 16); } });
+  const picMat = () => new THREE.MeshBasicMaterial({ map: bwTex });
+  function slab(g, w, d) { box(w + 0.6, 0.42, d + 0.6, 0xe8e0d0, 0, -0.19, 0, g); }
+
+  // Hallway (open at +z, camera enters from there)
+  const HZ = -24;
+  const hall = new THREE.Group(); hall.position.set(RX, 0, HZ); scene.add(hall);
+  slab(hall, 2.4, 6.4);
+  box(2.4, 0.12, 6.4, 0xd2c7b6, 0, 0.06, 0, hall);                       // stone floor
+  box(0.9, 0.03, 5.2, 0x6b6660, 0, 0.14, 0, hall);                       // runner
+  box(0.1, 3, 6.4, 0xa89a86, -1.25, 1.55, 0, hall);                      // left wall
+  box(0.1, 3, 6.4, 0xb3a690, 1.25, 1.55, 0, hall);                       // right wall
+  box(2.4, 3, 0.1, 0xc9bfae, 0, 1.55, -3.25, hall);                      // back wall
+  box(2.4, 0.1, 6.4, 0xd9d0c0, 0, 3.05, 0, hall);                        // ceiling
+  for (let i = 0; i < 9; i++) box(0.08, 2.9, 0.14, i % 2 ? 0xa97a45 : 0xc59a62, -1.16, 1.5, 0.9 + i * 0.26, hall); // slat panel
+  glow(0.03, 1.5, 0.9, 0xffe2b0, -1.18, 1.75, 0.2, hall);                // backlit mirror
+  box(0.4, 0.5, 1.5, 0x2d2f33, -1.0, 0.95, 0.2, hall); box(0.42, 0.06, 1.55, 0xc59a62, -1.0, 1.22, 0.2, hall);  // console
+  const hp = new THREE.Mesh(new THREE.IcosahedronGeometry(0.16, 0), mat(0x3c8f50, { flatShading: true })); hp.position.set(-0.95, 1.45, 0.4); hall.add(hp);
+  for (const z of [-1.0, 0.4, 1.8]) {                                      // pictures on right wall
+    box(0.04, 1.0, 0.76, 0x151515, 1.17, 1.7, z, hall);
+    const p = new THREE.Mesh(new THREE.PlaneGeometry(0.66, 0.9), picMat()); p.rotation.y = -Math.PI / 2; p.position.set(1.145, 1.7, z); hall.add(p);
+  }
+  box(1.0, 2.1, 0.08, 0xf2efe8, 0, 1.1, -3.17, hall); box(1.15, 2.2, 0.05, 0xdcd6c8, 0, 1.15, -3.2, hall);   // entrance door
+  box(0.04, 0.2, 0.06, 0x111111, 0.35, 1.1, -3.1, hall);
+  const sign = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.32), new THREE.MeshBasicMaterial({ map: welcomeTex })); sign.position.set(0, 2.45, -3.19); hall.add(sign);
+  [[0, 2.99, -2.6, 1.6, 0.04], [0, 2.99, 1.6, 1.6, 0.04]].forEach(([x, y, z, w, h]) => glow(w, h, 0.05, 0xffe2b0, x, y, z, hall));   // recessed LED frame
+  glow(0.04, 0.04, 4.2, 0xffe2b0, -0.8, 2.99, -0.5, hall); glow(0.04, 0.04, 4.2, 0xffe2b0, 0.8, 2.99, -0.5, hall);
+  cyl(0.1, 0.1, 0.12, 0x111111, 0, 2.95, -1.0, hall, 16);
+  const hallLight = new THREE.PointLight(0xffd9a0, 0.9, 9); hallLight.position.set(0, 2.5, 0); hall.add(hallLight);
+
+  // Kitchen (open at +z)
+  const KZ = -48;
+  const kit = new THREE.Group(); kit.position.set(RX, 0, KZ); scene.add(kit);
+  slab(kit, 4.8, 4.2);
+  box(4.8, 0.12, 4.2, 0xded6c8, 0, 0.06, 0, kit);                        // stone tiles
+  box(4.8, 2.95, 0.1, 0xe8e1d3, 0, 1.55, -2.15, kit);                    // back wall
+  box(0.1, 2.95, 4.2, 0xefe9dc, -2.45, 1.55, 0, kit);                    // left wall
+  box(0.1, 2.95, 4.2, 0xe3dccd, 2.45, 1.55, 0, kit);                     // right wall
+  box(4.8, 0.1, 4.2, 0xf1ece2, 0, 3.05, 0, kit);                         // ceiling
+  box(3.5, 0.85, 0.6, 0x3a3c40, -0.7, 0.55, -1.8, kit);                  // base cabinets
+  box(3.55, 0.05, 0.66, 0xc59a62, -0.7, 1.0, -1.8, kit);                 // oak counter
+  box(3.5, 0.9, 0.04, 0xb98d57, -0.7, 1.5, -2.07, kit);                  // wood backsplash
+  glow(3.5, 0.03, 0.05, 0xffc27a, -0.7, 1.97, -1.95, kit);               // LED under uppers
+  box(0.95, 0.8, 0.38, 0x3a3c40, -2.0, 2.4, -1.95, kit);                 // upper cabinets
+  box(0.95, 0.8, 0.38, 0x3a3c40, 0.55, 2.4, -1.95, kit);
+  box(1.2, 0.05, 0.36, 0xc59a62, -0.7, 2.62, -1.95, kit); box(1.2, 0.05, 0.36, 0xc59a62, -0.7, 2.2, -1.95, kit);  // open shelves
+  glow(1.2, 0.02, 0.04, 0xffc27a, -0.7, 2.17, -1.78, kit);
+  [[-1.0, 2.7], [-0.4, 2.7], [-0.7, 2.28]].forEach(([x, y], i) => { if (i < 2) box(0.1, 0.16, 0.1, 0xdfe6ea, x, y + 0.04, -1.95, kit, { transparent: true, opacity: 0.6 }); else { const p = new THREE.Mesh(new THREE.IcosahedronGeometry(0.1, 0), mat(0x3c8f50, { flatShading: true })); p.position.set(x, y + 0.1, -1.95); kit.add(p); } });
+  box(0.55, 0.04, 0.4, 0x0c0c0c, -1.4, 1.03, -1.8, kit);                 // sink
+  cyl(0.015, 0.015, 0.28, 0x0c0c0c, -1.4, 1.17, -2.0, kit, 8);           // faucet
+  box(0.04, 0.04, 0.15, 0x0c0c0c, -1.4, 1.3, -1.93, kit);
+  box(0.62, 0.015, 0.5, 0x0c0c0c, 0.0, 1.03, -1.8, kit);                 // hob
+  box(0.6, 0.5, 0.02, 0x101010, 0.0, 0.55, -1.49, kit); box(0.5, 0.025, 0.03, 0x555555, 0.0, 0.76, -1.47, kit);   // oven
+  cyl(0.06, 0.07, 0.2, 0x111111, 1.0, 1.13, -1.85, kit, 12);              // kettle
+  box(0.1, 2.0, 1.9, 0xf4f4f4, 2.4, 1.85, -0.2, kit);                    // window frame
+  const zebra = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.8), new THREE.MeshBasicMaterial({ map: zebraTex })); zebra.rotation.y = -Math.PI / 2; zebra.position.set(2.34, 1.85, -0.2); kit.add(zebra);
+  box(0.65, 0.05, 2.6, 0xc59a62, 2.05, 0.9, -0.1, kit);                  // sill / table
+  box(0.05, 0.9, 0.05, 0x2d2f33, 1.8, 0.45, 1.1, kit);
+  const kp = new THREE.Mesh(new THREE.IcosahedronGeometry(0.17, 0), mat(0x3c8f50, { flatShading: true })); kp.position.set(2.1, 1.12, 0.9); kit.add(kp); box(0.16, 0.16, 0.16, 0x111111, 2.1, 1.0, 0.9, kit);
+  box(0.45, 0.06, 0.45, 0x585c63, 1.3, 0.5, 0.2, kit); box(0.45, 0.5, 0.06, 0x585c63, 1.3, 0.78, 0.0, kit);   // chair
+  [[-0.18, -0.18], [0.18, -0.18], [-0.18, 0.18], [0.18, 0.18]].forEach(([dx, dz]) => box(0.04, 0.47, 0.04, 0x222222, 1.3 + dx, 0.25, 0.2 + dz, kit));
+  box(0.04, 0.9, 0.7, 0x151515, -2.38, 1.9, 0.6, kit);                    // picture left wall
+  const kpic = new THREE.Mesh(new THREE.PlaneGeometry(0.6, 0.8), picMat()); kpic.rotation.y = Math.PI / 2; kpic.position.set(-2.355, 1.9, 0.6); kit.add(kpic);
+  cyl(0.16, 0.16, 0.05, 0x111111, 0, 2.98, -0.2, kit, 20); glow(0.26, 0.02, 0.26, 0xffe2b0, 0, 2.95, -0.2, kit);
+  const kitLight = new THREE.PointLight(0xffd9a0, 0.9, 9); kitLight.position.set(0, 2.5, 0); kit.add(kitLight);
+
   // ---------- Camera keyframes ----------
   const V = (x, y, z) => new THREE.Vector3(x, y, z);
   const C = (h) => new THREE.Color(h);
@@ -539,7 +628,21 @@
     { pos: V(-3, 3.4, 18.5), look: V(3.2, 3.2, 9), sky: C(0xff9a6b), dusk: 0.75 },
     { pos: V(0, 2.2, 25),    look: V(0, 4.2, 0),  sky: C(0x1d1a3a), dusk: 1.0 },
     { pos: V(9, 3.5, 25),    look: V(0, 4.5, 0),  sky: C(0x1d1a3a), dusk: 1.0 },
+    { pos: V(RX + 0.8, 2.1, 7.4), look: V(RX + 0.3, 1.4, -2), sky: C(0x30323a), dusk: 0.7 },   // walkthrough (dynamic)
   ];
+  const walkPoses = [
+    { n: 'Dnevni boravak', pos: V(RX + 0.6, 2.2, 8.2), look: V(RX + 0.2, 1.4, -2) },
+    { n: 'Hodnik', pos: V(RX, 1.65, HZ + 3.0), look: V(RX, 1.5, HZ - 3) },
+    { n: 'Kuhinja', pos: V(RX + 1.2, 1.85, KZ + 2.0), look: V(RX + 0.1, 1.3, KZ - 2) },
+  ];
+  let walkI = 0, yaw = 0, yawT = 0, pitch = 0, pitchT = 0;
+  const walkPos = walkPoses[0].pos.clone(), walkLook = walkPoses[0].look.clone();
+  keys[6].pos = walkPos; keys[6].look = walkLook;
+  window.__walk = { names: walkPoses.map(p => p.n), go(i) { walkI = (i + walkPoses.length) % walkPoses.length; yawT = 0; pitchT = 0; return walkI; } };
+  addEventListener('pointermove', e => { if (e.pointerType === 'mouse' && e.buttons === 1 && progress > 5.5 && dragging) { yawT = Math.max(-0.7, Math.min(0.7, yawT - e.movementX * 0.004)); pitchT = Math.max(-0.25, Math.min(0.25, pitchT - e.movementY * 0.003)); } });
+  let dragging = false;
+  addEventListener('pointerdown', e => { dragging = e.pointerType === 'mouse' && !e.target.closest('button,a,input,select,textarea,summary,.panel,nav,.tiers'); });
+  addEventListener('pointerup', () => { dragging = false; });
   const N = keys.length;
   const tmpPos = new THREE.Vector3(), tmpLook = new THREE.Vector3(), tmpSky = new THREE.Color();
   let progress = 0, target = 0, mx = 0, my = 0, smx = 0, smy = 0;
@@ -578,7 +681,11 @@
     const t = clock.getElapsedTime();
     progress += (target - progress) * 0.06;
     smx += (mx - smx) * 0.05; smy += (my - smy) * 0.05;
+    walkPos.lerp(walkPoses[walkI].pos, 0.05); walkLook.lerp(walkPoses[walkI].look, 0.05);
+    yaw += (yawT - yaw) * 0.12; pitch += (pitchT - pitch) * 0.12;
     const dusk = sample(progress);
+    const ww = Math.min(1, Math.max(0, progress - 5));
+    if (ww > 0 && (Math.abs(yaw) > 1e-4 || Math.abs(pitch) > 1e-4)) { const d = tmpLook.clone().sub(tmpPos); d.applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw * ww); d.y += pitch * d.length() * ww; tmpLook.copy(tmpPos).add(d); }
 
     camera.position.copy(tmpPos); camera.position.x += smx * 1.2; camera.position.y -= smy * 0.7;
     camera.lookAt(tmpLook);
@@ -587,7 +694,9 @@
     hemi.intensity = 0.85 - dusk * 0.5;
     hemi.color.setHex(dusk > 0.5 ? 0xffc9a0 : 0xffffff);
     sun.color.setRGB(1, 1 - dusk * 0.45, 1 - dusk * 0.7);
-    sun.intensity = 1.05 - dusk * 0.6;
+    sun.intensity = (1.05 - dusk * 0.6) * (1 - 0.92 * ww);
+    hemi.intensity = Math.max(hemi.intensity, 0.35 + 0.3 * ww);
+    const fovT = (innerWidth < 760 ? 70 : 50) + 16 * ww; if (Math.abs(camera.fov - fovT) > 0.05) { camera.fov = fovT; camera.updateProjectionMatrix(); }
     const sy = 40 - dusk * 34;
     sun.position.set(-20, sy + 4, 30); sun.target.position.set(10, 0, 0); sun.target.updateMatrixWorld();
     sunBall.position.set(-40, sy, -150); sunBall.material.color.setHex(dusk > 0.5 ? 0xffb066 : 0xfff3c4);
@@ -618,8 +727,8 @@
   document.addEventListener('click', e => { const b = e.target.closest('[data-toast]'); if (b) { e.preventDefault(); toast(b.dataset.toast); } });
 
   // ---- packages ----
-  let tier = parseInt(new URLSearchParams(location.search).get('t'), 10); if (![1, 2, 3].includes(tier)) tier = 1;
-  const notes = { 1: 'Onepage: 3D prikaz apartmana i cijene.', 2: '+ kalendar, forma, WhatsApp/Viber, jezici, recenzije.', 3: '+ admin panel za rezervacije i cijene.' };
+  let tier = parseInt(new URLSearchParams(location.search).get('t'), 10); if (![1, 2, 3, 4].includes(tier)) tier = 1;
+  const notes = { 1: 'Onepage: 3D prikaz apartmana i cijene.', 2: '+ kalendar, forma, WhatsApp/Viber, jezici, recenzije.', 3: '+ admin panel za rezervacije i cijene.', 4: '+ virtualna šetnja kroz prostorije stana.' };
   function apply(scrollTo) {
     document.body.dataset.tier = tier;
     $$('[data-min]').forEach(e => e.hidden = tier < +e.dataset.min);
@@ -632,7 +741,7 @@
     window.__refreshScroll && window.__refreshScroll();
     if (scrollTo) setTimeout(() => { const t = scrollTo === 'top' ? document.body : $(scrollTo); t.scrollIntoView({ behavior: 'smooth' }); }, 60);
   }
-  $$('#tiers button').forEach(b => b.addEventListener('click', () => { tier = +b.dataset.t; apply(tier === 1 ? 'top' : '#rezervacija'); }));
+  $$('#tiers button').forEach(b => b.addEventListener('click', () => { tier = +b.dataset.t; apply(tier === 1 ? 'top' : tier === 4 ? '#setnja' : '#rezervacija'); }));
   apply();
 
   // ---- language (visual) ----
@@ -686,6 +795,22 @@
   $('#guests').onchange = sum; $$('.addons input').forEach(i => i.onchange = sum);
   $('#bookForm').addEventListener('submit', e => { e.preventDefault(); toast('Demo: upit nije poslan'); });
   drawCal();
+
+
+  // ---- virtual walkthrough UI ----
+  const nav = $('#walkNav'); let wi = 0;
+  function paintWalk() { $$('#walkNav button').forEach((b, i) => b.classList.toggle('on', i === wi)); $('#walkName').textContent = window.__walk ? window.__walk.names[wi] : ''; }
+  function goWalk(i) { if (!window.__walk) return; wi = window.__walk.go(i); paintWalk(); }
+  if (window.__walk) {
+    window.__walk.names.forEach((n, i) => { const b = document.createElement('button'); b.type = 'button'; b.innerHTML = '<i>' + (i + 1) + '</i>' + n; b.onclick = () => goWalk(i); nav.appendChild(b); });
+    $('#walkPrev').onclick = () => goWalk(wi - 1); $('#walkNext').onclick = () => goWalk(wi + 1);
+    paintWalk();
+    document.addEventListener('keydown', e => {
+      const s = $('#setnja'); if (!s || s.hidden) return; const r = s.getBoundingClientRect();
+      if (r.top > innerHeight * 0.5 || r.bottom < innerHeight * 0.5) return;
+      if (e.key === 'ArrowRight') goWalk(wi + 1); else if (e.key === 'ArrowLeft') goWalk(wi - 1);
+    });
+  }
 
   // ---- admin (visual only) ----
   const admin = $('#admin'), login = $('#adminLogin'), dash = $('#adminDash');
