@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin · Rezervacije</title>
+<style>
+  :root { --bg:#14161b; --panel:#1d2027; --line:#2c303a; --ink:#eef0f4; --mute:#9aa1ae; --accent:#ffa24c; --ok:#3ecf8e; --warn:#f5b84b; --bad:#ff6b6b; --blk:#7d8594; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; }
+  [hidden] { display:none !important; }
+  button, input, select, textarea { font:inherit; color:inherit; }
+  input, select, textarea { background:#12141a; border:1px solid var(--line); border-radius:10px; padding:10px 12px; width:100%; }
+  input:focus, select:focus, textarea:focus { outline:2px solid var(--accent); outline-offset:-1px; }
+  .btn { background:var(--accent); color:#1a1208; border:0; border-radius:10px; padding:10px 16px; font-weight:700; cursor:pointer; }
+  .btn.ghost { background:transparent; color:var(--ink); border:1px solid var(--line); font-weight:600; }
+  .btn.ok { background:var(--ok); } .btn.bad { background:transparent; color:var(--bad); border:1px solid var(--bad); }
+  .btn.sm { padding:6px 11px; font-size:13px; border-radius:8px; }
+  .btn:disabled { opacity:.5; cursor:default; }
+
+  #login { min-height:100vh; display:grid; place-items:center; padding:20px; }
+  #login form { background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:26px; width:100%; max-width:340px; display:grid; gap:12px; }
+  #login h1 { font-size:20px; }
+  .err { color:var(--bad); font-size:14px; min-height:18px; }
+
+  header { display:flex; align-items:center; gap:14px; flex-wrap:wrap; padding:14px 20px; border-bottom:1px solid var(--line); background:var(--panel); position:sticky; top:0; z-index:5; }
+  header h1 { font-size:16px; margin-right:auto; } header h1 span { color:var(--accent); }
+  .tabs { display:flex; gap:6px; }
+  .tabs button { background:transparent; border:0; padding:8px 14px; border-radius:8px; cursor:pointer; color:var(--mute); font-weight:600; }
+  .tabs button.on { background:#2a2e38; color:var(--ink); }
+  main { max-width:1000px; margin:0 auto; padding:20px; }
+  .bar { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:16px; }
+  .bar .sp { flex:1; }
+  .chips { display:flex; gap:6px; flex-wrap:wrap; }
+  .chip { background:transparent; border:1px solid var(--line); border-radius:999px; padding:6px 13px; cursor:pointer; color:var(--mute); font-size:14px; }
+  .chip.on { background:var(--accent); color:#1a1208; border-color:var(--accent); font-weight:700; }
+
+  .bk { background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--blk); border-radius:12px; padding:14px 16px; margin-bottom:10px; display:grid; gap:10px; }
+  .bk.st-pending { border-left-color:var(--warn); } .bk.st-confirmed { border-left-color:var(--ok); } .bk.st-cancelled { opacity:.55; }
+  .bk .top { display:flex; gap:10px; flex-wrap:wrap; align-items:baseline; }
+  .bk .top b { font-size:16px; }
+  .badge { font-size:12px; font-weight:700; padding:3px 9px; border-radius:999px; background:#2a2e38; }
+  .badge.pending { background:rgba(245,184,75,.18); color:var(--warn); } .badge.confirmed { background:rgba(62,207,142,.16); color:var(--ok); } .badge.cancelled { background:rgba(255,107,107,.15); color:var(--bad); }
+  .who, .nt { color:var(--mute); font-size:14px; line-height:1.45; } .who a { color:var(--mute); }
+  .money { display:flex; gap:12px; flex-wrap:wrap; align-items:end; padding-top:10px; border-top:1px solid var(--line); }
+  .money label { font-size:12px; color:var(--mute); display:grid; gap:4px; } .money input { width:100px; padding:7px 10px; }
+  .rest { font-weight:700; font-size:14px; padding-bottom:8px; } .rest.paid { color:var(--ok); } .rest.due { color:var(--warn); }
+  .acts { display:flex; gap:8px; flex-wrap:wrap; margin-left:auto; }
+  .empty { color:var(--mute); text-align:center; padding:40px 0; }
+
+  .calhead { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; font-weight:700; font-size:18px; }
+  .calhead button { width:38px; height:38px; border-radius:50%; background:var(--panel); border:1px solid var(--line); cursor:pointer; font-size:18px; }
+  .grid { display:grid; grid-template-columns:repeat(7,1fr); gap:5px; }
+  .dow { font-size:11px; color:var(--mute); text-align:center; text-transform:uppercase; padding:4px 0; }
+  .cell { min-height:62px; border-radius:9px; border:1px solid var(--line); background:var(--panel); padding:5px 6px; text-align:left; cursor:pointer; overflow:hidden; display:flex; flex-direction:column; gap:2px; font-size:13px; }
+  .cell .n { font-weight:700; } .cell .l { font-size:11px; line-height:1.15; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .cell.confirmed { background:rgba(62,207,142,.18); border-color:rgba(62,207,142,.5); } .cell.pending { background:rgba(245,184,75,.18); border-color:rgba(245,184,75,.5); } .cell.block { background:rgba(125,133,148,.28); border-color:var(--blk); }
+  .cell.past { opacity:.4; } .cell.busy { cursor:not-allowed; }
+  .cell.range { outline:2px solid var(--accent); outline-offset:-2px; background:rgba(255,162,76,.22); } .cell.sel { outline:2px solid var(--accent); background:var(--accent); color:#1a1208; }
+  .legend { display:flex; gap:16px; flex-wrap:wrap; margin:12px 0; font-size:13px; color:var(--mute); }
+  .legend i { display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:6px; vertical-align:-1px; }
+  .blockbox { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px; display:grid; gap:10px; margin-top:6px; }
+  .blockrow { display:flex; gap:10px; flex-wrap:wrap; align-items:center; padding:9px 0; border-top:1px solid var(--line); font-size:14px; } .blockrow span:first-child { font-weight:700; } .blockrow .nt { flex:1; }
+
+  .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-bottom:18px; }
+  .kpi { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px; } .kpi small { color:var(--mute); display:block; margin-bottom:4px; font-size:12px; } .kpi b { font-size:22px; }
+  table { width:100%; border-collapse:collapse; background:var(--panel); border-radius:12px; overflow:hidden; font-size:14px; }
+  th, td { padding:10px 12px; text-align:right; border-bottom:1px solid var(--line); } th:first-child, td:first-child { text-align:left; } th { color:var(--mute); font-size:12px; text-transform:uppercase; }
+  .occ { display:inline-block; width:70px; height:8px; background:#2a2e38; border-radius:4px; overflow:hidden; vertical-align:middle; margin-right:6px; } .occ i { display:block; height:100%; background:var(--accent); }
+  .tablewrap { overflow-x:auto; }
+
+  dialog { background:var(--panel); color:var(--ink); border:1px solid var(--line); border-radius:16px; padding:22px; width:min(480px,94vw); }
+  dialog::backdrop { background:rgba(0,0,0,.6); }
+  dialog form { display:grid; gap:12px; } dialog h2 { font-size:18px; }
+  dialog label { font-size:12px; color:var(--mute); display:grid; gap:4px; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .dlgacts { display:flex; gap:10px; justify-content:flex-end; }
+  #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#2a2e38; padding:11px 18px; border-radius:10px; font-size:14px; opacity:0; pointer-events:none; transition:opacity .2s; z-index:50; } #toast.show { opacity:1; }
+  @media (max-width:640px) { main { padding:14px; } .cell { min-height:50px; padding:4px; } .cell .l { display:none; } .acts { margin-left:0; } }
+</style>
+</head>
+<body>
+
+<section id="login" hidden>
+  <form id="loginForm">
+    <h1>Admin prijava</h1>
+    <input type="password" id="pw" placeholder="Lozinka" autocomplete="current-password" required>
+    <div class="err" id="loginErr"></div>
+    <button class="btn">Prijavi se</button>
+  </form>
+</section>
+
+<div id="app" hidden>
+  <header>
+    <h1>Admin · <span>Rezervacije</span></h1>
+    <div class="tabs" id="tabs">
+      <button data-tab="list" class="on">Rezervacije</button>
+      <button data-tab="cal">Kalendar</button>
+      <button data-tab="stats">Statistika</button>
+    </div>
+    <button class="btn ghost sm" id="logout">Odjava</button>
+  </header>
+
+  <main>
+    <section id="tab-list">
+      <div class="bar">
+        <div class="chips" id="chips"></div>
+        <span class="sp"></span>
+        <button class="btn" id="newBk">+ Nova rezervacija</button>
+      </div>
+      <div id="bkList"></div>
+    </section>
+
+    <section id="tab-cal" hidden>
+      <div class="calhead"><button id="cPrev" aria-label="Prethodni mjesec">‹</button><span id="cTitle"></span><button id="cNext" aria-label="Sljedeći mjesec">›</button></div>
+      <div class="grid" id="cGrid"></div>
+      <div class="legend"><span><i style="background:var(--ok)"></i>Potvrđeno</span><span><i style="background:var(--warn)"></i>Na čekanju</span><span><i style="background:var(--blk)"></i>Blokirano</span><span><i style="background:var(--accent)"></i>Odabrano</span></div>
+      <div class="blockbox">
+        <div id="selInfo" class="nt">Kliknite prvi i zadnji dan perioda koji je zauzet dogovorom van sajta.</div>
+        <div class="two"><input id="blkNote" placeholder="Napomena (npr. Marko, dogovoreno telefonom)" maxlength="200"><button class="btn" id="blkAdd" disabled>Označi kao zauzeto</button></div>
+      </div>
+      <h3 style="margin:22px 0 4px;font-size:15px">Blokirani periodi</h3>
+      <div id="blkList"></div>
+    </section>
+
+    <section id="tab-stats" hidden>
+      <div class="bar"><select id="yearSel" style="width:auto"></select></div>
+      <div class="kpis" id="kpis"></div>
+      <div class="tablewrap"><table id="statTable"></table></div>
+    </section>
+  </main>
+</div>
+
+<dialog id="dlg">
+  <form id="dlgForm" method="dialog">
+    <h2 id="dlgTitle">Rezervacija</h2>
+    <label>Ime i prezime<input id="fName" required maxlength="100"></label>
+    <div class="two"><label>Email<input id="fEmail" type="email"></label><label>Telefon<input id="fPhone"></label></div>
+    <div class="two"><label>Dolazak<input id="fIn" type="date" required></label><label>Odlazak<input id="fOut" type="date" required></label></div>
+    <div class="two"><label>Broj osoba<select id="fGuests"><option value="2">1–2 osobe</option><option value="4">3–4 osobe</option></select></label><label>Status<select id="fStatus"><option value="confirmed">Potvrđeno</option><option value="pending">Na čekanju</option><option value="cancelled">Otkazano</option></select></label></div>
+    <div class="two"><label>Ukupna cijena (KM)<input id="fPrice" type="number" min="0" step="1" placeholder="auto"></label><label>Plaćeno (KM)<input id="fPaid" type="number" min="0" step="1" value="0"></label></div>
+    <label>Napomena<textarea id="fNote" rows="2" maxlength="600"></textarea></label>
+    <div class="err" id="dlgErr"></div>
+    <div class="dlgacts"><button type="button" class="btn ghost" id="dlgCancel">Odustani</button><button class="btn" id="dlgSave">Sačuvaj</button></div>
+  </form>
+</dialog>
+<div id="toast"></div>
+
+<script>
+(function () {
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const pad = n => String(n).padStart(2, '0');
+  const fmtD = s => s.slice(8) + '.' + s.slice(5, 7) + '.' + s.slice(0, 4);
+  const nightsOf = (a, b) => Math.round((new Date(b) - new Date(a)) / 864e5);
+  const ISO = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  const ST = { pending: 'Na čekanju', confirmed: 'Potvrđeno', cancelled: 'Otkazano' };
+  const MN = ['Januar', 'Februar', 'Mart', 'April', 'Maj', 'Juni', 'Juli', 'August', 'Septembar', 'Oktobar', 'Novembar', 'Decembar'];
+  let csrf = '', rates = { '2': 90, '4': 110 }, bookings = [], blocks = [], filter = 'all', tab = 'list';
+  let toastT; function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2800); }
+
+  async function api(action, data) {
+    const post = data !== undefined;
+    const r = await fetch('../api/admin.php?action=' + action, { method: post ? 'POST' : 'GET', credentials: 'same-origin', headers: post ? { 'Content-Type': 'application/json', 'X-CSRF': csrf } : {}, body: post ? JSON.stringify(data) : undefined });
+    const j = await r.json().catch(() => ({ error: 'Greška servera' }));
+    if (r.status === 401 && action !== 'login') { showLogin(); throw new Error('Sesija je istekla.'); }
+    if (!r.ok) throw new Error(j.error || 'Greška');
+    return j;
+  }
+  const run = p => p.catch(e => { toast(e.message); throw e; });
+
+  // ---- prijava ----
+  function showLogin() { $('#app').hidden = true; $('#login').hidden = false; $('#pw').focus(); }
+  function showApp() { $('#login').hidden = true; $('#app').hidden = false; loadAll(); }
+  $('#loginForm').addEventListener('submit', async e => {
+    e.preventDefault(); $('#loginErr').textContent = '';
+    try { const j = await api('login', { password: $('#pw').value }); csrf = j.csrf; rates = j.rates; $('#pw').value = ''; showApp(); }
+    catch (err) { $('#loginErr').textContent = err.message; }
+  });
+  $('#logout').onclick = async () => { try { await api('logout', {}); } catch (e) {} showLogin(); };
+  api('me').then(j => { if (j.auth) { csrf = j.csrf; rates = j.rates || rates; showApp(); } else showLogin(); }).catch(showLogin);
+
+  async function loadAll() {
+    const [b, k] = await Promise.all([run(api('bookings')), run(api('blocks'))]);
+    bookings = b.bookings; blocks = k.blocks; render();
+  }
+  function render() { if (tab === 'list') renderList(); else if (tab === 'cal') renderCal(); else renderStats(); }
+
+  $('#tabs').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return; tab = b.dataset.tab;
+    document.querySelectorAll('#tabs button').forEach(x => x.classList.toggle('on', x === b));
+    ['list', 'cal', 'stats'].forEach(t => $('#tab-' + t).hidden = t !== tab);
+    render();
+  });
+
+  // ---- lista rezervacija ----
+  const CH = [['all', 'Sve'], ['pending', 'Na čekanju'], ['confirmed', 'Potvrđene'], ['cancelled', 'Otkazane']];
+  function renderList() {
+    $('#chips').innerHTML = CH.map(([k, l]) => '<button class="chip' + (filter === k ? ' on' : '') + '" data-f="' + k + '">' + l + ' (' + bookings.filter(b => k === 'all' || b.status === k).length + ')</button>').join('');
+    const list = bookings.filter(b => filter === 'all' || b.status === filter);
+    $('#bkList').innerHTML = list.length ? list.map(card).join('') : '<div class="empty">Nema rezervacija.</div>';
+  }
+  function card(b) {
+    const n = nightsOf(b.check_in, b.check_out), rest = b.price_total - b.paid_amount;
+    const restTxt = b.paid_amount >= b.price_total && b.price_total > 0 ? '<span class="rest paid">✓ Plaćeno u cijelosti</span>' : '<span class="rest due">Preostalo: ' + rest + ' KM</span>';
+    return '<div class="bk st-' + b.status + '" data-id="' + b.id + '">' +
+      '<div class="top"><b>' + fmtD(b.check_in) + ' → ' + fmtD(b.check_out) + '</b><span class="nt">' + n + (n === 1 ? ' noć' : ' noći') + ' · ' + (b.guests === '2' ? '1–2' : '3–4') + ' osobe</span><span class="badge ' + b.status + '">' + ST[b.status] + '</span>' + (b.source === 'admin' ? '<span class="badge">ručno</span>' : '') + '</div>' +
+      '<div class="who"><b style="color:var(--ink)">' + esc(b.name) + '</b>' + (b.phone ? ' · <a href="tel:' + esc(b.phone) + '">' + esc(b.phone) + '</a>' : '') + (b.email ? ' · <a href="mailto:' + esc(b.email) + '">' + esc(b.email) + '</a>' : '') + '</div>' +
+      (b.note ? '<div class="nt">„' + esc(b.note) + '“</div>' : '') +
+      '<div class="money"><label>Cijena (KM)<input type="number" min="0" data-k="price_total" value="' + b.price_total + '"></label>' +
+      '<label>Plaćeno (KM)<input type="number" min="0" data-k="paid_amount" value="' + b.paid_amount + '"></label>' +
+      '<button class="btn ghost sm" data-a="full">Plaćeno sve</button>' + restTxt +
+      '<div class="acts">' + (b.status !== 'confirmed' ? '<button class="btn ok sm" data-a="confirm">Potvrdi</button>' : '') + (b.status !== 'cancelled' ? '<button class="btn bad sm" data-a="cancel">Otkaži</button>' : '') + '<button class="btn ghost sm" data-a="edit">Uredi</button><button class="btn bad sm" data-a="del">Obriši</button></div></div></div>';
+  }
+  async function patch(id, fields) { await run(api('booking_save', Object.assign({ id }, fields))); await loadAll(); }
+  $('#tab-list').addEventListener('click', async e => {
+    const f = e.target.closest('[data-f]'); if (f) { filter = f.dataset.f; renderList(); return; }
+    const btn = e.target.closest('[data-a]'); if (!btn) return;
+    const id = +btn.closest('.bk').dataset.id, b = bookings.find(x => x.id == id), a = btn.dataset.a;
+    if (a === 'confirm') patch(id, { status: 'confirmed' });
+    else if (a === 'cancel') { if (confirm('Otkazati rezervaciju? Termin će opet biti slobodan.')) patch(id, { status: 'cancelled' }); }
+    else if (a === 'full') patch(id, { paid_amount: b.price_total });
+    else if (a === 'edit') openDlg(b);
+    else if (a === 'del') { if (confirm('Trajno obrisati ovu rezervaciju? (Za otkazivanje koristite „Otkaži“.)')) { await run(api('booking_delete', { id })); loadAll(); } }
+  });
+  $('#tab-list').addEventListener('change', e => {
+    const i = e.target.closest('input[data-k]'); if (!i) return;
+    patch(+i.closest('.bk').dataset.id, { [i.dataset.k]: Math.max(0, parseInt(i.value, 10) || 0) });
+  });
+
+  // ---- dijalog (nova / uredi) ----
+  const dlg = $('#dlg'); let editId = 0;
+  function openDlg(b) {
+    editId = b ? b.id : 0; $('#dlgTitle').textContent = b ? 'Uredi rezervaciju' : 'Nova rezervacija'; $('#dlgErr').textContent = '';
+    $('#fName').value = b ? b.name : ''; $('#fEmail').value = b ? b.email : ''; $('#fPhone').value = b ? b.phone : '';
+    $('#fIn').value = b ? b.check_in : ''; $('#fOut').value = b ? b.check_out : ''; $('#fGuests').value = b ? b.guests : '2';
+    $('#fStatus').value = b ? b.status : 'confirmed'; $('#fPrice').value = b ? b.price_total : ''; $('#fPaid').value = b ? b.paid_amount : 0; $('#fNote').value = b ? b.note : '';
+    dlg.showModal();
+  }
+  $('#newBk').onclick = () => openDlg(null);
+  $('#dlgCancel').onclick = () => dlg.close();
+  $('#dlgForm').addEventListener('submit', async e => {
+    e.preventDefault(); $('#dlgErr').textContent = '';
+    const d = { name: $('#fName').value, email: $('#fEmail').value, phone: $('#fPhone').value, check_in: $('#fIn').value, check_out: $('#fOut').value, guests: $('#fGuests').value, status: $('#fStatus').value, paid_amount: parseInt($('#fPaid').value, 10) || 0, note: $('#fNote').value };
+    if ($('#fPrice').value !== '') d.price_total = parseInt($('#fPrice').value, 10) || 0;
+    if (editId) d.id = editId;
+    try { await api('booking_save', d); dlg.close(); toast('Sačuvano.'); loadAll(); } catch (err) { $('#dlgErr').textContent = err.message; }
+  });
+
+  // ---- kalendar + blokiranje dana ----
+  let cView = new Date(new Date().getFullYear(), new Date().getMonth(), 1), selA = null, selB = null;
+  const todayIso = ISO(new Date());
+  function dayMap() {
+    const m = {};
+    const each = (from, toExcl, v) => { for (let d = new Date(from); ISO(d) < toExcl; d.setDate(d.getDate() + 1)) m[ISO(d)] = v; };
+    blocks.forEach(k => { const e = new Date(k.date_to); e.setDate(e.getDate() + 1); each(k.date_from, ISO(e), { kind: 'block', label: k.note || 'Blokirano' }); });
+    bookings.filter(b => b.status !== 'cancelled').forEach(b => each(b.check_in, b.check_out, { kind: b.status, label: b.name }));
+    return m;
+  }
+  function renderCal() {
+    $('#cTitle').textContent = MN[cView.getMonth()] + ' ' + cView.getFullYear();
+    const map = dayMap(), g = $('#cGrid');
+    g.innerHTML = ['Pon', 'Uto', 'Sri', 'Čet', 'Pet', 'Sub', 'Ned'].map(d => '<div class="dow">' + d + '</div>').join('') + '<div></div>'.repeat((cView.getDay() + 6) % 7);
+    const n = new Date(cView.getFullYear(), cView.getMonth() + 1, 0).getDate(), lo = selA && selB ? (selA < selB ? selA : selB) : selA, hi = selA && selB ? (selA < selB ? selB : selA) : selA;
+    for (let i = 1; i <= n; i++) {
+      const key = cView.getFullYear() + '-' + pad(cView.getMonth() + 1) + '-' + pad(i), v = map[key];
+      let cls = 'cell' + (v ? ' ' + v.kind + ' busy' : '') + (key < todayIso ? ' past' : '');
+      if (lo && key >= lo && key <= hi) cls += key === lo || key === hi ? ' sel' : ' range';
+      g.insertAdjacentHTML('beforeend', '<button type="button" class="' + cls + '" data-d="' + key + '"' + (v ? ' title="' + esc(v.label) + '"' : '') + '><span class="n">' + i + '</span>' + (v ? '<span class="l">' + esc(v.label) + '</span>' : '') + '</button>');
+    }
+    const ready = !!(selA && selB);
+    $('#blkAdd').disabled = !ready;
+    $('#selInfo').textContent = !selA ? 'Kliknite prvi i zadnji dan perioda koji je zauzet dogovorom van sajta.' : !selB ? 'Početak: ' + fmtD(selA) + ' — kliknite zadnji dan.' : 'Zauzeto: ' + fmtD(lo) + ' – ' + fmtD(hi) + ' (' + (nightsOf(lo, hi) + 1) + ' dana)';
+    $('#blkList').innerHTML = blocks.length ? blocks.map(k => '<div class="blockrow"><span>' + fmtD(k.date_from) + (k.date_to !== k.date_from ? ' – ' + fmtD(k.date_to) : '') + '</span><span class="nt">' + esc(k.note) + '</span><button class="btn bad sm" data-bd="' + k.id + '">Ukloni</button></div>').join('') : '<div class="nt" style="padding:8px 0">Nema blokiranih perioda.</div>';
+  }
+  $('#cPrev').onclick = () => { cView = new Date(cView.getFullYear(), cView.getMonth() - 1, 1); renderCal(); };
+  $('#cNext').onclick = () => { cView = new Date(cView.getFullYear(), cView.getMonth() + 1, 1); renderCal(); };
+  $('#cGrid').addEventListener('click', e => {
+    const c = e.target.closest('[data-d]'); if (!c) return;
+    if (c.classList.contains('busy')) { toast(c.title || 'Dan je već zauzet.'); return; }
+    const d = c.dataset.d;
+    if (!selA || selB) { selA = d; selB = null; } else selB = d;
+    renderCal();
+  });
+  $('#blkAdd').onclick = async () => {
+    const lo = selA < selB ? selA : selB, hi = selA < selB ? selB : selA;
+    try { await api('block_add', { date_from: lo, date_to: hi, note: $('#blkNote').value }); selA = selB = null; $('#blkNote').value = ''; toast('Dani su označeni kao zauzeti.'); loadAll(); } catch (err) { toast(err.message); }
+  };
+  $('#blkList').addEventListener('click', async e => {
+    const b = e.target.closest('[data-bd]'); if (!b || !confirm('Ukloniti blokadu? Ti dani će opet biti slobodni za rezervaciju.')) return;
+    await run(api('block_delete', { id: +b.dataset.bd })); loadAll();
+  });
+
+  // ---- statistika ----
+  let stats = null;
+  async function renderStats() {
+    stats = await run(api('stats'));
+    const years = [...new Set(stats.months.map(m => m.month.slice(0, 4)).concat(String(new Date().getFullYear())))].sort().reverse();
+    const sel = $('#yearSel'), cur = sel.value || years[0];
+    sel.innerHTML = years.map(y => '<option' + (y === cur ? ' selected' : '') + '>' + y + '</option>').join('');
+    drawStats();
+  }
+  $('#yearSel').onchange = drawStats;
+  function drawStats() {
+    const y = $('#yearSel').value, ms = stats.months.filter(m => m.month.startsWith(y));
+    const sum = k => ms.reduce((s, m) => s + m[k], 0), exp = sum('expected'), paid = sum('paid'), nights = sum('nights');
+    const kp = [['Naplaćeno', paid + ' KM'], ['Očekivano (potvrđeno)', exp + ' KM'], ['Preostalo za naplatu', Math.max(0, exp - paid) + ' KM'], ['Potvrđenih rezervacija', sum('bookings')], ['Noćenja', nights], ['Na čekanju', sum('pending')], ['Otkazanih (ukupno)', stats.cancelled]];
+    $('#kpis').innerHTML = kp.map(([l, v]) => '<div class="kpi"><small>' + l + '</small><b>' + v + '</b></div>').join('');
+    const all = Array.from({ length: 12 }, (_, i) => y + '-' + pad(i + 1));
+    $('#statTable').innerHTML = '<tr><th>Mjesec</th><th>Rezervacije</th><th>Noćenja</th><th>Popunjenost</th><th>Očekivano</th><th>Naplaćeno</th><th>Preostalo</th></tr>' +
+      all.map((k, i) => {
+        const m = ms.find(x => x.month === k) || { bookings: 0, nights: 0, expected: 0, paid: 0, blocked: 0 }, days = new Date(+y, i + 1, 0).getDate(), occ = Math.min(100, Math.round((m.nights + m.blocked) / days * 100));
+        return '<tr><td>' + MN[i] + '</td><td>' + m.bookings + '</td><td>' + m.nights + (m.blocked ? ' <small style="color:var(--mute)">+' + m.blocked + ' bl.</small>' : '') + '</td><td><span class="occ"><i style="width:' + occ + '%"></i></span>' + occ + '%</td><td>' + m.expected + ' KM</td><td>' + m.paid + ' KM</td><td>' + Math.max(0, m.expected - m.paid) + ' KM</td></tr>';
+      }).join('');
+  }
+})();
+</script>
+</body>
+</html>
