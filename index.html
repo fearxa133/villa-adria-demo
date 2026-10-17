@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Villa Adria – Apartmani na moru</title>
+<title>Apartmani LED Vječna Vatra – Sarajevo Centar</title>
 <style>
-  :root { --ink:#0e2233; --accent:#ff8a4c; --glass:rgba(255,255,255,.14); }
+  :root { --ink:#0e2233; --accent:#ffa24c; }
   * { box-sizing:border-box; margin:0; padding:0; }
   html { scroll-behavior:smooth; }
-  body { font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif; color:#fff; background:#8fd3ff; }
+  body { font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif; color:#fff; background:#1a1c22; }
   #bg { position:fixed; inset:0; width:100%; height:100%; z-index:0; display:block; }
-  nav { position:fixed; top:0; left:0; right:0; z-index:10; display:flex; justify-content:space-between; align-items:center; padding:20px 5vw; backdrop-filter:blur(8px); background:linear-gradient(rgba(10,30,50,.35),transparent); }
-  nav .logo { font-weight:800; letter-spacing:.12em; text-transform:uppercase; font-size:15px; }
+  nav { position:fixed; top:0; left:0; right:0; z-index:10; display:flex; justify-content:space-between; align-items:center; padding:18px 5vw; backdrop-filter:blur(10px); background:rgba(14,16,22,.6); }
+  nav .logo { font-weight:800; letter-spacing:.1em; text-transform:uppercase; font-size:14px; }
   nav .logo span { color:var(--accent); }
   nav ul { display:flex; gap:28px; list-style:none; }
   nav a { color:#fff; text-decoration:none; font-size:14px; opacity:.9; }
@@ -19,44 +19,39 @@
   section { position:relative; z-index:1; min-height:100vh; display:flex; align-items:center; padding:90px 6vw 60px; }
   section.right { justify-content:flex-end; }
   section.center { justify-content:center; text-align:center; }
-  .panel { max-width:520px; padding:34px 36px; border-radius:28px; background:rgba(8,26,44,.62); border:1px solid rgba(255,255,255,.18); backdrop-filter:blur(18px) saturate(1.2); -webkit-backdrop-filter:blur(18px) saturate(1.2); box-shadow:0 20px 60px rgba(0,20,40,.35); }
-  nav { background:rgba(8,26,44,.55) !important; }
-  footer { background:rgba(8,26,44,.6); }
-  form { background:rgba(255,255,255,.08) !important; }
-  .card { background:rgba(255,255,255,.12) !important; }
-  .eyebrow { font-size:13px !important; }
-  h1 { font-size:clamp(40px,7vw,84px); line-height:1.02; font-weight:800; text-shadow:0 4px 30px rgba(0,30,60,.35); }
-  h2 { font-size:clamp(30px,4.5vw,52px); line-height:1.1; margin-bottom:16px; text-shadow:0 3px 20px rgba(0,30,60,.4); }
-  p { font-size:18px; line-height:1.6; text-shadow:0 2px 14px rgba(0,30,60,.45); }
-  .eyebrow { text-transform:uppercase; letter-spacing:.25em; font-size:12px; margin-bottom:16px; color:var(--accent); font-weight:700; }
-  .btn { display:inline-block; margin-top:28px; padding:15px 32px; border-radius:999px; background:var(--accent); color:#fff; font-weight:700; text-decoration:none; border:0; font-size:16px; cursor:pointer; box-shadow:0 10px 30px rgba(255,138,76,.45); transition:transform .2s; }
+  .panel { max-width:540px; padding:34px 36px; border-radius:28px; background:rgba(14,16,22,.66); border:1px solid rgba(255,255,255,.16); backdrop-filter:blur(18px) saturate(1.2); -webkit-backdrop-filter:blur(18px) saturate(1.2); box-shadow:0 20px 60px rgba(0,0,0,.4); }
+  h1 { font-size:clamp(36px,6vw,70px); line-height:1.04; font-weight:800; }
+  h2 { font-size:clamp(28px,4vw,46px); line-height:1.1; margin-bottom:14px; }
+  p { font-size:18px; line-height:1.6; }
+  .eyebrow { text-transform:uppercase; letter-spacing:.22em; font-size:13px; margin-bottom:16px; color:var(--accent); font-weight:700; }
+  .btn { display:inline-block; margin-top:26px; padding:15px 32px; border-radius:999px; background:var(--accent); color:#1a1208; font-weight:800; text-decoration:none; border:0; font-size:16px; cursor:pointer; box-shadow:0 10px 30px rgba(255,162,76,.4); transition:transform .2s; }
   .btn:hover { transform:translateY(-3px); }
-  .scroll-hint { position:absolute; bottom:30px; left:6vw; font-size:12px; letter-spacing:.2em; text-transform:uppercase; opacity:.8; animation:bob 1.8s infinite; }
+  .scroll-hint { position:absolute; bottom:30px; left:6vw; font-size:12px; letter-spacing:.2em; text-transform:uppercase; opacity:.85; animation:bob 1.8s infinite; }
   @keyframes bob { 50% { transform:translateY(8px); } }
-  .cards { display:grid; gap:14px; margin-top:24px; }
-  .card { background:var(--glass); border:1px solid rgba(255,255,255,.28); backdrop-filter:blur(14px); border-radius:18px; padding:18px 22px; display:flex; justify-content:space-between; align-items:center; gap:16px; }
-  .card h3 { font-size:18px; margin-bottom:4px; }
+  .cards { display:grid; gap:12px; margin-top:22px; }
+  .card { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); border-radius:16px; padding:16px 20px; display:flex; justify-content:space-between; align-items:center; gap:16px; }
+  .card h3 { font-size:17px; margin-bottom:3px; }
   .card small { opacity:.85; font-size:13px; }
-  .card .price { font-size:24px; font-weight:800; white-space:nowrap; }
-  .card .price small { display:block; font-weight:400; text-align:right; }
-  .stats { display:flex; gap:30px; margin-top:26px; flex-wrap:wrap; }
-  .stats b { display:block; font-size:34px; color:var(--accent); }
+  .card .price { font-size:24px; font-weight:800; white-space:nowrap; color:var(--accent); }
+  .note { margin-top:16px; font-size:14px; opacity:.85; line-height:1.5; }
+  .stats { display:flex; gap:28px; margin-top:24px; flex-wrap:wrap; }
+  .stats b { display:block; font-size:32px; color:var(--accent); }
   .stats span { font-size:13px; opacity:.9; }
-  form { display:grid; gap:12px; margin-top:24px; background:var(--glass); border:1px solid rgba(255,255,255,.28); backdrop-filter:blur(16px); padding:26px; border-radius:22px; text-align:left; }
-  input { padding:14px 16px; border-radius:12px; border:0; background:rgba(255,255,255,.9); font-size:15px; color:var(--ink); }
+  form { display:grid; gap:12px; margin-top:22px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.2); padding:24px; border-radius:20px; text-align:left; }
+  input { padding:14px 16px; border-radius:12px; border:0; background:rgba(255,255,255,.92); font-size:15px; color:var(--ink); }
   .row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-  footer { position:relative; z-index:1; text-align:center; padding:20px; font-size:12px; opacity:.75; }
-  @media (max-width:760px) { nav ul { display:none; } section.right { justify-content:flex-start; } }
+  footer { position:relative; z-index:1; text-align:center; padding:18px; font-size:12px; background:rgba(14,16,22,.7); }
+  @media (max-width:760px) { nav ul { display:none; } section.right { justify-content:flex-start; } .panel { padding:26px 24px; } }
 </style>
 </head>
 <body>
 <canvas id="bg"></canvas>
 
 <nav>
-  <div class="logo">Villa <span>Adria</span></div>
+  <div class="logo">LED <span>Vječna Vatra</span></div>
   <ul>
     <li><a href="#top">Početna</a></li>
-    <li><a href="#apartmani">Apartmani</a></li>
+    <li><a href="#cijene">Cijene</a></li>
     <li><a href="#unutra">Enterijer</a></li>
     <li><a href="#lokacija">Lokacija</a></li>
     <li><a href="#kontakt">Rezervacija</a></li>
@@ -65,24 +60,26 @@
 
 <section id="top">
   <div class="panel">
-    <div class="eyebrow">Apartmani uz more</div>
-    <h1>Vaš odmor<br>počinje ovdje.</h1>
-    <p style="margin-top:20px">Moderni apartmani sa pogledom na more, nekoliko koraka od plaže. Istražite ih u 3D — skrolajte i uđite unutra.</p>
+    <div class="eyebrow">Sarajevo – Centar</div>
+    <h1>Vaš dom u srcu Sarajeva.</h1>
+    <p style="margin-top:18px">Novouređen apartman svega 20 metara od Vječne vatre. Istražite ga u 3D — skrolajte i uđite unutra.</p>
     <a class="btn" href="#kontakt">Rezerviši termin</a>
   </div>
   <div class="scroll-hint">Skrolaj ↓</div>
 </section>
 
-<section id="apartmani" class="right">
+<section id="cijene" class="right">
   <div class="panel">
-    <div class="eyebrow">Smještaj</div>
-    <h2>Tri apartmana,<br>jedna adresa.</h2>
-    <p>Svaki apartman ima balkon, klimu, besplatan Wi-Fi i parking.</p>
+    <div class="eyebrow">Cijene boravka</div>
+    <h2>Jasno i fleksibilno.</h2>
+    <p>Dnevni boravak ili noćenje — birate prema svojim planovima.</p>
     <div class="cards">
-      <div class="card"><div><h3>Studio Sea View</h3><small>2 osobe · 28 m² · balkon</small></div><div class="price">45 €<small>po noći</small></div></div>
-      <div class="card"><div><h3>Apartman Deluxe</h3><small>4 osobe · 55 m² · terasa</small></div><div class="price">80 €<small>po noći</small></div></div>
-      <div class="card"><div><h3>Penthouse</h3><small>6 osoba · 90 m² · krovna terasa</small></div><div class="price">130 €<small>po noći</small></div></div>
+      <div class="card"><div><h3>Dnevni boravak</h3><small>do 14:00 sati</small></div><div class="price">50 KM</div></div>
+      <div class="card"><div><h3>Dnevni boravak</h3><small>do 18:00 sati</small></div><div class="price">70 KM</div></div>
+      <div class="card"><div><h3>Noćenje</h3><small>1–2 osobe</small></div><div class="price">90 KM</div></div>
+      <div class="card"><div><h3>Noćenje</h3><small>3–4 osobe</small></div><div class="price">110 KM</div></div>
     </div>
+    <p class="note">Vikendom doplata 10 KM po osobi. U sezoni i za praznike posebne cijene.</p>
   </div>
 </section>
 
@@ -90,11 +87,11 @@
   <div class="panel">
     <div class="eyebrow">Enterijer</div>
     <h2>Uđite unutra.</h2>
-    <p>Svijetli, čisti i potpuno opremljeni prostori. Zamislite jutarnju kafu uz pogled na more — upravo ovako izgleda vaš apartman.</p>
+    <p>Moderan dnevni boravak s drvenom oblogom, LED rasvjetom i električnim kaminom. Topla atmosfera nakon dana provedenog u gradu.</p>
     <div class="stats">
-      <div><b>4.9★</b><span>ocjena gostiju</span></div>
-      <div><b>50 m</b><span>do plaže</span></div>
-      <div><b>100%</b><span>opremljeno</span></div>
+      <div><b>40 m²</b><span>jednoiposoban stan</span></div>
+      <div><b>WiFi</b><span>besplatan internet</span></div>
+      <div><b>Klima</b><span>u apartmanu</span></div>
     </div>
   </div>
 </section>
@@ -102,15 +99,15 @@
 <section id="lokacija" class="right">
   <div class="panel">
     <div class="eyebrow">Lokacija</div>
-    <h2>Sve na dohvat ruke.</h2>
-    <p>Plaža, restorani, market i stari grad — sve u krugu od 5 minuta hoda. Aerodrom je udaljen 25 minuta vožnje.</p>
+    <h2>20 metara od Vječne vatre.</h2>
+    <p>Branilaca Sarajeva 39 — pored Narodnog pozorišta, okružen restoranima, kafićima i šetalištima. Parking moguć po dogovoru.</p>
   </div>
 </section>
 
 <section id="kontakt" class="center">
   <div class="panel" style="max-width:560px">
     <div class="eyebrow">Rezervacija</div>
-    <h2>Rezerviši svoj zalazak sunca.</h2>
+    <h2>Rezerviši svoj boravak u centru.</h2>
     <form onsubmit="event.preventDefault(); alert('Ovo je demo — forma nije povezana.');">
       <input placeholder="Ime i prezime" required>
       <div class="row"><input type="date"><input type="date"></div>
@@ -119,7 +116,7 @@
     </form>
   </div>
 </section>
-<footer>© Villa Adria · Demo 3D prezentacija</footer>
+<footer>© Apartmani LED Vječna Vatra · Demo 3D prezentacija</footer>
 
 <script src="three.min.js"></script>
 <script>
@@ -131,29 +128,29 @@
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x8fd3ff);
-  scene.fog = new THREE.Fog(0x8fd3ff, 40, 140);
-  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 400);
+  scene.background = new THREE.Color(0x9ccfee);
+  scene.fog = new THREE.Fog(0x9ccfee, 50, 170);
+  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 500);
 
-  // ---------- Light ----------
-  const hemi = new THREE.HemisphereLight(0xffffff, 0x3a6a8a, 0.75);
+  const hemi = new THREE.HemisphereLight(0xffffff, 0x6a6a6a, 0.8);
   scene.add(hemi);
   const sun = new THREE.DirectionalLight(0xffffff, 1.0);
   sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048);
-  const sc = sun.shadow.camera; sc.left = -30; sc.right = 40; sc.top = 20; sc.bottom = -20; sc.near = 1; sc.far = 120;
+  const sc = sun.shadow.camera; sc.left = -35; sc.right = 55; sc.top = 25; sc.bottom = -25; sc.near = 1; sc.far = 140;
   scene.add(sun);
-
   const sunBall = new THREE.Mesh(new THREE.SphereGeometry(4, 24, 16), new THREE.MeshBasicMaterial({ color: 0xfff3c4, fog: false }));
   scene.add(sunBall);
 
-  // ---------- Helpers ----------
-  const mats = {};
   function mat(color, opts) { return new THREE.MeshStandardMaterial(Object.assign({ color, roughness: 0.85, metalness: 0.02 }, opts || {})); }
   function box(w, h, d, color, x, y, z, parent, opts) {
     const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), typeof color === 'object' ? color : mat(color, opts));
     m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true;
     (parent || scene).add(m); return m;
+  }
+  function glow(w, h, d, color, x, y, z, parent) {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), new THREE.MeshBasicMaterial({ color }));
+    m.position.set(x, y, z); (parent || scene).add(m); return m;
   }
   function cyl(rt, rb, h, color, x, y, z, parent, seg) {
     const m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg || 16), mat(color));
@@ -161,218 +158,205 @@
     (parent || scene).add(m); return m;
   }
 
-  // ---------- Sea ----------
-  const seaGeo = new THREE.PlaneGeometry(400, 400, 80, 80);
-  seaGeo.rotateX(-Math.PI / 2);
-  const seaBase = seaGeo.attributes.position.array.slice();
-  const sea = new THREE.Mesh(seaGeo, new THREE.MeshStandardMaterial({ color: 0x1f8fc4, roughness: 0.35, metalness: 0.1, flatShading: true }));
-  sea.position.y = -0.4; sea.receiveShadow = true;
-  scene.add(sea);
+  // ---------- Ground ----------
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(500, 500), mat(0x4b4e55));
+  ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+  box(60, 0.2, 9, 0x8d8a84, 0, 0.1, 6.5);                 // sidewalk in front
+  cyl(6, 6, 0.24, 0xb9b2a5, 0, 0.12, 11, scene, 48);      // plaza around the flame
+  cyl(5.2, 5.2, 0.28, 0xa59e90, 0, 0.13, 11, scene, 48);
 
-  // ---------- Island ----------
-  const island = new THREE.Group(); scene.add(island);
-  const sand = cyl(13, 15, 0.9, 0xf0dca8, 0, -0.15, 0, island, 40);
-  const grass = cyl(10.5, 11.5, 0.3, 0x6fbf6a, 0, 0.45, 0, island, 40);
+  // ---------- Hills (Sarajevo valley) ----------
+  for (let i = 0; i < 26; i++) {
+    const a = i / 26 * Math.PI * 2, r = 120 + (i % 3) * 14;
+    const h = 30 + (i * 37 % 28);
+    const hill = new THREE.Mesh(new THREE.ConeGeometry(34, h, 7), new THREE.MeshStandardMaterial({ color: 0x55806a, roughness: 1, flatShading: true }));
+    hill.position.set(Math.cos(a) * r, h / 2 - 1, Math.sin(a) * r - 10); scene.add(hill);
+  }
 
-  // ---------- Building ----------
+  // ---------- Buildings ----------
   const windowMats = [];
-  const building = new THREE.Group(); scene.add(building);
-  const FH = 1.7;
-  for (let f = 0; f < 3; f++) {
-    const y = 0.6 + FH / 2 + f * FH;
-    box(6.4 - f * 0.35, FH, 4.2, f === 2 ? 0xf6e7d0 : 0xfaf6ee, 0, y, 0, building);
-    // slab line
-    box(6.6 - f * 0.35, 0.1, 4.4, 0xd9cdb8, 0, 0.6 + (f + 1) * FH, 0, building);
-    // windows + balcony
-    for (let i = -1; i <= 1; i++) {
-      const wm = new THREE.MeshBasicMaterial({ color: 0x9fd8ff });
-      windowMats.push(wm);
-      const w = new THREE.Mesh(new THREE.PlaneGeometry(1.05, 0.95), wm);
-      w.position.set(i * 1.9, y + 0.05, 2.11);
-      building.add(w);
-      box(1.2, 0.08, 0.08, 0xffffff, i * 1.9, y - 0.5, 2.15, building);
-      box(1.15, 0.05, 0.7, 0xe8dcc6, i * 1.9, y - 0.78, 2.45, building);
-      box(1.15, 0.35, 0.04, 0xffffff, i * 1.9, y - 0.6, 2.78, building, { transparent: true, opacity: 0.55 });
+  const winDay = new THREE.Color(0x7ea0bb), winNight = new THREE.Color(0xffc874);
+  function facade(cx, w, floors, color, depth, withDetails) {
+    const g = new THREE.Group(); scene.add(g);
+    const FH = 1.9, base = 2.2;
+    const H = base + floors * FH;
+    box(w, H, depth, color, cx, H / 2, 0, g);
+    box(w + 0.4, 0.3, depth + 0.5, 0xe9e1d0, cx, H + 0.15, 0, g);      // cornice
+    box(w, 0.1, depth + 0.1, 0x6b4a3a, cx, H + 0.4, 0, g);             // roof edge
+    // ground floor: shop windows
+    const cols = Math.max(2, Math.round(w / 2.4));
+    for (let c = 0; c < cols; c++) {
+      const x = cx - w / 2 + (c + 0.5) * w / cols;
+      for (let f = 0; f < floors; f++) {
+        const y = base + f * FH + FH / 2;
+        const wm = new THREE.MeshBasicMaterial({ color: 0x7ea0bb }); wm._k = 0.55 + Math.random() * 0.45; windowMats.push(wm);
+        const win = new THREE.Mesh(new THREE.PlaneGeometry(0.95, 1.25), wm); win.position.set(x, y, depth / 2 + 0.02); g.add(win);
+        box(1.15, 0.1, 0.22, 0xf5efe3, x, y - 0.7, depth / 2 + 0.08, g);
+        box(1.15, 0.12, 0.2, 0xf5efe3, x, y + 0.72, depth / 2 + 0.08, g);
+        if (withDetails && f > 0 && f < floors - 1) { box(1.1, 0.5, 0.05, 0x1f2227, x, y - 0.4, depth / 2 + 0.5, g); box(1.1, 0.06, 0.6, 0xd8cfbd, x, y - 0.67, depth / 2 + 0.3, g); }
+      }
+      const wm2 = new THREE.MeshBasicMaterial({ color: 0x7ea0bb }); wm2._k = 0.8; windowMats.push(wm2);
+      const shop = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 1.4), wm2); shop.position.set(x, 1.35, depth / 2 + 0.02); g.add(shop);
     }
+    return g;
   }
-  // roof
-  box(6.2, 0.15, 4.0, 0xd9693f, 0, 0.6 + 3 * FH + 0.1, 0, building);
-  box(2.2, 0.9, 1.8, 0xfaf6ee, 1.5, 0.6 + 3 * FH + 0.6, 0.3, building);
-  const flag = box(0.04, 1.4, 0.04, 0x555555, -2.4, 0.6 + 3 * FH + 0.85, -1.2, building);
-  box(0.6, 0.35, 0.03, 0xff8a4c, -2.1, 0.6 + 3 * FH + 1.35, -1.2, building);
-  // door + awning
-  box(1.1, 1.3, 0.1, 0x7a4a2b, 0, 1.25, 2.12, building);
-  box(2.0, 0.1, 0.9, 0xff8a4c, 0, 2.05, 2.5, building);
-  // sign
-  box(2.4, 0.4, 0.08, 0x0e2233, -1.9, 0.9, 2.15, building);
+  facade(-9.5, 9, 4, 0xd9c8a9, 5.5, false);
+  facade(9.8, 9.6, 6, 0xc7d1d6, 5.5, false);
+  const main = facade(0, 9.6, 5, 0xf2e6cf, 6, true);
+  // main entrance + sign
+  box(1.5, 1.9, 0.12, 0x3a2a20, 0, 1.1, 3.05, main);
+  box(2.6, 0.45, 0.1, 0x1a1c22, 0, 2.55, 3.1, main);
+  glow(2.3, 0.18, 0.05, 0xffa24c, 0, 2.55, 3.17, main);
+  // back row buildings (skyline)
+  [[-22, 12, 0xc9b79a], [-8, 16, 0xd6cdbd], [10, 13, 0xbfc9c9], [24, 15, 0xd8c3a5]].forEach(([x, h, c]) => box(10, h, 8, c, x, h / 2, -14));
 
-  // ---------- Palms ----------
-  function palm(x, z, s) {
+  // ---------- Eternal flame monument ----------
+  const mon = new THREE.Group(); mon.position.set(0, 0.3, 11); scene.add(mon);
+  box(3.4, 0.25, 3.4, 0x777777, 0, 0.12, 0, mon);
+  const star = box(3.4, 0.25, 3.4, 0x8a8a8a, 0, 0.3, 0, mon); star.rotation.y = Math.PI / 4;
+  box(0.9, 0.8, 0.9, 0x666666, 0, 0.7, 0, mon);
+  const flame = new THREE.Mesh(new THREE.ConeGeometry(0.28, 1.0, 8), new THREE.MeshBasicMaterial({ color: 0xff7a1a }));
+  flame.position.set(0, 1.55, 0); mon.add(flame);
+  const flame2 = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.7, 8), new THREE.MeshBasicMaterial({ color: 0xffd35c }));
+  flame2.position.set(0, 1.45, 0); mon.add(flame2);
+  const flameLight = new THREE.PointLight(0xff8a3a, 0.5, 14); flameLight.position.set(0, 2, 0); mon.add(flameLight);
+
+  // ---------- Trees & lamps ----------
+  function tree(x, z, s) {
     const g = new THREE.Group();
-    const trunk = cyl(0.1, 0.16, 2.6, 0x9a7048, 0, 1.3, 0, g, 8); trunk.rotation.z = 0.12;
-    for (let i = 0; i < 7; i++) {
-      const leaf = new THREE.Mesh(new THREE.ConeGeometry(0.2, 1.8, 4), mat(0x2f9e4f));
-      leaf.castShadow = true;
-      const a = i / 7 * Math.PI * 2;
-      leaf.position.set(0.3 + Math.cos(a) * 0.7, 2.6, Math.sin(a) * 0.7);
-      leaf.rotation.set(Math.sin(a) * 1.2, 0, -Math.cos(a) * 1.2 - 0.3);
-      leaf.scale.set(1, 1, 0.35);
-      g.add(leaf);
-    }
-    g.position.set(x, 0.6, z); g.scale.setScalar(s); scene.add(g); return g;
+    cyl(0.12, 0.18, 1.6, 0x6b4a2f, 0, 0.8, 0, g, 8);
+    const c = new THREE.Mesh(new THREE.IcosahedronGeometry(1.1, 1), new THREE.MeshStandardMaterial({ color: 0x4f9a55, flatShading: true, roughness: 1 }));
+    c.position.y = 2.4; c.castShadow = true; g.add(c);
+    g.position.set(x, 0.2, z); g.scale.setScalar(s); scene.add(g); return g;
   }
-  const palms = [palm(-5.6, 3.2, 1.1), palm(5.8, 2.8, 1.3), palm(-6.8, -1.5, 0.9), palm(6.5, -3, 1.0)];
-
-  // umbrellas on the sand
-  function umbrella(x, z, c) {
-    cyl(0.03, 0.03, 1.4, 0xffffff, x, 1.3, z, scene, 6);
-    const top = new THREE.Mesh(new THREE.ConeGeometry(0.9, 0.5, 8), mat(c)); top.position.set(x, 2.1, z); top.castShadow = true; scene.add(top);
+  const trees = [tree(-7, 9, 1.2), tree(7.5, 9.5, 1.3), tree(-12, 8, 1.1), tree(13, 8.5, 1.2), tree(-5, 14.5, 1), tree(5.5, 15, 1)];
+  const lampMats = [];
+  function lamp(x, z) {
+    cyl(0.05, 0.07, 3.6, 0x22252b, x, 2.0, z, scene, 8);
+    const m = new THREE.MeshBasicMaterial({ color: 0xdadada }); lampMats.push(m);
+    const b = new THREE.Mesh(new THREE.SphereGeometry(0.22, 12, 10), m); b.position.set(x, 3.95, z); scene.add(b);
   }
-  umbrella(-8, 6, 0xff8a4c); umbrella(-6.4, 7.2, 0xffffff); umbrella(7.5, 6.5, 0xff5c7a);
+  [-10, -4.5, 4.5, 10].forEach(x => lamp(x, 8));
 
-  // ---------- Boats ----------
-  const boats = [];
-  function boat(x, z, c) {
-    const g = new THREE.Group();
-    box(2.2, 0.5, 0.9, 0xffffff, 0, 0.1, 0, g);
-    box(2.0, 0.12, 0.8, c, 0, 0.4, 0, g);
-    cyl(0.04, 0.04, 2.4, 0xcccccc, 0.1, 1.6, 0, g, 6);
-    const sail = new THREE.Mesh(new THREE.ConeGeometry(0.9, 2.0, 3), mat(0xffffff, { side: THREE.DoubleSide }));
-    sail.scale.z = 0.05; sail.rotation.y = 0; sail.position.set(-0.4, 1.5, 0); sail.castShadow = true; g.add(sail);
-    g.position.set(x, -0.2, z); scene.add(g); boats.push({ g, ph: Math.random() * 6 }); return g;
-  }
-  boat(-18, 10, 0xff8a4c); boat(22, 12, 0x1f8fc4); boat(-30, -8, 0xff5c7a);
-
-  // ---------- Interior room ----------
+  // ---------- Interior: living room (RX) ----------
   const RX = 40;
   const room = new THREE.Group(); room.position.set(RX, 0, 0); scene.add(room);
-  const wood = 0xc9a070;
-  box(9, 0.4, 6.6, 0xf2ead8, 0, -0.2, 0, room);          // base slab
-  box(8.4, 0.12, 6, wood, 0, 0.06, 0, room);               // floor
-  box(8.4, 4, 0.2, 0xf7f2ea, 0, 2.05, -3, room);           // back wall
-  box(0.2, 4, 6, 0xf1e9dc, -4.2, 2.05, 0, room);           // left wall
-  box(0.2, 4, 6, 0xf1e9dc, 4.2, 2.05, 0, room);            // right wall
-  // big window on back wall with sea view
-  const seaView = new THREE.Mesh(new THREE.PlaneGeometry(3.6, 2.2), new THREE.MeshBasicMaterial({ color: 0x7fd0ff }));
-  seaView.position.set(0, 2.3, -2.88); room.add(seaView);
-  const horizon = new THREE.Mesh(new THREE.PlaneGeometry(3.6, 0.9), new THREE.MeshBasicMaterial({ color: 0x1f8fc4 }));
-  horizon.position.set(0, 1.55, -2.87); room.add(horizon);
-  const rsun = new THREE.Mesh(new THREE.CircleGeometry(0.28, 24), new THREE.MeshBasicMaterial({ color: 0xfff3c4 }));
-  rsun.position.set(0.9, 2.85, -2.86); room.add(rsun);
-  box(3.8, 0.1, 0.25, 0xffffff, 0, 3.45, -2.9, room); box(3.8, 0.1, 0.25, 0xffffff, 0, 1.18, -2.85, room);
-  box(0.1, 2.3, 0.25, 0xffffff, -1.85, 2.3, -2.9, room); box(0.1, 2.3, 0.25, 0xffffff, 1.85, 2.3, -2.9, room); box(0.06, 2.3, 0.2, 0xffffff, 0, 2.3, -2.88, room);
-  // curtains
-  box(0.6, 2.6, 0.12, 0xf4a97a, -2.3, 2.3, -2.78, room); box(0.6, 2.6, 0.12, 0xf4a97a, 2.3, 2.3, -2.78, room);
-  // bed (left)
-  box(2.6, 0.35, 3.0, 0x7a5a3a, -2.6, 0.35, -1.2, room);
-  box(2.45, 0.3, 2.85, 0xffffff, -2.6, 0.68, -1.2, room);
-  box(2.5, 0.12, 1.7, 0x3d8fb5, -2.6, 0.88, -0.6, room);
-  box(0.9, 0.18, 0.5, 0xffffff, -3.2, 0.92, -2.2, room); box(0.9, 0.18, 0.5, 0xffffff, -2.0, 0.92, -2.2, room);
-  box(2.8, 1.3, 0.15, 0x7a5a3a, -2.6, 1.0, -2.65, room);
-  box(0.5, 0.5, 0.5, 0x7a5a3a, -4.0, 0.35, -2.2, room);
-  // rug
-  const rug = cyl(1.7, 1.7, 0.03, 0xff8a4c, 1.2, 0.14, 0.9, room, 40);
-  // sofa (right)
-  box(3.0, 0.5, 1.2, 0x3f6f8c, 2.0, 0.45, 2.2, room);
-  box(3.0, 0.9, 0.3, 0x3f6f8c, 2.0, 0.95, 2.75, room);
-  box(0.3, 0.75, 1.2, 0x34607b, 0.65, 0.65, 2.2, room); box(0.3, 0.75, 1.2, 0x34607b, 3.35, 0.65, 2.2, room);
-  box(0.6, 0.5, 0.2, 0xff8a4c, 1.2, 0.95, 2.45, room); box(0.6, 0.5, 0.2, 0xf6e7d0, 2.8, 0.95, 2.45, room);
-  // coffee table
-  box(1.6, 0.1, 0.9, 0x7a5a3a, 1.2, 0.62, 0.7, room);
-  for (const dx of [-0.65, 0.65]) for (const dz of [-0.3, 0.3]) box(0.08, 0.45, 0.08, 0x5a3f27, 1.2 + dx, 0.38, 0.7 + dz, room);
-  cyl(0.12, 0.1, 0.22, 0xffffff, 1.0, 0.78, 0.7, room);
-  // TV unit on right wall
-  box(0.5, 0.6, 2.6, 0x7a5a3a, 3.8, 0.4, -0.6, room);
-  box(0.08, 1.3, 2.2, 0x111111, 4.05, 1.55, -0.6, room);
-  // plant
-  cyl(0.28, 0.2, 0.5, 0xd9693f, 3.6, 0.3, -2.4, room, 12);
-  for (let i = 0; i < 6; i++) { const l = new THREE.Mesh(new THREE.SphereGeometry(0.28, 8, 6), mat(0x3aa35a)); l.position.set(3.6 + Math.cos(i) * 0.2, 0.9 + i * 0.12, -2.4 + Math.sin(i) * 0.2); l.scale.set(1, 1.6, 1); l.castShadow = true; room.add(l); }
-  // lamp
-  cyl(0.03, 0.05, 1.5, 0x333333, -4.0, 0.8, 0.7, room, 8);
-  const lampBulb = new THREE.Mesh(new THREE.SphereGeometry(0.22, 16, 12), new THREE.MeshBasicMaterial({ color: 0xffe1a8 })); lampBulb.position.set(-4.0, 1.6, 0.7); room.add(lampBulb);
-  const lampLight = new THREE.PointLight(0xffc98a, 0.0, 9); lampLight.position.set(-3.7, 1.7, 0.7); room.add(lampLight);
-  // wall art
-  box(1.2, 0.8, 0.06, 0xffffff, -4.05, 2.4, -0.3, room).rotation.y = Math.PI / 2;
-  box(1.0, 0.6, 0.07, 0xff8a4c, -3.98, 2.4, -0.3, room).rotation.y = Math.PI / 2;
+  const taupe = 0x7b7266, oak = 0xc59a62, graphite = 0x2d2f33;
+  box(9, 0.4, 6.6, 0xe8e0d0, 0, -0.2, 0, room);
+  box(8.4, 0.12, 6, 0xb98d57, 0, 0.06, 0, room);                       // oak floor
+  box(8.4, 4, 0.2, taupe, 0, 2.05, -3, room);                           // back wall
+  box(0.2, 4, 6, 0x8a8174, -4.2, 2.05, 0, room);                        // left wall
+  box(0.2, 4, 6, 0x6f675c, 4.2, 2.05, 0, room);                         // right wall
+  // slat panel on left part of back wall
+  for (let i = 0; i < 12; i++) box(0.14, 3.8, 0.12, i % 2 ? 0xa97a45 : 0xc59a62, -3.9 + i * 0.2, 2.0, -2.85, room);
+  glow(0.06, 3.8, 0.04, 0xffc27a, -1.5, 2.0, -2.82, room);             // LED edge
+  // floating media unit
+  box(5.4, 0.5, 0.5, graphite, 0.9, 0.95, -2.7, room);
+  box(5.5, 0.07, 0.55, oak, 0.9, 1.22, -2.7, room);
+  glow(5.4, 0.05, 0.05, 0xffc27a, 0.9, 0.66, -2.46, room);             // LED under unit
+  // fireplace
+  box(2.6, 0.3, 0.1, 0x111111, 0.4, 0.97, -2.43, room);
+  const fire = glow(2.4, 0.16, 0.04, 0xff7a1a, 0.4, 0.95, -2.37, room);
+  const fireLight = new THREE.PointLight(0xff8a3a, 0.9, 7); fireLight.position.set(0.4, 1.0, -1.7); room.add(fireLight);
+  // TV with city picture
+  const cv = document.createElement('canvas'); cv.width = 320; cv.height = 180;
+  const cx = cv.getContext('2d');
+  const gr = cx.createLinearGradient(0, 0, 0, 180); gr.addColorStop(0, '#3b2f6c'); gr.addColorStop(.55, '#ff8f5c'); gr.addColorStop(.7, '#ffcf8a'); gr.addColorStop(1, '#241a3a');
+  cx.fillStyle = gr; cx.fillRect(0, 0, 320, 180);
+  cx.fillStyle = '#2a2740'; cx.beginPath(); cx.moveTo(0, 120); cx.lineTo(70, 85); cx.lineTo(140, 115); cx.lineTo(220, 80); cx.lineTo(320, 118); cx.lineTo(320, 180); cx.lineTo(0, 180); cx.fill();
+  cx.fillStyle = '#e8c98a'; for (let i = 0; i < 70; i++) cx.fillRect(Math.random() * 320, 110 + Math.random() * 60, 2, 2);
+  cx.fillStyle = '#1b1830'; cx.fillRect(150, 70, 6, 50);
+  const tv = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 1.9), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(cv) }));
+  tv.position.set(0.9, 2.45, -2.86); room.add(tv);
+  box(3.5, 2.0, 0.05, 0x0b0b0b, 0.9, 2.45, -2.9, room);
+  // shelves with plants (right of TV)
+  box(1.3, 0.07, 0.4, oak, 3.2, 2.1, -2.75, room); box(1.3, 0.07, 0.4, oak, 3.2, 1.6, -2.75, room);
+  glow(1.3, 0.03, 0.04, 0xffc27a, 3.2, 2.05, -2.54, room); glow(1.3, 0.03, 0.04, 0xffc27a, 3.2, 1.55, -2.54, room);
+  [[2.8, 2.35], [3.6, 1.85], [2.7, 1.85]].forEach(([x, y], i) => { const p = new THREE.Mesh(new THREE.IcosahedronGeometry(0.2, 0), mat(0x3c8f50, { flatShading: true })); p.position.set(x, y + 0.2, -2.7); p.castShadow = true; room.add(p); box(0.18, 0.2, 0.18, 0x1c1c1c, x, y + 0.04, -2.7, room); });
+  // window on right wall with blinds
+  box(0.1, 2.3, 1.7, 0xf4f4f4, 4.08, 2.2, -0.2, room);
+  const blind = glow(0.04, 2.0, 1.45, 0xcfd6de, 4.0, 2.2, -0.2, room);
+  for (let i = 0; i < 8; i++) glow(0.05, 0.03, 1.45, 0x9aa3ad, 3.98, 1.3 + i * 0.25, -0.2, room);
+  // sofa (dark grey, backs to camera, left)
+  box(3.4, 0.55, 1.3, 0x4a4d54, -1.9, 0.45, 2.2, room);
+  box(3.4, 0.9, 0.35, 0x40434a, -1.9, 0.95, 2.8, room);
+  box(0.3, 0.8, 1.3, 0x3a3d43, -3.55, 0.7, 2.2, room); box(0.3, 0.8, 1.3, 0x3a3d43, -0.25, 0.7, 2.2, room);
+  box(0.6, 0.5, 0.2, 0xffa24c, -2.8, 0.95, 2.45, room); box(0.6, 0.5, 0.2, 0xcfc6b4, -1.0, 0.95, 2.45, room);
+  // rug + round black marble table
+  const rug = cyl(1.9, 1.9, 0.03, 0x6d6d70, 1.2, 0.14, 0.6, room, 40);
+  cyl(0.8, 0.8, 0.07, 0x1b1b1d, 1.2, 0.66, 0.6, room, 32);
+  cyl(0.05, 0.05, 0.55, 0x111111, 1.2, 0.36, 0.6, room, 8);
+  cyl(0.45, 0.45, 0.03, 0x111111, 1.2, 0.14, 0.6, room, 24);
+  const tp = new THREE.Mesh(new THREE.IcosahedronGeometry(0.2, 0), mat(0x3c8f50, { flatShading: true })); tp.position.set(1.0, 0.92, 0.6); room.add(tp);
+  glow(0.12, 0.08, 0.12, 0xffc27a, 1.5, 0.74, 0.7, room);
+  // floor plants
+  box(0.4, 0.5, 0.4, 0x1c1c1c, -3.9, 0.35, -2.5, room);
+  const fp = new THREE.Mesh(new THREE.IcosahedronGeometry(0.4, 0), mat(0x3c8f50, { flatShading: true })); fp.position.set(-3.9, 0.95, -2.5); fp.castShadow = true; room.add(fp);
+  // ceiling glow strip
+  glow(8.0, 0.05, 0.05, 0xffd9a0, 0, 3.98, -2.85, room);
 
-  // ---------- Keyframes (one per section) ----------
+  // ---------- Camera keyframes ----------
   const V = (x, y, z) => new THREE.Vector3(x, y, z);
   const C = (h) => new THREE.Color(h);
   const keys = [
-    { pos: V(6, 5.5, 15),    look: V(-3.2, 2.4, 0), sky: C(0x8fd3ff), dusk: 0.0 },
-    { pos: V(-7, 3.2, 9),    look: V(0, 3.0, 0),   sky: C(0x8fd3ff), dusk: 0.0 },
-    { pos: V(RX + 2.4, 2.6, 8.2), look: V(RX + 0.6, 1.3, 0), sky: C(0xa7dcff), dusk: 0.15 },
-    { pos: V(-2, 16, 26),    look: V(0, 1, 0),     sky: C(0xff9a6b), dusk: 0.7 },
-    { pos: V(-9, 2.6, 10),   look: V(0, 3.2, 0),   sky: C(0x3b2f6c), dusk: 1.0 },
+    { pos: V(7, 5, 24),      look: V(-4, 5.2, 0), sky: C(0x9ccfee), dusk: 0.0 },
+    { pos: V(-10, 4.5, 17),  look: V(4, 5.5, 0),  sky: C(0xa9d5ee), dusk: 0.0 },
+    { pos: V(RX + 2.4, 2.6, 8.2), look: V(RX + 0.6, 1.6, 0), sky: C(0x30323a), dusk: 0.7 },
+    { pos: V(-3, 3.4, 18.5), look: V(3.2, 3.2, 9), sky: C(0xff9a6b), dusk: 0.75 },
+    { pos: V(0, 2.2, 25),    look: V(0, 4.2, 0),  sky: C(0x1d1a3a), dusk: 1.0 },
   ];
   const N = keys.length;
-
   const tmpPos = new THREE.Vector3(), tmpLook = new THREE.Vector3(), tmpSky = new THREE.Color();
-  const winDay = new THREE.Color(0x9fd8ff), winNight = new THREE.Color(0xffd27a);
   let progress = 0, target = 0, mx = 0, my = 0, smx = 0, smy = 0;
-
-  function ease(t) { return t * t * (3 - 2 * t); }
+  const ease = t => t * t * (3 - 2 * t);
   function sample(p) {
     const f = Math.min(Math.max(p, 0), 1) * (N - 1);
     const i = Math.min(Math.floor(f), N - 2);
     const t = ease(f - i);
     const a = keys[i], b = keys[i + 1];
-    tmpPos.lerpVectors(a.pos, b.pos, t);
-    tmpLook.lerpVectors(a.look, b.look, t);
-    tmpSky.copy(a.sky).lerp(b.sky, t);
+    tmpPos.lerpVectors(a.pos, b.pos, t); tmpLook.lerpVectors(a.look, b.look, t); tmpSky.copy(a.sky).lerp(b.sky, t);
     return a.dusk + (b.dusk - a.dusk) * t;
   }
-
-  function onScroll() {
-    const max = document.documentElement.scrollHeight - innerHeight;
-    target = max > 0 ? scrollY / max : 0;
-  }
+  function onScroll() { const max = document.documentElement.scrollHeight - innerHeight; target = max > 0 ? scrollY / max : 0; }
   addEventListener('scroll', onScroll, { passive: true });
   addEventListener('mousemove', e => { mx = e.clientX / innerWidth - 0.5; my = e.clientY / innerHeight - 0.5; });
   function resize() {
     renderer.setSize(innerWidth, innerHeight, false);
-    camera.aspect = innerWidth / innerHeight;
-    camera.fov = innerWidth < 760 ? 70 : 50;
-    camera.updateProjectionMatrix();
+    camera.aspect = innerWidth / innerHeight; camera.fov = innerWidth < 760 ? 70 : 50; camera.updateProjectionMatrix();
   }
   addEventListener('resize', resize); resize(); onScroll();
 
-  // ---------- Loop ----------
   const clock = new THREE.Clock();
+  const lampDay = new THREE.Color(0xcfcfcf), lampNight = new THREE.Color(0xffd9a0), tmpC = new THREE.Color();
   function frame() {
     const t = clock.getElapsedTime();
     progress += (target - progress) * 0.06;
     smx += (mx - smx) * 0.05; smy += (my - smy) * 0.05;
     const dusk = sample(progress);
 
-    camera.position.copy(tmpPos);
-    camera.position.x += smx * 1.2; camera.position.y -= smy * 0.7;
+    camera.position.copy(tmpPos); camera.position.x += smx * 1.2; camera.position.y -= smy * 0.7;
     camera.lookAt(tmpLook);
 
     scene.background.copy(tmpSky); scene.fog.color.copy(tmpSky);
-    hemi.intensity = 0.8 - dusk * 0.35;
+    hemi.intensity = 0.85 - dusk * 0.5;
     hemi.color.setHex(dusk > 0.5 ? 0xffc9a0 : 0xffffff);
     sun.color.setRGB(1, 1 - dusk * 0.45, 1 - dusk * 0.7);
-    sun.intensity = 1.05 - dusk * 0.2;
-    const sy = 32 - dusk * 26;
-    sun.position.set(-20, sy + 4, 25); sun.target.position.set(10, 0, 0); sun.target.updateMatrixWorld();
-    sunBall.position.set(-40, sy, -100); sunBall.material.color.setHex(dusk > 0.5 ? 0xffb066 : 0xfff3c4);
-    sea.material.color.setHex(dusk > 0.5 ? 0x2a5f8c : 0x1f8fc4);
-    winDay.getHSL; windowMats.forEach(m => m.color.copy(winDay).lerp(winNight, Math.min(1, dusk * 1.3)));
-    lampLight.intensity = 0.4 + dusk * 1.2;
-    seaView.material.color.set(0x7fd0ff).lerp(new THREE.Color(0xffa070), dusk);
+    sun.intensity = 1.05 - dusk * 0.6;
+    const sy = 40 - dusk * 34;
+    sun.position.set(-20, sy + 4, 30); sun.target.position.set(10, 0, 0); sun.target.updateMatrixWorld();
+    sunBall.position.set(-40, sy, -150); sunBall.material.color.setHex(dusk > 0.5 ? 0xffb066 : 0xfff3c4);
+    ground.material.color.setHex(dusk > 0.5 ? 0x2c2e35 : 0x4b4e55);
 
-    // sea waves
-    const p = seaGeo.attributes.position;
-    for (let i = 0; i < p.count; i++) {
-      const x = seaBase[i * 3], z = seaBase[i * 3 + 2];
-      p.array[i * 3 + 1] = Math.sin(x * 0.18 + t * 0.9) * 0.18 + Math.cos(z * 0.22 + t * 0.7) * 0.18;
-    }
-    p.needsUpdate = true; seaGeo.computeVertexNormals();
+    const k = Math.min(1, dusk * 1.3);
+    windowMats.forEach(m => m.color.copy(winDay).lerp(winNight, k * m._k));
+    lampMats.forEach(m => m.color.copy(lampDay).lerp(lampNight, k));
 
-    boats.forEach((b, i) => { b.g.position.y = -0.15 + Math.sin(t * 1.1 + b.ph) * 0.12; b.g.rotation.z = Math.sin(t * 0.9 + b.ph) * 0.05; b.g.position.x += Math.sin(t * 0.2 + i) * 0.003; });
-    palms.forEach((pm, i) => { pm.rotation.z = Math.sin(t * 0.8 + i) * 0.02; });
-    rug.rotation.y = 0;
+    const fl = 0.85 + Math.sin(t * 9) * 0.1 + Math.sin(t * 17) * 0.05;
+    flame.scale.set(1, fl, 1); flame2.scale.set(1, 1.1 - fl * 0.1, 1);
+    flameLight.intensity = (0.5 + dusk * 2.2) * fl;
+    fireLight.intensity = 0.9 * (0.9 + Math.sin(t * 7) * 0.1);
+    fire.scale.y = 0.8 + Math.sin(t * 11) * 0.2;
+    trees.forEach((tr, i) => { tr.rotation.z = Math.sin(t * 0.8 + i) * 0.015; });
 
     renderer.render(scene, camera);
     requestAnimationFrame(frame);
