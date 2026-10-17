@@ -53,7 +53,28 @@
   .adm h2 { margin:14px 0 8px; font-size:18px; }
   .adm input { padding:4px; }
   .adm button { padding:5px 12px; cursor:pointer; }
-  @media (max-width:720px) { .two { grid-template-columns:1fr; } .hero img { height:260px; } }
+  html, body { overflow-x:hidden; max-width:100%; }
+  input, select, textarea { font-size:16px; max-width:100%; }
+  .adm { overflow-x:auto; }
+  @media (max-width:720px) {
+    .two { grid-template-columns:1fr; gap:16px; } .hero img { height:230px; }
+    header { padding:10px 14px; gap:8px; } .logo { font-size:12px; letter-spacing:.04em; }
+    .langs { display:none; }
+    .toggle { font-size:12px; } .toggle span, .toggle a { padding:6px 12px; }
+    .tiers { padding:8px 14px 0; justify-content:flex-start; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; }
+    .tiers::-webkit-scrollbar { display:none; }
+    .tiers button { white-space:nowrap; flex:0 0 auto; padding:8px 12px; }
+    .wrap { padding:0 14px; } .hero .wrap { padding-top:20px; }
+    h1 { font-size:26px; } section { padding-top:30px; }
+    .btn { padding:13px 26px; }
+    td { padding:11px 12px; font-size:15px; }
+    .plain-cal th, .plain-cal td { padding:4px 2px; font-size:12px; }
+    .plainform input:not([type=checkbox]), .plainform textarea { width:100%; margin-top:4px; }
+    .plainform { padding:12px; }
+    .contactlinks a { display:inline-block; padding:10px 14px 10px 0; }
+    .hint { margin:20px 14px 0; }
+    .adm { padding:16px; } .adm table { width:100%; }
+  }
 </style>
 </head>
 <body>
@@ -122,7 +143,7 @@
 </div>
 
 <div class="hint">Ovo je klasična 2D verzija sajta. <a href="index.html#usporedba">Pogledajte u čemu je 3D bolji →</a></div>
-<footer>© Apartmani LED Vječna Vatra <span data-min="3"> · <a href="#" id="admOpen">Admin</a></span></footer>
+<footer>© Apartmani LED Vječna Vatra <span data-min="3"> · <a href="#" id="admOpen" style="padding:10px 6px;display:inline-block">Admin</a></span></footer>
 
 <div class="adm" id="adm" hidden>
   <div id="admLogin">
