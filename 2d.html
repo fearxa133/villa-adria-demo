@@ -3,46 +3,90 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Apartmani LED Vječna Vatra - Sarajevo</title>
+<title>Apartmani LED Vječna Vatra – Sarajevo</title>
 <style>
-  body { font-family:"Times New Roman",serif; background:#fff; color:#000; max-width:760px; margin:0 auto; padding:20px; font-size:16px; line-height:1.4; }
-  .bar { text-align:right; font-family:Arial,sans-serif; font-size:13px; margin-bottom:10px; }
-  .toggle { display:inline-flex; border:1px solid #888; border-radius:999px; padding:3px; font-weight:bold; }
-  .toggle span, .toggle a { padding:6px 16px; border-radius:999px; text-decoration:none; color:#333; }
-  .toggle .on { background:#333; color:#fff; }
-  h1 { font-size:28px; }
-  h2 { font-size:20px; margin-top:24px; }
-  img { max-width:100%; height:auto; }
-  a { color:#00e; }
-  hr { margin:24px 0; }
-  .hint { font-family:Arial,sans-serif; font-size:13px; background:#fff8c6; border:1px solid #e0d27a; padding:8px 10px; margin-top:24px; }
+  :root { --accent:#d9822b; --ink:#1f2933; --muted:#5f6b76; --bg:#f6f4f0; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif; color:var(--ink); background:var(--bg); line-height:1.6; }
+  header { display:flex; justify-content:space-between; align-items:center; padding:16px 5vw; background:#fff; border-bottom:1px solid #e6e1d8; position:sticky; top:0; z-index:5; }
+  .logo { font-weight:800; letter-spacing:.08em; text-transform:uppercase; font-size:14px; }
+  .logo span { color:var(--accent); }
+  .toggle { display:flex; border:1px solid #cfc8bb; border-radius:999px; padding:3px; font-size:13px; font-weight:800; }
+  .toggle span, .toggle a { padding:6px 16px; border-radius:999px; text-decoration:none; color:var(--ink); }
+  .toggle .on { background:var(--ink); color:#fff; }
+  .wrap { max-width:960px; margin:0 auto; padding:0 20px; }
+  .hero img { width:100%; height:420px; object-fit:cover; display:block; }
+  .hero .wrap { padding-top:28px; }
+  h1 { font-size:clamp(28px,4.5vw,40px); line-height:1.15; }
+  .sub { color:var(--muted); margin-top:6px; }
+  .btn { display:inline-block; margin-top:18px; padding:12px 26px; border-radius:8px; background:var(--accent); color:#fff; font-weight:700; text-decoration:none; }
+  section { padding:44px 0 6px; }
+  h2 { font-size:24px; margin-bottom:12px; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:28px; align-items:center; }
+  .two img { width:100%; border-radius:12px; display:block; }
+  ul.facts { list-style:none; margin-top:12px; display:grid; gap:6px; }
+  ul.facts li::before { content:"✓ "; color:var(--accent); font-weight:800; }
+  table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; }
+  td { padding:13px 16px; border-bottom:1px solid #eee8de; }
+  td:last-child { text-align:right; font-weight:800; }
+  tr:last-child td { border-bottom:0; }
+  .note { color:var(--muted); font-size:14px; margin-top:10px; }
+  footer { margin-top:50px; padding:22px 20px; text-align:center; font-size:13px; color:var(--muted); border-top:1px solid #e6e1d8; }
+  .hint { max-width:960px; margin:26px auto 0; padding:12px 16px; background:#fff3d6; border:1px solid #ecd699; border-radius:10px; font-size:14px; }
+  .hint a { color:#8a5200; font-weight:700; }
+  @media (max-width:720px) { .two { grid-template-columns:1fr; } .hero img { height:260px; } }
 </style>
 </head>
 <body>
-<div class="bar"><div class="toggle"><a href="index.html">3D</a><span class="on">2D</span></div></div>
+<header>
+  <div class="logo">LED <span>Vječna Vatra</span></div>
+  <div class="toggle"><a href="index.html">3D</a><span class="on">2D</span></div>
+</header>
 
-<h1>Apartmani LED Vječna Vatra</h1>
-<p>Sarajevo - Centar, Branilaca Sarajeva 39</p>
-<img src="2d-1.jpg" alt="Apartman">
+<div class="hero">
+  <img src="2d-1.jpg" alt="Apartman u centru Sarajeva">
+  <div class="wrap">
+    <h1>Apartmani LED Vječna Vatra</h1>
+    <p class="sub">Sarajevo – Centar · Branilaca Sarajeva 39 · 20 m od Vječne vatre</p>
+    <a class="btn" href="#kontakt">Rezerviši</a>
+  </div>
+</div>
 
-<h2>O apartmanu</h2>
-<p>Novouređen apartman u centru Sarajeva, 20 metara od Vječne vatre. Jednoiposoban stan, 40 m2, WiFi, klima.</p>
-<img src="2d-2.jpg" alt="Dnevni boravak">
+<div class="wrap">
+  <section>
+    <div class="two">
+      <div>
+        <h2>O apartmanu</h2>
+        <p>Novouređen i moderno opremljen apartman u samom srcu Sarajeva, u blizini Narodnog pozorišta, restorana i kafića.</p>
+        <ul class="facts">
+          <li>Jednoiposoban stan, 40 m²</li>
+          <li>Besplatan WiFi</li>
+          <li>Klima uređaj</li>
+          <li>Parking po dogovoru</li>
+        </ul>
+      </div>
+      <img src="2d-2.jpg" alt="Dnevni boravak">
+    </div>
+  </section>
 
-<h2>Cijene</h2>
-<ul>
-  <li>Dnevni boravak do 14:00 - 50 KM</li>
-  <li>Dnevni boravak do 18:00 - 70 KM</li>
-  <li>Noćenje 1-2 osobe - 90 KM</li>
-  <li>Noćenje 3-4 osobe - 110 KM</li>
-</ul>
-<p>Vikendom doplata 10 KM po osobi.</p>
+  <section>
+    <h2>Cijene</h2>
+    <table>
+      <tr><td>Dnevni boravak do 14:00</td><td>50 KM</td></tr>
+      <tr><td>Dnevni boravak do 18:00</td><td>70 KM</td></tr>
+      <tr><td>Noćenje, 1–2 osobe</td><td>90 KM</td></tr>
+      <tr><td>Noćenje, 3–4 osobe</td><td>110 KM</td></tr>
+    </table>
+    <p class="note">Vikendom doplata 10 KM po osobi. U sezoni i za praznike posebne cijene.</p>
+  </section>
 
-<h2>Kontakt</h2>
-<p>Za rezervacije javite se putem OLX poruka.</p>
+  <section id="kontakt">
+    <h2>Kontakt i rezervacije</h2>
+    <p>Za rezervacije i dostupnost termina javite se putem OLX poruka.</p>
+  </section>
+</div>
 
-<hr>
-<p style="font-size:12px">Apartmani LED Vječna Vatra</p>
 <div class="hint">Ovo je klasična 2D verzija sajta. <a href="index.html#usporedba">Pogledajte u čemu je 3D bolji →</a></div>
+<footer>© Apartmani LED Vječna Vatra</footer>
 </body>
 </html>
