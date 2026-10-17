@@ -266,10 +266,74 @@
     .refthumb .cap { left:7px; bottom:5px; font-size:10.5px; }
     .refthumb .zoom { display:none; }
   }
+
+  /* map */
+  .mapwrap { position:relative; margin-top:16px; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.2); height:210px; background:#222; }
+  .mapwrap iframe { width:100%; height:100%; border:0; display:block; filter:saturate(.85) contrast(1.05); pointer-events:none; }
+  .mapwrap.active iframe { pointer-events:auto; }
+  .maptap { position:absolute; inset:0; width:100%; border:0; background:transparent; color:#fff; font-size:12px; font-weight:700; text-align:center; cursor:pointer; display:flex; align-items:flex-end; justify-content:center; padding-bottom:10px; text-shadow:0 1px 6px rgba(0,0,0,.8); }
+  .mapwrap.active .maptap { display:none; }
+  .addr { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px; font-weight:700; font-size:15px; flex-wrap:wrap; }
+  /* sound */
+  .snd { position:fixed; left:20px; bottom:20px; z-index:16; }
+  .sndbtn { display:flex; align-items:center; gap:8px; border:1px solid rgba(255,255,255,.28); background:rgba(14,16,22,.78); backdrop-filter:blur(10px); color:#fff; padding:11px 16px; border-radius:999px; font-weight:800; font-size:13px; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,.4); }
+  .sndbtn .eq { display:flex; align-items:flex-end; gap:2px; height:14px; }
+  .sndbtn .eq i { width:3px; height:4px; background:#fff; border-radius:2px; }
+  .snd.playing .eq i { background:var(--accent); animation:eq 0.9s infinite ease-in-out; }
+  .snd.playing .eq i:nth-child(2) { animation-delay:.25s; } .snd.playing .eq i:nth-child(3) { animation-delay:.5s; }
+  @keyframes eq { 0%,100% { height:4px; } 50% { height:14px; } }
+  .sndmenu { position:absolute; left:0; bottom:54px; width:230px; background:rgba(14,16,22,.94); backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,.2); border-radius:18px; padding:8px; box-shadow:0 16px 40px rgba(0,0,0,.5); }
+  .sndtitle { font-size:11px; letter-spacing:.14em; text-transform:uppercase; opacity:.65; padding:8px 10px 6px; }
+  .sndmenu > button { display:block; width:100%; text-align:left; background:none; border:0; color:#fff; padding:11px 12px; border-radius:10px; font-size:15px; cursor:pointer; }
+  .sndmenu > button:hover { background:rgba(255,255,255,.1); }
+  .sndmenu > button.on { background:var(--accent); color:#1a1208; font-weight:800; }
+  .vol { display:flex; align-items:center; gap:10px; padding:10px 12px 6px; font-size:13px; opacity:.9; }
+  .vol input { flex:1; accent-color:var(--accent); }
+  .ref { bottom:84px; }
+  /* 3D <-> photo slider */
+  .cmpbtn { width:100%; margin-top:12px; padding:12px; border-radius:12px; border:1px dashed rgba(255,255,255,.4); background:rgba(255,255,255,.06); color:#fff; font-weight:700; font-size:14px; cursor:pointer; }
+  .cmpbtn.on { background:var(--accent); color:#1a1208; border-style:solid; border-color:var(--accent); }
+  .cmp { position:fixed; inset:0; z-index:0; display:none; pointer-events:none; clip-path:inset(0 50% 0 0); }
+  .cmp.show { display:block; }
+  .cmp img { width:100%; height:100%; object-fit:cover; display:block; }
+  .cmphandle { position:fixed; top:0; bottom:0; left:50%; width:44px; margin-left:-22px; z-index:13; display:none; pointer-events:none; }
+  .cmphandle.show { display:block; }
+  .cmphandle .line { position:absolute; left:50%; top:0; bottom:0; width:2px; margin-left:-1px; background:#fff; box-shadow:0 0 12px rgba(0,0,0,.6); }
+  .cmphandle .knob { position:absolute; left:0; top:46%; width:44px; height:44px; border-radius:50%; border:2px solid #fff; background:var(--accent); color:#1a1208; font-weight:900; font-size:13px; letter-spacing:-1px; cursor:ew-resize; pointer-events:auto; touch-action:none; box-shadow:0 6px 20px rgba(0,0,0,.5); }
+  .cmphandle .lbl { position:absolute; bottom:52px; left:50%; transform:translateX(-50%); display:flex; gap:10px; background:rgba(14,16,22,.8); padding:5px 12px; border-radius:999px; font-size:10.5px; letter-spacing:.12em; color:#fff; white-space:nowrap; letter-spacing:.1em; }
+  body.cmp-on .ref { opacity:0 !important; pointer-events:none !important; }
+  @media (max-width:760px) {
+    .snd { left:auto; right:10px; bottom:auto; top:108px; }
+    .sndbtn { padding:9px 12px; font-size:12px; } .sndbtn .sndtxt { display:none; }
+    .sndmenu { left:auto; right:0; bottom:auto; top:48px; }
+    .ref { bottom:auto; }
+    .mapwrap { height:170px; } .addr { font-size:14px; }
+    .cmpbtn { margin-top:8px; padding:9px; font-size:13px; }
+    #setnja .walknav + .walkctl { margin-top:8px; }
+  }
+  @media (max-width:1100px) { .ref { bottom:84px; } }
+  @media (max-width:760px) { .ref { bottom:auto; } }
 </style>
 </head>
 <body>
 <canvas id="bg"></canvas>
+<div class="cmp" id="cmp" aria-hidden="true"><img id="cmpImg" alt=""></div>
+<div class="cmphandle" id="cmpHandle">
+  <span class="line"></span>
+  <button type="button" class="knob" id="cmpKnob" role="slider" aria-label="Klizač 3D i fotografija" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="lbl"><b>FOTO</b><b>3D</b></span>‹ ›</button>
+</div>
+<div class="snd" id="snd">
+  <button type="button" class="sndbtn" id="sndBtn" aria-label="Ambijentalni zvuk"><span class="eq"><i></i><i></i><i></i></span><span class="sndtxt">Zvuk</span></button>
+  <div class="sndmenu" id="sndMenu" hidden>
+    <div class="sndtitle">Ambijentalni zvuk</div>
+    <button type="button" data-s="off" class="on">Isključeno</button>
+    <button type="button" data-s="fire">Kamin</button>
+    <button type="button" data-s="rain">Kiša</button>
+    <button type="button" data-s="city">Grad (centar)</button>
+    <button type="button" data-s="night">Noć</button>
+    <label class="vol">Jačina <input type="range" id="sndVol" min="0" max="100" value="45"></label>
+  </div>
+</div>
 
 <nav>
   <div class="logo">LED <span>Vječna Vatra</span></div>
@@ -348,6 +412,11 @@
     <div class="eyebrow">Lokacija</div>
     <h2>20 metara od Vječne vatre.</h2>
     <p>Branilaca Sarajeva 39 — pored Narodnog pozorišta, okružen restoranima, kafićima i šetalištima. Parking moguć po dogovoru.</p>
+    <div class="mapwrap" id="mapWrap">
+      <iframe title="Mapa: Branilaca Sarajeva 39, Sarajevo" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Branilaca+Sarajeva+39,+Sarajevo&hl=bs&z=16&output=embed"></iframe>
+      <button type="button" class="maptap" id="mapTap">Dodirnite za pomjeranje mape</button>
+    </div>
+    <div class="addr"><span>Branilaca Sarajeva 39, Sarajevo</span><a class="btn" style="margin:0;padding:10px 18px;font-size:14px" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Branilaca+Sarajeva+39+Sarajevo">Otvori u Google Maps</a></div>
   </div>
 </section>
 
@@ -399,6 +468,7 @@
     <p>Izaberite prostoriju i uđite unutra, kao da ste već stigli.</p>
     <div class="walknav" id="walkNav"></div>
     <div class="walkctl"><button type="button" id="walkPrev" aria-label="Prethodna">‹</button><span id="walkName"></span><button type="button" id="walkNext" aria-label="Sljedeća">›</button></div>
+    <button type="button" class="cmpbtn" id="cmpBtn">↔ Usporedi 3D i fotografiju</button>
     <p class="note"><span class="mouse">Prevucite mišem da pogledate oko sebe · strelice ← → za prelaz između prostorija.</span><span class="touch">Povucite prstom lijevo/desno da pogledate oko sebe.</span></p>
   </div>
 </section>
@@ -986,6 +1056,108 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
   if ('IntersectionObserver' in window) new IntersectionObserver(en => { ref.classList.toggle('show', en[0].isIntersecting && en[0].intersectionRatio > 0.4); }, { threshold: [0, 0.4, 0.7] }).observe($('#setnja'));
   refImg.src = REF[0].src; $('#refCap').textContent = REF[0].cap;
+
+
+  // ---- map: tap to enable (so the iframe does not hijack page scroll on phones) ----
+  $('#mapTap').addEventListener('click', () => $('#mapWrap').classList.add('active'));
+
+  // ---- 3D <-> photo slider ----
+  const cmp = $('#cmp'), cmpH = $('#cmpHandle'), cmpImg = $('#cmpImg'), cmpBtn = $('#cmpBtn');
+  let cmpOn = false, cmpVis = false, cmpPos = 50;
+  function cmpRender() {
+    const show = cmpOn && cmpVis;
+    cmp.classList.toggle('show', show); cmpH.classList.toggle('show', show);
+    document.body.classList.toggle('cmp-on', show);
+    cmpBtn.classList.toggle('on', cmpOn);
+    cmpBtn.textContent = cmpOn ? '✕ Zatvori usporedbu' : '↔ Usporedi 3D i fotografiju';
+    cmp.style.clipPath = 'inset(0 ' + (100 - cmpPos) + '% 0 0)';
+    cmpH.style.left = cmpPos + '%';
+    $('#cmpKnob').setAttribute('aria-valuenow', Math.round(cmpPos));
+  }
+  function cmpSrc() { const r = REF[wi]; if (r) { cmpImg.src = r.src; cmpImg.alt = r.cap; } }
+  cmpBtn.addEventListener('click', () => { cmpOn = !cmpOn; cmpSrc(); cmpRender(); });
+  let drag = false;
+  const setPos = x => { cmpPos = Math.max(4, Math.min(96, x / innerWidth * 100)); cmpRender(); };
+  $('#cmpKnob').addEventListener('pointerdown', e => { drag = true; e.target.setPointerCapture && e.target.setPointerCapture(e.pointerId); e.preventDefault(); });
+  addEventListener('pointermove', e => { if (drag) setPos(e.clientX); });
+  addEventListener('pointerup', () => { drag = false; });
+  $('#cmpKnob').addEventListener('keydown', e => { if (e.key === 'ArrowLeft') { cmpPos = Math.max(4, cmpPos - 4); cmpRender(); } if (e.key === 'ArrowRight') { cmpPos = Math.min(96, cmpPos + 4); cmpRender(); } });
+  if ('IntersectionObserver' in window) new IntersectionObserver(en => { cmpVis = en[0].isIntersecting && en[0].intersectionRatio > 0.3; cmpRender(); }, { threshold: [0, 0.3, 0.6] }).observe($('#setnja'));
+  const _paintRef = paintRef;
+  paintRef = function () { _paintRef(); cmpSrc(); };
+  cmpRender();
+
+  // ---- ambient sound (generated in the browser, no audio files) ----
+  const snd = $('#snd'), sndMenu = $('#sndMenu');
+  let ac = null, master = null, cur = null, vol = 0.45;
+  function audio() {
+    if (!ac) { const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; ac = new AC(); master = ac.createGain(); master.gain.value = 0; master.connect(ac.destination); }
+    if (ac.state === 'suspended') ac.resume();
+    return ac;
+  }
+  function noiseBuf(kind) {
+    const len = ac.sampleRate * 4, b = ac.createBuffer(1, len, ac.sampleRate), d = b.getChannelData(0);
+    if (kind === 'brown') { let l = 0; for (let i = 0; i < len; i++) { const w = Math.random() * 2 - 1; l = (l + 0.02 * w) / 1.02; d[i] = l * 3.5; } }
+    else if (kind === 'pink') { let b0 = 0, b1 = 0, b2 = 0; for (let i = 0; i < len; i++) { const w = Math.random() * 2 - 1; b0 = 0.99765 * b0 + w * 0.0990460; b1 = 0.96300 * b1 + w * 0.2965164; b2 = 0.57000 * b2 + w * 1.0526913; d[i] = (b0 + b1 + b2 + w * 0.1848) * 0.2; } }
+    else for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    return b;
+  }
+  function loop(kind, type, freq, q, gain, dest) {
+    const src = ac.createBufferSource(); src.buffer = noiseBuf(kind); src.loop = true;
+    const f = ac.createBiquadFilter(); f.type = type; f.frequency.value = freq; f.Q.value = q;
+    const g = ac.createGain(); g.gain.value = gain; src.connect(f); f.connect(g); g.connect(dest); src.start();
+    return { src, g, f };
+  }
+  function lfo(param, rate, depth) { const o = ac.createOscillator(), g = ac.createGain(); o.frequency.value = rate; g.gain.value = depth; o.connect(g); g.connect(param); o.start(); return o; }
+  function burst(dest, freq, dur, amp, q) {
+    const s = ac.createBufferSource(); s.buffer = noiseBuf('white'); const f = ac.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = freq; f.Q.value = q || 1;
+    const g = ac.createGain(), t = ac.currentTime; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(amp, t + 0.004); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    s.connect(f); f.connect(g); g.connect(dest); s.start(t, Math.random() * 3); s.stop(t + dur + 0.05);
+  }
+  const makers = {
+    fire(out) {
+      const nodes = [loop('brown', 'lowpass', 380, 0.7, 0.9, out)]; const timers = [];
+      const crack = () => { const n = 1 + (Math.random() * 3 | 0); for (let i = 0; i < n; i++) setTimeout(() => burst(out, 1200 + Math.random() * 3800, 0.03 + Math.random() * 0.06, 0.25 + Math.random() * 0.5, 2), i * 25); timers.push(setTimeout(crack, 80 + Math.random() * 520)); };
+      crack(); return { nodes, stop() { timers.forEach(clearTimeout); } };
+    },
+    rain(out) {
+      const a = loop('pink', 'highpass', 900, 0.5, 0.55, out), b = loop('white', 'bandpass', 3800, 0.6, 0.12, out); const l = lfo(a.g.gain, 0.15, 0.08);
+      return { nodes: [a, b], extra: [l], stop() {} };
+    },
+    city(out) {
+      const a = loop('brown', 'lowpass', 260, 0.6, 1.0, out), b = loop('pink', 'bandpass', 700, 0.4, 0.07, out); const l = lfo(a.g.gain, 0.07, 0.25); const timers = [];
+      const car = () => { const n = ac.createBufferSource(); n.buffer = noiseBuf('pink'); n.loop = true; const f = ac.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = 1.2; const g = ac.createGain(), t = ac.currentTime, d = 5 + Math.random() * 3;
+        f.frequency.setValueAtTime(180, t); f.frequency.linearRampToValueAtTime(520, t + d); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.28, t + d * 0.5); g.gain.linearRampToValueAtTime(0, t + d);
+        n.connect(f); f.connect(g); g.connect(out); n.start(t); n.stop(t + d + 0.1); timers.push(setTimeout(car, 7000 + Math.random() * 9000)); };
+      timers.push(setTimeout(car, 2500)); return { nodes: [a, b], extra: [l], stop() { timers.forEach(clearTimeout); } };
+    },
+    night(out) {
+      const wind = loop('brown', 'bandpass', 450, 0.8, 0.5, out); const l = lfo(wind.g.gain, 0.09, 0.28);
+      const cg = ac.createGain(); cg.gain.value = 0; cg.connect(out); const o1 = ac.createOscillator(), o2 = ac.createOscillator(); o1.frequency.value = 4300; o2.frequency.value = 4650; o1.connect(cg); o2.connect(cg); o1.start(); o2.start();
+      const gate = ac.createOscillator(), gg = ac.createGain(); gate.type = 'square'; gate.frequency.value = 13; gg.gain.value = 0.03; gate.connect(gg); gg.connect(cg.gain); gate.start();
+      const mod = lfo(gg.gain, 0.3, 0.02);
+      return { nodes: [wind], extra: [l, o1, o2, gate, mod], stop() {} };
+    },
+  };
+  function stopCur(fade) {
+    if (!cur) return; const c = cur; cur = null;
+    c.out.gain.cancelScheduledValues(ac.currentTime); c.out.gain.setTargetAtTime(0, ac.currentTime, fade);
+    setTimeout(() => { try { c.h.stop(); c.h.nodes.forEach(n => n.src.stop()); (c.h.extra || []).forEach(o => o.stop()); c.out.disconnect(); } catch (e) {} }, fade * 1000 * 5);
+  }
+  function play(kind) {
+    if (!audio()) return;
+    stopCur(0.25);
+    if (kind === 'off') { snd.classList.remove('playing'); return; }
+    const out = ac.createGain(); out.gain.value = 0; out.connect(master);
+    const h = makers[kind](out); cur = { out, h };
+    out.gain.setTargetAtTime(1, ac.currentTime, 0.4); master.gain.setTargetAtTime(vol * vol * 1.6, ac.currentTime, 0.1);
+    snd.classList.add('playing');
+  }
+  $('#sndBtn').addEventListener('click', e => { e.stopPropagation(); sndMenu.hidden = !sndMenu.hidden; });
+  document.addEventListener('click', e => { if (!e.target.closest('#snd')) sndMenu.hidden = true; });
+  $$('#sndMenu > button').forEach(b => b.addEventListener('click', () => { $$('#sndMenu > button').forEach(x => x.classList.toggle('on', x === b)); play(b.dataset.s); }));
+  $('#sndVol').addEventListener('input', e => { vol = e.target.value / 100; if (master) master.gain.setTargetAtTime(vol * vol * 1.6, ac.currentTime, 0.05); });
+  document.addEventListener('visibilitychange', () => { if (!ac) return; if (document.hidden) ac.suspend(); else if (cur) ac.resume(); });
 
   // ---- admin (visual only) ----
   const admin = $('#admin'), login = $('#adminLogin'), dash = $('#adminDash');
