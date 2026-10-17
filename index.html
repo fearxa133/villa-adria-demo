@@ -151,7 +151,7 @@
         <tr><td>Povjerenje</td><td class="no">Gost može sumnjati u fotografije</td><td class="hl">Prostor je jasan, pa nema iznenađenja po dolasku</td></tr>
         <tr><td>Dijeljenje i pamćenje</td><td class="no">Rijetko se šalje dalje</td><td class="hl">Gosti ga dijele jer je neobičan</td></tr>
         <tr><td>Promjena izgleda</td><td class="no">Zamjena fotografija</td><td class="hl">Dan, zalazak i noć, sezonske i prazničke teme</td></tr>
-        <tr><td>Cijena izrade</td><td class="no">Niža</td><td class="hl">Viša, ali je to jednokratno ulaganje koje se vraća većim brojem rezervacija</td></tr>
+        <tr><td>Cijena izrade</td><td class="no">oko 800 KM</td><td class="hl">od 1.250 do 1.800 KM — jednokratno ulaganje koje se vraća većim brojem rezervacija</td></tr>
       </tbody>
     </table>
     </div>
@@ -178,7 +178,7 @@
   scene.add(hemi);
   const sun = new THREE.DirectionalLight(0xffffff, 1.0);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(2048, 2048);
+  sun.shadow.mapSize.set(2048, 2048); sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.03;
   const sc = sun.shadow.camera; sc.left = -35; sc.right = 55; sc.top = 25; sc.bottom = -25; sc.near = 1; sc.far = 140;
   scene.add(sun);
   const sunBall = new THREE.Mesh(new THREE.SphereGeometry(4, 24, 16), new THREE.MeshBasicMaterial({ color: 0xfff3c4, fog: false }));
@@ -284,7 +284,7 @@
   const RX = 40;
   const room = new THREE.Group(); room.position.set(RX, 0, 0); scene.add(room);
   const taupe = 0x7b7266, oak = 0xc59a62, graphite = 0x2d2f33;
-  box(9, 0.4, 6.6, 0xe8e0d0, 0, -0.2, 0, room);
+  box(9, 0.42, 6.6, 0xe8e0d0, 0, -0.19, 0, room);
   box(8.4, 0.12, 6, 0xb98d57, 0, 0.06, 0, room);                       // oak floor
   box(8.4, 4, 0.2, taupe, 0, 2.05, -3, room);                           // back wall
   box(0.2, 4, 6, 0x8a8174, -4.2, 2.05, 0, room);                        // left wall
@@ -328,7 +328,7 @@
   const rug = cyl(1.9, 1.9, 0.03, 0x6d6d70, 1.2, 0.14, 0.6, room, 40);
   cyl(0.8, 0.8, 0.07, 0x1b1b1d, 1.2, 0.66, 0.6, room, 32);
   cyl(0.05, 0.05, 0.55, 0x111111, 1.2, 0.36, 0.6, room, 8);
-  cyl(0.45, 0.45, 0.03, 0x111111, 1.2, 0.14, 0.6, room, 24);
+  cyl(0.45, 0.45, 0.03, 0x111111, 1.2, 0.18, 0.6, room, 24);
   const tp = new THREE.Mesh(new THREE.IcosahedronGeometry(0.2, 0), mat(0x3c8f50, { flatShading: true })); tp.position.set(1.0, 0.92, 0.6); room.add(tp);
   glow(0.12, 0.08, 0.12, 0xffc27a, 1.5, 0.74, 0.7, room);
   // floor plants
