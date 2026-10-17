@@ -227,6 +227,18 @@
     .navr .adminbtn { display:none; }
     .tiers { top:64px; }
   }
+
+  @media (max-width:760px) {
+    #setnja { padding:100px 10px 10px; }
+    #setnja .panel { padding:10px 10px 8px; border-radius:18px; background:rgba(14,16,22,.78); }
+    #setnja .eyebrow, #setnja h2, #setnja p:not(.note) { display:none; }
+    #setnja .walknav { margin-top:0; gap:6px; }
+    #setnja .walknav button { flex-direction:row; justify-content:center; gap:6px; padding:9px 4px; font-size:12.5px; border-radius:12px; }
+    #setnja .walknav button i { width:20px; height:20px; font-size:11px; flex:0 0 auto; }
+    #setnja .walkctl { margin-top:8px; font-size:14px; }
+    #setnja .walkctl button { width:38px; height:38px; }
+    #setnja .note { margin-top:6px; font-size:11.5px; text-align:center; opacity:.8; }
+  }
 </style>
 </head>
 <body>
@@ -717,6 +729,11 @@
     { n: 'Kuhinja', pos: V(RX + 1.2, 1.85, KZ + 2.0), look: V(RX + 0.1, 1.3, KZ - 2) },
   ];
   let walkI = 0, yaw = 0, yawT = 0, pitch = 0, pitchT = 0;
+  if (SMALL) {   // portrait: pull back and centre each room, leave the lower part free for the control bar
+    walkPoses[0].pos.set(RX + 0.5, 2.3, 10.0); walkPoses[0].look.set(RX + 0.5, 1.2, -2);
+    walkPoses[1].pos.set(RX, 1.7, HZ + 4.6);   walkPoses[1].look.set(RX, 1.3, HZ - 3);
+    walkPoses[2].pos.set(RX - 0.2, 1.9, KZ + 4.8); walkPoses[2].look.set(RX - 0.3, 1.1, KZ - 2);
+  }
   const walkPos = walkPoses[0].pos.clone(), walkLook = walkPoses[0].look.clone();
   keys[6].pos = walkPos; keys[6].look = walkLook;
   window.__walk = { names: walkPoses.map(p => p.n), go(i) { walkI = (i + walkPoses.length) % walkPoses.length; yawT = 0; pitchT = 0; return walkI; } };
@@ -836,8 +853,9 @@
 
   // hide floating chat buttons while the booking form (which has its own) is on screen
   if ('IntersectionObserver' in window) {
-    const fabs = $('.fabs'), res = $('#rezervacija');
-    new IntersectionObserver(en => { fabs.style.display = en[0].isIntersecting && en[0].intersectionRatio > 0.25 ? 'none' : ''; }, { threshold: [0, 0.25, 0.5] }).observe(res);
+    const fabs = $('.fabs'), seen = new Set();
+    const io = new IntersectionObserver(en => { en.forEach(x => { if (x.isIntersecting && x.intersectionRatio > 0.25) seen.add(x.target.id); else seen.delete(x.target.id); }); fabs.style.display = seen.size ? 'none' : ''; }, { threshold: [0, 0.25, 0.5] });
+    io.observe($('#rezervacija')); io.observe($('#setnja'));
   }
 
   // ---- language (visual) ----
