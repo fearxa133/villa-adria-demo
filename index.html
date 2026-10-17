@@ -154,7 +154,6 @@
     <li><a href="#unutra">Enterijer</a></li>
     <li><a href="#lokacija">Lokacija</a></li>
     <li data-min="2"><a href="#recenzije">Recenzije</a></li>
-    <li data-max="1"><a href="#kontakt">Rezervacija</a></li>
     <li data-min="2"><a href="#rezervacija">Rezervacija</a></li>
     <li><a href="#usporedba">Zašto 3D?</a></li>
   </ul>
@@ -184,7 +183,7 @@
     <div class="eyebrow">Sarajevo – Centar</div>
     <h1>Vaš dom u srcu Sarajeva.</h1>
     <p style="margin-top:18px">Novouređen apartman svega 20 metara od Vječne vatre. Istražite ga u 3D — skrolajte i uđite unutra.</p>
-    <a class="btn cta" href="#kontakt">Rezerviši termin</a>
+    <a class="btn cta" href="#cijene" data-t1="Pogledaj cijene">Rezerviši termin</a>
   </div>
   <div class="scroll-hint">Skrolaj ↓</div>
 </section>
@@ -266,18 +265,6 @@
   </div>
 </section>
 
-<section id="kontakt" class="center" data-max="1" data-key="4">
-  <div class="panel" style="max-width:560px">
-    <div class="eyebrow">Rezervacija</div>
-    <h2>Rezerviši svoj boravak u centru.</h2>
-    <form onsubmit="event.preventDefault(); alert('Ovo je demo — forma nije povezana.');">
-      <input placeholder="Ime i prezime" required>
-      <div class="row"><input type="date"><input type="date"></div>
-      <input type="email" placeholder="Email" required>
-      <button class="btn" style="margin-top:6px">Pošalji upit</button>
-    </form>
-  </div>
-</section>
 <section id="usporedba" class="center" data-key="5">
   <div class="panel compare" style="max-width:920px">
     <div class="eyebrow">Usporedba</div>
@@ -299,7 +286,7 @@
       </tbody>
     </table>
     </div>
-    <a class="btn cta" href="#kontakt">Želim 3D sajt</a>
+    <a class="btn cta" href="#rezervacija" data-min="2">Želim 3D sajt</a>
   </div>
 </section>
 <footer>© Apartmani LED Vječna Vatra · Demo 3D prezentacija</footer>
@@ -632,14 +619,14 @@
 
   // ---- packages ----
   let tier = parseInt(new URLSearchParams(location.search).get('t'), 10); if (![1, 2, 3].includes(tier)) tier = 1;
-  const notes = { 1: 'Onepage: 3D prikaz apartmana, cijene i kontakt.', 2: '+ kalendar, forma, WhatsApp/Viber, jezici, recenzije.', 3: '+ admin panel za rezervacije i cijene.' };
+  const notes = { 1: 'Onepage: 3D prikaz apartmana i cijene.', 2: '+ kalendar, forma, WhatsApp/Viber, jezici, recenzije.', 3: '+ admin panel za rezervacije i cijene.' };
   function apply(scrollTo) {
     document.body.dataset.tier = tier;
     $$('[data-min]').forEach(e => e.hidden = tier < +e.dataset.min);
     $$('[data-max]').forEach(e => e.hidden = tier > +e.dataset.max);
     $$('#tiers button').forEach(b => b.classList.toggle('on', +b.dataset.t === tier));
     $('#tierNote').textContent = notes[tier];
-    $$('a.cta').forEach(a => a.setAttribute('href', tier > 1 ? '#rezervacija' : '#kontakt'));
+    $$('a.cta').forEach(a => { a.setAttribute('href', tier > 1 ? '#rezervacija' : '#cijene'); if (a.dataset.t1) { if (!a.dataset.t2) a.dataset.t2 = a.textContent; a.textContent = tier > 1 ? a.dataset.t2 : a.dataset.t1; } });
     $$('a.to2d').forEach(a => a.href = '2d.html?t=' + tier);
     try { history.replaceState(null, '', '?t=' + tier + location.hash); } catch (e) {}
     window.__refreshScroll && window.__refreshScroll();
