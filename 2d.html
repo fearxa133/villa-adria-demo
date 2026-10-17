@@ -34,21 +34,41 @@
   footer { margin-top:50px; padding:22px 20px; text-align:center; font-size:13px; color:var(--muted); border-top:1px solid #e6e1d8; }
   .hint { max-width:960px; margin:26px auto 0; padding:12px 16px; background:#fff3d6; border:1px solid #ecd699; border-radius:10px; font-size:14px; }
   .hint a { color:#8a5200; font-weight:700; }
+  [hidden] { display:none !important; }
+  .tiers { max-width:960px; margin:0 auto; padding:10px 20px 0; display:flex; justify-content:flex-end; gap:6px; font-size:13px; flex-wrap:wrap; }
+  .tiers button { border:1px solid #cfc8bb; background:#fff; padding:6px 12px; border-radius:999px; cursor:pointer; font-weight:700; color:var(--ink); }
+  .tiers button.on { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .langs { font-size:13px; margin-right:14px; color:var(--muted); }
+  .langs a { color:var(--muted); text-decoration:none; margin:0 3px; }
+  .hr { display:flex; align-items:center; }
+  .plain-cal { border-collapse:collapse; width:100%; background:#fff; }
+  .plain-cal th, .plain-cal td { border:1px solid #ddd; padding:6px; text-align:center; font-size:14px; }
+  .plain-cal td.x { background:#e5e5e5; color:#999; }
+  .plainform label { display:block; margin-top:10px; font-size:14px; }
+  .plainform { background:#fff; padding:16px; border:1px solid #ddd; }
+  .contactlinks a { margin-right:14px; }
+  .adm { position:fixed; inset:0; background:#fff; z-index:30; overflow:auto; padding:30px; font-family:Arial,sans-serif; font-size:14px; }
+  .adm table { border-collapse:collapse; margin:10px 0 20px; }
+  .adm th, .adm td { border:1px solid #bbb; padding:6px 12px; text-align:left; }
+  .adm h2 { margin:14px 0 8px; font-size:18px; }
+  .adm input { padding:4px; }
+  .adm button { padding:5px 12px; cursor:pointer; }
   @media (max-width:720px) { .two { grid-template-columns:1fr; } .hero img { height:260px; } }
 </style>
 </head>
 <body>
 <header>
   <div class="logo">LED <span>Vječna Vatra</span></div>
-  <div class="toggle"><a href="index.html">3D</a><span class="on">2D</span></div>
+  <div class="hr"><span class="langs" data-min="2"><a href="#" onclick="return false">BS</a>|<a href="#" onclick="return false">EN</a>|<a href="#" onclick="return false">DE</a></span><div class="toggle"><a class="to3d" href="index.html">3D</a><span class="on">2D</span></div></div>
 </header>
+<div class="tiers" id="tiers"><button data-t="1">Onepage</button><button data-t="2">+ Rezervacije</button><button data-t="3">+ Admin panel</button></div>
 
 <div class="hero">
   <img src="2d-1.jpg" alt="Apartman u centru Sarajeva">
   <div class="wrap">
     <h1>Apartmani LED Vječna Vatra</h1>
     <p class="sub">Sarajevo – Centar · Branilaca Sarajeva 39 · 20 m od Vječne vatre</p>
-    <a class="btn" href="#kontakt">Rezerviši</a>
+    <a class="btn cta" href="#kontakt">Rezerviši</a>
   </div>
 </div>
 
@@ -80,13 +100,82 @@
     <p class="note">Vikendom doplata 10 KM po osobi. U sezoni i za praznike posebne cijene.</p>
   </section>
 
-  <section id="kontakt">
+  <section id="kontakt" data-max="1">
     <h2>Kontakt i rezervacije</h2>
     <p>Za rezervacije i dostupnost termina javite se putem OLX poruka.</p>
+  </section>
+
+  <section id="rezervacija" data-min="2">
+    <h2>Rezervacija</h2>
+    <p>Slobodni termini (X = zauzeto):</p>
+    <table class="plain-cal" id="plainCal"></table>
+    <form class="plainform" style="margin-top:14px" onsubmit="event.preventDefault();alert('Demo: upit nije poslan');">
+      <label>Ime: <input></label>
+      <label>Email: <input type="email"></label>
+      <label>Datum dolaska: <input type="date"></label>
+      <label>Datum odlaska: <input type="date"></label>
+      <label>Poruka:<br><textarea rows="3" style="width:100%"></textarea></label>
+      <p style="margin-top:10px"><button>Pošalji</button></p>
+    </form>
+    <p class="contactlinks" style="margin-top:12px">Ili nas kontaktirajte: <a href="#" onclick="return false">WhatsApp</a> <a href="#" onclick="return false">Viber</a></p>
   </section>
 </div>
 
 <div class="hint">Ovo je klasična 2D verzija sajta. <a href="index.html#usporedba">Pogledajte u čemu je 3D bolji →</a></div>
-<footer>© Apartmani LED Vječna Vatra</footer>
+<footer>© Apartmani LED Vječna Vatra <span data-min="3"> · <a href="#" id="admOpen">Admin</a></span></footer>
+
+<div class="adm" id="adm" hidden>
+  <div id="admLogin">
+    <h2>Admin prijava</h2>
+    <form id="admForm">
+      Korisnik: <input id="au"><br><br>
+      Lozinka: <input id="ap" type="password"><br><br>
+      <button>Prijava</button> <button type="button" id="admCancel">Zatvori</button>
+      <p id="aerr" style="color:red"></p>
+    </form>
+  </div>
+  <div id="admDash" hidden>
+    <h2>Admin</h2>
+    <p><a href="#" id="admOut">Odjava</a></p>
+    <h2>Rezervacije</h2>
+    <table><tr><th>Gost</th><th>Dolazak</th><th>Odlazak</th><th>Status</th></tr>
+      <tr><td>Amra K.</td><td>21.11.</td><td>23.11.</td><td>Potvrđeno</td></tr>
+      <tr><td>Marco R.</td><td>24.11.</td><td>27.11.</td><td>Čeka avans</td></tr>
+      <tr><td>Hans M.</td><td>28.11.</td><td>30.11.</td><td>Novi upit</td></tr></table>
+    <h2>Cijene</h2>
+    <p>Noćenje 1-2 osobe: <input value="90"> KM</p>
+    <p>Noćenje 3-4 osobe: <input value="110"> KM</p>
+    <p><button>Sačuvaj</button></p>
+  </div>
+</div>
+
+<script>
+(function(){
+  const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+  let tier=parseInt(new URLSearchParams(location.search).get('t'),10); if(![1,2,3].includes(tier)) tier=1;
+  function apply(){
+    $$('[data-min]').forEach(e=>e.hidden = tier < +e.dataset.min);
+    $$('[data-max]').forEach(e=>e.hidden = tier > +e.dataset.max);
+    $$('#tiers button').forEach(b=>b.classList.toggle('on', +b.dataset.t===tier));
+    $$('a.to3d').forEach(a=>a.href='index.html?t='+tier);
+    $$('a.cta').forEach(a=>a.setAttribute('href', tier>1?'#rezervacija':'#kontakt'));
+    try{history.replaceState(null,'','?t='+tier);}catch(e){}
+  }
+  $$('#tiers button').forEach(b=>b.onclick=()=>{tier=+b.dataset.t; apply(); window.scrollTo(0,0);});
+  apply();
+  // plain calendar
+  const t=new Date(), y=t.getFullYear(), m=t.getMonth(), n=new Date(y,m+1,0).getDate(), off=(new Date(y,m,1).getDay()+6)%7;
+  let h='<tr>'+['Pon','Uto','Sri','Čet','Pet','Sub','Ned'].map(d=>'<th>'+d+'</th>').join('')+'</tr><tr>'; let c=0;
+  for(;c<off;c++) h+='<td></td>';
+  for(let i=1;i<=n;i++,c++){ if(c%7===0&&c) h+='</tr><tr>'; const bk=((i*7+m*3)%13)<3; h+='<td class="'+(bk?'x':'')+'">'+i+(bk?' X':'')+'</td>'; }
+  $('#plainCal').innerHTML=h+'</tr>';
+  // admin
+  const adm=$('#adm');
+  $('#admOpen').onclick=e=>{e.preventDefault(); adm.hidden=false; $('#admLogin').hidden=false; $('#admDash').hidden=true; $('#aerr').textContent='';};
+  $('#admCancel').onclick=()=>adm.hidden=true;
+  $('#admOut').onclick=e=>{e.preventDefault(); adm.hidden=true;};
+  $('#admForm').onsubmit=e=>{e.preventDefault(); if($('#au').value==='user'&&$('#ap').value==='1234'){$('#admLogin').hidden=true;$('#admDash').hidden=false;} else $('#aerr').textContent='Pogrešni podaci.';};
+})();
+</script>
 </body>
 </html>

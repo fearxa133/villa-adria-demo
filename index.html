@@ -55,7 +55,92 @@
   td:first-child { font-weight:700; width:26%; }
   td.no { opacity:.75; }
   tr:last-child td { border-bottom:0; }
-  @media (max-width:760px) { nav ul { display:none; } section.right { justify-content:flex-start; } .panel { padding:26px 24px; } }
+  [hidden] { display:none !important; }
+  .navr { display:flex; align-items:center; gap:12px; }
+  .lang { position:relative; }
+  .lang > button { background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.25); color:#fff; border-radius:999px; padding:8px 14px; font-size:13px; font-weight:800; cursor:pointer; }
+  .lang .menu { position:absolute; right:0; top:42px; background:rgba(14,16,22,.95); border:1px solid rgba(255,255,255,.2); border-radius:14px; padding:6px; min-width:120px; display:none; }
+  .lang.open .menu { display:block; }
+  .lang .menu button { display:block; width:100%; text-align:left; background:none; border:0; color:#fff; padding:8px 12px; border-radius:8px; cursor:pointer; font-size:14px; }
+  .lang .menu button:hover { background:rgba(255,255,255,.12); }
+  .adminbtn { background:transparent; border:1px solid var(--accent); color:var(--accent); border-radius:999px; padding:8px 16px; font-size:13px; font-weight:800; cursor:pointer; }
+  .adminbtn:hover { background:var(--accent); color:#1a1208; }
+  .tiers { position:fixed; top:68px; right:5vw; z-index:10; display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
+  .tiers .pills { display:flex; gap:4px; background:rgba(14,16,22,.7); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.2); border-radius:999px; padding:4px; }
+  .tiers button { border:0; background:transparent; color:#fff; font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:999px; cursor:pointer; opacity:.85; }
+  .tiers button.on { background:var(--accent); color:#1a1208; opacity:1; }
+  .tiers .note { font-size:12px; background:rgba(14,16,22,.7); padding:5px 12px; border-radius:999px; max-width:360px; text-align:right; }
+  .toast { position:fixed; bottom:90px; left:50%; transform:translate(-50%,20px); background:#fff; color:var(--ink); padding:12px 20px; border-radius:12px; font-size:14px; font-weight:600; opacity:0; pointer-events:none; transition:.25s; z-index:80; box-shadow:0 10px 30px rgba(0,0,0,.4); }
+  .toast.show { opacity:1; transform:translate(-50%,0); }
+  .fabs { position:fixed; right:20px; bottom:20px; z-index:20; display:flex; flex-direction:column; gap:10px; }
+  .fab { display:flex; align-items:center; gap:8px; border:0; color:#fff; font-weight:800; font-size:14px; padding:12px 18px; border-radius:999px; cursor:pointer; box-shadow:0 10px 26px rgba(0,0,0,.4); }
+  .fab.wa { background:#25d366; } .fab.vb { background:#7360f2; }
+  .fab svg { width:18px; height:18px; fill:#fff; }
+  .rev { display:grid; gap:10px; margin-top:16px; }
+  .rev .card { display:block; }
+  .rev .stars { color:var(--accent); letter-spacing:2px; font-size:14px; }
+  .rev p { font-size:14px; margin-top:4px; }
+  .rev small { opacity:.75; }
+  details { margin-top:10px; background:rgba(255,255,255,.08); border-radius:12px; padding:12px 16px; font-size:15px; }
+  summary { cursor:pointer; font-weight:700; }
+  details p { font-size:14px; margin-top:8px; }
+  .book { display:grid; grid-template-columns:1.05fr 1fr; gap:26px; text-align:left; margin-top:18px; }
+  .calhead { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-weight:800; }
+  .calhead button { background:rgba(255,255,255,.14); border:0; color:#fff; width:34px; height:34px; border-radius:50%; cursor:pointer; font-size:16px; }
+  .calgrid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+  .calgrid .dow { font-size:11px; opacity:.7; text-align:center; padding:4px 0; text-transform:uppercase; }
+  .day { aspect-ratio:1; border:0; border-radius:10px; background:rgba(255,255,255,.1); color:#fff; font-size:13px; cursor:pointer; }
+  .day:hover:not(:disabled) { background:rgba(255,162,76,.4); }
+  .day:disabled { cursor:not-allowed; opacity:.3; }
+  .day.booked { background:rgba(220,70,70,.35); text-decoration:line-through; opacity:.8; }
+  .day.range { background:rgba(255,162,76,.35); }
+  .day.sel { background:var(--accent); color:#1a1208; font-weight:800; }
+  .legend { display:flex; gap:14px; font-size:12px; margin-top:10px; opacity:.85; flex-wrap:wrap; }
+  .legend i { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:5px; }
+  .book form { margin-top:0; padding:18px; }
+  select, textarea { padding:12px 14px; border-radius:12px; border:0; background:rgba(255,255,255,.92); font-size:15px; color:var(--ink); font-family:inherit; }
+  .addons { display:grid; gap:6px; font-size:14px; }
+  .addons label { display:flex; gap:8px; align-items:center; }
+  .sum { background:rgba(255,162,76,.16); border:1px solid rgba(255,162,76,.4); border-radius:12px; padding:12px 14px; font-size:14px; }
+  .sum b { font-size:20px; color:var(--accent); }
+  .msgr { display:flex; gap:10px; flex-wrap:wrap; }
+  .msgr .fab { box-shadow:none; flex:1; justify-content:center; }
+  .admin { position:fixed; inset:0; z-index:60; background:#0f1218; overflow:auto; }
+  .login { max-width:380px; margin:12vh auto 0; background:#181c24; border:1px solid #2a303c; border-radius:20px; padding:30px; position:relative; }
+  .login h3 { font-size:22px; margin-bottom:4px; }
+  .login p { font-size:14px; opacity:.7; margin-bottom:16px; }
+  .login input { width:100%; margin-bottom:10px; }
+  .login .err { color:#ff7b7b; font-size:13px; min-height:18px; }
+  .login .btn { width:100%; margin-top:6px; }
+  .login .x { position:absolute; top:14px; right:16px; background:none; border:0; color:#fff; font-size:22px; cursor:pointer; opacity:.7; }
+  .dash { display:grid; grid-template-columns:220px 1fr; min-height:100vh; text-align:left; }
+  .side { background:#151922; border-right:1px solid #232937; padding:22px 16px; display:flex; flex-direction:column; gap:4px; }
+  .side .logo { margin-bottom:20px; }
+  .side a { color:#c6ccd8; text-decoration:none; padding:10px 12px; border-radius:10px; font-size:14px; }
+  .side a.on, .side a:hover { background:#222836; color:#fff; }
+  .side .out { margin-top:auto; background:none; border:1px solid #2f3647; color:#c6ccd8; border-radius:10px; padding:10px; cursor:pointer; }
+  .main { padding:26px 30px; }
+  .main h3 { font-size:22px; margin-bottom:18px; }
+  .kpis { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  .kpi { background:#181c24; border:1px solid #262c39; border-radius:14px; padding:16px; }
+  .kpi small { opacity:.65; font-size:12px; } .kpi b { display:block; font-size:26px; margin-top:4px; }
+  .kpi em { font-style:normal; font-size:12px; color:#6fdc9b; }
+  .grid2 { display:grid; grid-template-columns:1.2fr 1fr; gap:14px; margin-top:14px; }
+  .box { background:#181c24; border:1px solid #262c39; border-radius:14px; padding:18px; }
+  .box h4 { font-size:15px; margin-bottom:12px; }
+  .bars { display:flex; align-items:flex-end; gap:10px; height:140px; }
+  .bars div { flex:1; background:linear-gradient(var(--accent),#b8571c); border-radius:6px 6px 0 0; position:relative; }
+  .bars span { position:absolute; bottom:-20px; left:0; right:0; text-align:center; font-size:11px; opacity:.6; }
+  .dash table { min-width:0; font-size:13.5px; }
+  .dash th, .dash td { padding:10px 8px; }
+  .dash td:first-child { width:auto; }
+  .badge { padding:3px 10px; border-radius:999px; font-size:12px; font-weight:700; }
+  .b-ok { background:rgba(80,200,130,.2); color:#6fdc9b; } .b-wait { background:rgba(255,190,80,.2); color:#ffc766; } .b-new { background:rgba(110,160,255,.2); color:#8db4ff; }
+  .prow { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px; font-size:14px; }
+  .prow input { width:90px; padding:8px 10px; }
+  .dash .btn { margin-top:6px; padding:10px 20px; font-size:14px; }
+  @media (max-width:860px) { .book, .grid2 { grid-template-columns:1fr; } .dash { grid-template-columns:1fr; } .side { flex-direction:row; flex-wrap:wrap; } .side .out { margin-top:0; } .kpis { grid-template-columns:1fr 1fr; } .main { padding:18px; } }
+  @media (max-width:760px) { nav ul { display:none; } section.right { justify-content:flex-start; } .panel { padding:26px 24px; } .tiers { left:12px; right:12px; align-items:center; } .tiers .pills { overflow-x:auto; max-width:100%; } .tiers .note { text-align:center; } .navr .adminbtn { display:none; } }
 </style>
 </head>
 <body>
@@ -68,25 +153,43 @@
     <li><a href="#cijene">Cijene</a></li>
     <li><a href="#unutra">Enterijer</a></li>
     <li><a href="#lokacija">Lokacija</a></li>
-    <li><a href="#kontakt">Rezervacija</a></li>
+    <li data-min="2"><a href="#recenzije">Recenzije</a></li>
+    <li data-max="1"><a href="#kontakt">Rezervacija</a></li>
+    <li data-min="2"><a href="#rezervacija">Rezervacija</a></li>
     <li><a href="#usporedba">Zašto 3D?</a></li>
   </ul>
-  <div class="toggle" role="group" aria-label="Verzija sajta">
-    <span class="on">3D</span><a href="2d.html">2D</a>
+  <div class="navr">
+    <div class="lang" data-min="2" id="lang">
+      <button type="button" id="langBtn">BS ▾</button>
+      <div class="menu"><button type="button">BS – Bosanski</button><button type="button">EN – English</button><button type="button">DE – Deutsch</button><button type="button">TR – Türkçe</button></div>
+    </div>
+    <button type="button" class="adminbtn" id="adminOpen" data-min="3">Admin</button>
+    <div class="toggle" role="group" aria-label="Verzija sajta">
+      <span class="on">3D</span><a class="to2d" href="2d.html">2D</a>
+    </div>
   </div>
 </nav>
+<div class="tiers" id="tiers">
+  <div class="pills"><button data-t="1">Onepage</button><button data-t="2">+ Rezervacije</button><button data-t="3">+ Admin panel</button></div>
+  <div class="note" id="tierNote"></div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="fabs" data-min="2">
+  <button type="button" class="fab wa" data-toast="Demo: ovdje se otvara WhatsApp chat s vlasnikom">WhatsApp</button>
+  <button type="button" class="fab vb" data-toast="Demo: ovdje se otvara Viber chat s vlasnikom">Viber</button>
+</div>
 
-<section id="top">
+<section id="top" data-key="0">
   <div class="panel">
     <div class="eyebrow">Sarajevo – Centar</div>
     <h1>Vaš dom u srcu Sarajeva.</h1>
     <p style="margin-top:18px">Novouređen apartman svega 20 metara od Vječne vatre. Istražite ga u 3D — skrolajte i uđite unutra.</p>
-    <a class="btn" href="#kontakt">Rezerviši termin</a>
+    <a class="btn cta" href="#kontakt">Rezerviši termin</a>
   </div>
   <div class="scroll-hint">Skrolaj ↓</div>
 </section>
 
-<section id="cijene" class="right">
+<section id="cijene" class="right" data-key="1">
   <div class="panel">
     <div class="eyebrow">Cijene boravka</div>
     <h2>Jasno i fleksibilno.</h2>
@@ -101,7 +204,7 @@
   </div>
 </section>
 
-<section id="unutra">
+<section id="unutra" data-key="2">
   <div class="panel">
     <div class="eyebrow">Enterijer</div>
     <h2>Uđite unutra.</h2>
@@ -114,7 +217,7 @@
   </div>
 </section>
 
-<section id="lokacija" class="right">
+<section id="lokacija" class="right" data-key="3">
   <div class="panel">
     <div class="eyebrow">Lokacija</div>
     <h2>20 metara od Vječne vatre.</h2>
@@ -122,7 +225,48 @@
   </div>
 </section>
 
-<section id="kontakt" class="center">
+<section id="recenzije" class="right" data-min="2" data-key="3.5">
+  <div class="panel">
+    <div class="eyebrow">Recenzije i informacije</div>
+    <h2>Gosti o nama.</h2>
+    <div class="rev">
+      <div class="card"><div><div class="stars">★★★★★</div><p>Čist, topao i savršena lokacija. Do Baščaršije pješke za par minuta.</p><small>Primjer recenzije · Amra, Tuzla</small></div></div>
+      <div class="card"><div><div class="stars">★★★★★</div><p>Kamin i LED rasvjeta stvaraju odličnu atmosferu. Preporuka za vikend u gradu.</p><small>Primjer recenzije · Marco, Zagreb</small></div></div>
+    </div>
+    <details><summary>Kada su check-in i check-out?</summary><p>Check-in po dogovoru s vlasnikom, a check-out do 10:00.</p></details>
+    <details><summary>Ima li parkinga?</summary><p>Parking je moguć po dogovoru.</p></details>
+    <details><summary>Mogu li doći kasno uvečer?</summary><p>Da, samo javite vrijeme dolaska unaprijed.</p></details>
+  </div>
+</section>
+
+<section id="rezervacija" class="center" data-min="2" data-key="4">
+  <div class="panel" style="max-width:1000px;width:100%">
+    <div class="eyebrow">Rezervacija</div>
+    <h2>Odaberite termin.</h2>
+    <div class="book">
+      <div>
+        <div class="calhead"><button type="button" id="calPrev">‹</button><span id="calTitle"></span><button type="button" id="calNext">›</button></div>
+        <div class="calgrid" id="calGrid"></div>
+        <div class="legend"><span><i style="background:var(--accent)"></i>Odabrano</span><span><i style="background:rgba(220,70,70,.6)"></i>Zauzeto</span><span><i style="background:rgba(255,255,255,.3)"></i>Slobodno</span></div>
+      </div>
+      <form id="bookForm">
+        <input placeholder="Ime i prezime" required>
+        <div class="row"><input type="email" placeholder="Email" required><input type="tel" placeholder="Telefon"></div>
+        <select id="guests"><option value="90">1–2 osobe</option><option value="110">3–4 osobe</option></select>
+        <div class="addons">
+          <label><input type="checkbox" data-p="30"> Transfer s aerodroma (+30 KM, primjer)</label>
+          <label><input type="checkbox" data-p="20"> Kasniji check-out (+20 KM, primjer)</label>
+          <label><input type="checkbox" data-p="15"> Doručak (+15 KM, primjer)</label>
+        </div>
+        <div class="sum" id="calSum">Odaberite datum dolaska i odlaska.</div>
+        <button class="btn" style="margin-top:2px">Pošalji upit</button>
+        <div class="msgr"><button type="button" class="fab wa" data-toast="Demo: ovdje se otvara WhatsApp chat">WhatsApp</button><button type="button" class="fab vb" data-toast="Demo: ovdje se otvara Viber chat">Viber</button></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section id="kontakt" class="center" data-max="1" data-key="4">
   <div class="panel" style="max-width:560px">
     <div class="eyebrow">Rezervacija</div>
     <h2>Rezerviši svoj boravak u centru.</h2>
@@ -134,7 +278,7 @@
     </form>
   </div>
 </section>
-<section id="usporedba" class="center">
+<section id="usporedba" class="center" data-key="5">
   <div class="panel compare" style="max-width:920px">
     <div class="eyebrow">Usporedba</div>
     <h2>Zašto 3D, a ne običan sajt?</h2>
@@ -155,10 +299,71 @@
       </tbody>
     </table>
     </div>
-    <a class="btn" href="#kontakt">Želim 3D sajt</a>
+    <a class="btn cta" href="#kontakt">Želim 3D sajt</a>
   </div>
 </section>
 <footer>© Apartmani LED Vječna Vatra · Demo 3D prezentacija</footer>
+
+<div class="admin" id="admin" hidden>
+  <div class="login" id="adminLogin">
+    <button class="x" type="button" id="adminClose" aria-label="Zatvori">×</button>
+    <div class="logo" style="margin-bottom:18px">LED <span>Vječna Vatra</span></div>
+    <h3>Admin prijava</h3>
+    <p>Prijavite se za upravljanje rezervacijama.</p>
+    <form id="loginForm" style="background:none;border:0;padding:0;margin:0;backdrop-filter:none">
+      <input id="lu" placeholder="Korisničko ime" autocomplete="off">
+      <input id="lp" type="password" placeholder="Lozinka" autocomplete="off">
+      <div class="err" id="lerr"></div>
+      <button class="btn">Prijavi se</button>
+    </form>
+  </div>
+  <div class="dash" id="adminDash" hidden>
+    <aside class="side">
+      <div class="logo">LED <span>Vječna Vatra</span></div>
+      <a class="on" href="#" onclick="return false">Pregled</a>
+      <a href="#" onclick="return false">Rezervacije</a>
+      <a href="#" onclick="return false">Kalendar</a>
+      <a href="#" onclick="return false">Cijene</a>
+      <a href="#" onclick="return false">Poruke</a>
+      <a href="#" onclick="return false">Postavke</a>
+      <button class="out" type="button" id="adminOut">Odjava</button>
+    </aside>
+    <div class="main">
+      <h3>Dobrodošli, user</h3>
+      <div class="kpis">
+        <div class="kpi"><small>Rezervacije (mjesec)</small><b>14</b><em>+3 u odnosu na prošli</em></div>
+        <div class="kpi"><small>Popunjenost</small><b>68%</b><em>+8%</em></div>
+        <div class="kpi"><small>Prihod</small><b>2.340 KM</b><em>+12%</em></div>
+        <div class="kpi"><small>Novi upiti</small><b>3</b><em>čekaju odgovor</em></div>
+      </div>
+      <div class="grid2">
+        <div class="box">
+          <h4>Popunjenost po sedmicama</h4>
+          <div class="bars" style="margin-bottom:26px"><div style="height:45%"><span>S1</span></div><div style="height:70%"><span>S2</span></div><div style="height:55%"><span>S3</span></div><div style="height:90%"><span>S4</span></div><div style="height:65%"><span>S5</span></div><div style="height:80%"><span>S6</span></div></div>
+        </div>
+        <div class="box">
+          <h4>Cijene (uredi)</h4>
+          <div class="prow"><span>Dnevni boravak do 14:00</span><input value="50 KM"></div>
+          <div class="prow"><span>Noćenje 1–2 osobe</span><input value="90 KM"></div>
+          <div class="prow"><span>Noćenje 3–4 osobe</span><input value="110 KM"></div>
+          <button class="btn" type="button" data-toast="Demo: izmjene nisu sačuvane">Sačuvaj</button>
+        </div>
+      </div>
+      <div class="box" style="margin-top:14px">
+        <h4>Posljednje rezervacije (primjeri)</h4>
+        <table>
+          <thead><tr><th>Gost</th><th>Dolazak</th><th>Odlazak</th><th>Osobe</th><th>Iznos</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Amra K.</td><td>21.11.</td><td>23.11.</td><td>2</td><td>180 KM</td><td><span class="badge b-ok">Potvrđeno</span></td></tr>
+            <tr><td>Marco R.</td><td>24.11.</td><td>27.11.</td><td>3</td><td>330 KM</td><td><span class="badge b-wait">Čeka avans</span></td></tr>
+            <tr><td>Hans M.</td><td>28.11.</td><td>30.11.</td><td>2</td><td>180 KM</td><td><span class="badge b-new">Novi upit</span></td></tr>
+            <tr><td>Emina S.</td><td>05.12.</td><td>07.12.</td><td>4</td><td>220 KM</td><td><span class="badge b-ok">Potvrđeno</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script src="three.min.js"></script>
 <script>
@@ -353,14 +558,25 @@
   let progress = 0, target = 0, mx = 0, my = 0, smx = 0, smy = 0;
   const ease = t => t * t * (3 - 2 * t);
   function sample(p) {
-    const f = Math.min(Math.max(p, 0), 1) * (N - 1);
+    const f = Math.min(Math.max(p, 0), N - 1);
     const i = Math.min(Math.floor(f), N - 2);
     const t = ease(f - i);
     const a = keys[i], b = keys[i + 1];
     tmpPos.lerpVectors(a.pos, b.pos, t); tmpLook.lerpVectors(a.look, b.look, t); tmpSky.copy(a.sky).lerp(b.sky, t);
     return a.dusk + (b.dusk - a.dusk) * t;
   }
-  function onScroll() { const max = document.documentElement.scrollHeight - innerHeight; target = max > 0 ? scrollY / max : 0; }
+  // map scroll position to a (fractional) keyframe index using the visible sections
+  function onScroll() {
+    const secs = [...document.querySelectorAll('section[data-key]')].filter(s => !s.hidden)
+      .map(s => ({ y: s.getBoundingClientRect().top + scrollY, k: parseFloat(s.dataset.key) })).sort((a, b) => a.y - b.y);
+    const y = scrollY;
+    if (!secs.length || y <= secs[0].y) { target = secs.length ? secs[0].k : 0; return; }
+    for (let i = 0; i < secs.length - 1; i++) {
+      if (y < secs[i + 1].y) { target = secs[i].k + (secs[i + 1].k - secs[i].k) * (y - secs[i].y) / (secs[i + 1].y - secs[i].y); return; }
+    }
+    target = secs[secs.length - 1].k;
+  }
+  window.__refreshScroll = onScroll;
   addEventListener('scroll', onScroll, { passive: true });
   addEventListener('mousemove', e => { mx = e.clientX / innerWidth - 0.5; my = e.clientY / innerHeight - 0.5; });
   function resize() {
@@ -405,6 +621,97 @@
     requestAnimationFrame(frame);
   }
   frame();
+})();
+</script>
+<script>
+(function () {
+  const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+  const toastEl = $('#toast'); let tt;
+  function toast(m) { toastEl.textContent = m; toastEl.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => toastEl.classList.remove('show'), 2400); }
+  document.addEventListener('click', e => { const b = e.target.closest('[data-toast]'); if (b) { e.preventDefault(); toast(b.dataset.toast); } });
+
+  // ---- packages ----
+  let tier = parseInt(new URLSearchParams(location.search).get('t'), 10); if (![1, 2, 3].includes(tier)) tier = 1;
+  const notes = { 1: 'Onepage: 3D prikaz apartmana, cijene i kontakt.', 2: '+ kalendar, forma, WhatsApp/Viber, jezici, recenzije.', 3: '+ admin panel za rezervacije i cijene.' };
+  function apply(scrollTo) {
+    document.body.dataset.tier = tier;
+    $$('[data-min]').forEach(e => e.hidden = tier < +e.dataset.min);
+    $$('[data-max]').forEach(e => e.hidden = tier > +e.dataset.max);
+    $$('#tiers button').forEach(b => b.classList.toggle('on', +b.dataset.t === tier));
+    $('#tierNote').textContent = notes[tier];
+    $$('a.cta').forEach(a => a.setAttribute('href', tier > 1 ? '#rezervacija' : '#kontakt'));
+    $$('a.to2d').forEach(a => a.href = '2d.html?t=' + tier);
+    try { history.replaceState(null, '', '?t=' + tier + location.hash); } catch (e) {}
+    window.__refreshScroll && window.__refreshScroll();
+    if (scrollTo) setTimeout(() => { const t = scrollTo === 'top' ? document.body : $(scrollTo); t.scrollIntoView({ behavior: 'smooth' }); }, 60);
+  }
+  $$('#tiers button').forEach(b => b.addEventListener('click', () => { tier = +b.dataset.t; apply(tier === 1 ? 'top' : '#rezervacija'); }));
+  apply();
+
+  // ---- language (visual) ----
+  const lang = $('#lang');
+  $('#langBtn').addEventListener('click', e => { e.stopPropagation(); lang.classList.toggle('open'); });
+  document.addEventListener('click', () => lang.classList.remove('open'));
+  $$('#lang .menu button').forEach(b => b.addEventListener('click', () => { $('#langBtn').textContent = b.textContent.slice(0, 2) + ' ▾'; toast('Demo: u punoj verziji se cijeli sajt prevodi'); }));
+
+  // ---- calendar ----
+  const MN = ['Januar', 'Februar', 'Mart', 'April', 'Maj', 'Juni', 'Juli', 'August', 'Septembar', 'Oktobar', 'Novembar', 'Decembar'];
+  const DW = ['Pon', 'Uto', 'Sri', 'Čet', 'Pet', 'Sub', 'Ned'];
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  let view = new Date(today.getFullYear(), today.getMonth(), 1), a = null, b = null;
+  const isBooked = d => ((d.getDate() * 7 + d.getMonth() * 3) % 13) < 3;
+  const fmt = d => String(d.getDate()).padStart(2, '0') + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.';
+  function drawCal() {
+    $('#calTitle').textContent = MN[view.getMonth()] + ' ' + view.getFullYear();
+    const g = $('#calGrid'); g.innerHTML = DW.map(d => '<div class="dow">' + d + '</div>').join('');
+    const off = (view.getDay() + 6) % 7;
+    for (let i = 0; i < off; i++) g.insertAdjacentHTML('beforeend', '<div></div>');
+    const n = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+    for (let i = 1; i <= n; i++) {
+      const d = new Date(view.getFullYear(), view.getMonth(), i), t = +d;
+      const el = document.createElement('button'); el.type = 'button'; el.className = 'day'; el.textContent = i;
+      if (d < today) el.disabled = true;
+      else if (isBooked(d)) { el.classList.add('booked'); el.disabled = true; }
+      if (a && +a === t || b && +b === t) el.classList.add('sel');
+      else if (a && b && t > +a && t < +b) el.classList.add('range');
+      el.addEventListener('click', () => pick(d));
+      g.appendChild(el);
+    }
+  }
+  function pick(d) {
+    if (!a || b || d <= a) { a = d; b = null; }
+    else {
+      for (let x = new Date(a.getTime() + 864e5); x < d; x = new Date(x.getTime() + 864e5)) if (isBooked(x)) { toast('U tom periodu ima zauzetih dana'); a = d; b = null; drawCal(); sum(); return; }
+      b = d;
+    }
+    drawCal(); sum();
+  }
+  function sum() {
+    const el = $('#calSum');
+    if (!a) { el.innerHTML = 'Odaberite datum dolaska i odlaska.'; return; }
+    if (!b) { el.innerHTML = 'Dolazak: <b style="font-size:inherit">' + fmt(a) + '</b> — odaberite datum odlaska.'; return; }
+    const nights = Math.round((b - a) / 864e5), rate = +$('#guests').value;
+    const add = $$('.addons input:checked').reduce((s, i) => s + +i.dataset.p, 0);
+    el.innerHTML = fmt(a) + ' → ' + fmt(b) + ' · ' + nights + (nights === 1 ? ' noć' : ' noći') + ' × ' + rate + ' KM' + (add ? ' + dodaci ' + add + ' KM' : '') + '<br>Ukupno: <b>' + (nights * rate + add) + ' KM</b>';
+  }
+  $('#calPrev').onclick = () => { view = new Date(view.getFullYear(), view.getMonth() - 1, 1); drawCal(); };
+  $('#calNext').onclick = () => { view = new Date(view.getFullYear(), view.getMonth() + 1, 1); drawCal(); };
+  $('#guests').onchange = sum; $$('.addons input').forEach(i => i.onchange = sum);
+  $('#bookForm').addEventListener('submit', e => { e.preventDefault(); toast('Demo: upit nije poslan'); });
+  drawCal();
+
+  // ---- admin (visual only) ----
+  const admin = $('#admin'), login = $('#adminLogin'), dash = $('#adminDash');
+  function openAdmin() { admin.hidden = false; login.hidden = false; dash.hidden = true; $('#lerr').textContent = ''; $('#lu').value = ''; $('#lp').value = ''; document.body.style.overflow = 'hidden'; setTimeout(() => $('#lu').focus(), 50); }
+  function closeAdmin() { admin.hidden = true; document.body.style.overflow = ''; }
+  $('#adminOpen').addEventListener('click', openAdmin);
+  $('#adminClose').addEventListener('click', closeAdmin);
+  $('#adminOut').addEventListener('click', closeAdmin);
+  $('#loginForm').addEventListener('submit', e => {
+    e.preventDefault();
+    if ($('#lu').value === 'user' && $('#lp').value === '1234') { login.hidden = true; dash.hidden = false; }
+    else $('#lerr').textContent = 'Pogrešno korisničko ime ili lozinka.';
+  });
 })();
 </script>
 </body>
