@@ -41,6 +41,20 @@
   input { padding:14px 16px; border-radius:12px; border:0; background:rgba(255,255,255,.92); font-size:15px; color:var(--ink); }
   .row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
   footer { position:relative; z-index:1; text-align:center; padding:18px; font-size:12px; background:rgba(14,16,22,.7); }
+  .toggle { display:flex; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.25); border-radius:999px; padding:3px; font-size:13px; font-weight:800; letter-spacing:.06em; }
+  .toggle span, .toggle a { padding:7px 16px; border-radius:999px; text-decoration:none; color:#fff; opacity:1; }
+  .toggle .on { background:var(--accent); color:#1a1208; }
+  .toggle a { opacity:.8; } .toggle a:hover { opacity:1; color:#fff; }
+  .compare { max-width:920px; width:100%; text-align:left; }
+  .compare .scroll { overflow-x:auto; margin-top:20px; border-radius:16px; border:1px solid rgba(255,255,255,.2); }
+  table { width:100%; border-collapse:collapse; font-size:15px; min-width:560px; }
+  th, td { padding:13px 16px; text-align:left; border-bottom:1px solid rgba(255,255,255,.12); vertical-align:top; }
+  th { font-size:13px; letter-spacing:.08em; text-transform:uppercase; background:rgba(255,255,255,.06); }
+  th.hl, td.hl { background:rgba(255,162,76,.16); }
+  th.hl { color:var(--accent); }
+  td:first-child { font-weight:700; width:26%; }
+  td.no { opacity:.75; }
+  tr:last-child td { border-bottom:0; }
   @media (max-width:760px) { nav ul { display:none; } section.right { justify-content:flex-start; } .panel { padding:26px 24px; } }
 </style>
 </head>
@@ -55,7 +69,11 @@
     <li><a href="#unutra">Enterijer</a></li>
     <li><a href="#lokacija">Lokacija</a></li>
     <li><a href="#kontakt">Rezervacija</a></li>
+    <li><a href="#usporedba">Zašto 3D?</a></li>
   </ul>
+  <div class="toggle" role="group" aria-label="Verzija sajta">
+    <span class="on">3D</span><a href="2d.html">2D</a>
+  </div>
 </nav>
 
 <section id="top">
@@ -114,6 +132,30 @@
       <input type="email" placeholder="Email" required>
       <button class="btn" style="margin-top:6px">Pošalji upit</button>
     </form>
+  </div>
+</section>
+<section id="usporedba" class="center">
+  <div class="panel compare" style="max-width:920px">
+    <div class="eyebrow">Usporedba</div>
+    <h2>Zašto 3D, a ne običan sajt?</h2>
+    <p>Gost bira smještaj za nekoliko sekundi. 3D sajt mu pokazuje apartman umjesto da ga samo opiše.</p>
+    <div class="scroll">
+    <table>
+      <thead><tr><th></th><th>Klasični 2D sajt</th><th class="hl">3D sajt (ovaj)</th></tr></thead>
+      <tbody>
+        <tr><td>Prvi dojam</td><td class="no">Isto kao stotine drugih oglasa</td><td class="hl">Odmah „wow“ — gost pamti objekat</td></tr>
+        <tr><td>Prikaz apartmana</td><td class="no">Nekoliko fotografija</td><td class="hl">Gost „ulazi“ u prostor i vidi raspored i atmosferu</td></tr>
+        <tr><td>Lokacija</td><td class="no">Adresa i mapa</td><td class="hl">Vidi okolinu, zgradu i Vječnu vatru u prostoru</td></tr>
+        <tr><td>Vrijeme na stranici</td><td class="no">Kratko, brzo se zatvori</td><td class="hl">Gost istražuje i ostaje duže</td></tr>
+        <tr><td>Razlikovanje od konkurencije</td><td class="no">Teško — sve liči jedno na drugo</td><td class="hl">Jedinstven doživljaj koji drugi apartmani nemaju</td></tr>
+        <tr><td>Povjerenje</td><td class="no">Gost može sumnjati u fotografije</td><td class="hl">Prostor je jasan, pa nema iznenađenja po dolasku</td></tr>
+        <tr><td>Dijeljenje i pamćenje</td><td class="no">Rijetko se šalje dalje</td><td class="hl">Gosti ga dijele jer je neobičan</td></tr>
+        <tr><td>Promjena izgleda</td><td class="no">Zamjena fotografija</td><td class="hl">Dan, zalazak i noć, sezonske i prazničke teme</td></tr>
+        <tr><td>Cijena izrade</td><td class="no">Niža</td><td class="hl">Viša, ali je to jednokratno ulaganje koje se vraća većim brojem rezervacija</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <a class="btn" href="#kontakt">Želim 3D sajt</a>
   </div>
 </section>
 <footer>© Apartmani LED Vječna Vatra · Demo 3D prezentacija</footer>
@@ -304,6 +346,7 @@
     { pos: V(RX + 2.4, 2.6, 8.2), look: V(RX + 0.6, 1.6, 0), sky: C(0x30323a), dusk: 0.7 },
     { pos: V(-3, 3.4, 18.5), look: V(3.2, 3.2, 9), sky: C(0xff9a6b), dusk: 0.75 },
     { pos: V(0, 2.2, 25),    look: V(0, 4.2, 0),  sky: C(0x1d1a3a), dusk: 1.0 },
+    { pos: V(9, 3.5, 25),    look: V(0, 4.5, 0),  sky: C(0x1d1a3a), dusk: 1.0 },
   ];
   const N = keys.length;
   const tmpPos = new THREE.Vector3(), tmpLook = new THREE.Vector3(), tmpSky = new THREE.Color();
