@@ -63,6 +63,18 @@ function migrate($pdo, $driver) {
         note VARCHAR(600) NOT NULL DEFAULT '',
         created_at VARCHAR(19) NOT NULL
     )$tail");
+    $pdo->exec("CREATE TABLE IF NOT EXISTS seasons (
+        id $pk,
+        name VARCHAR(60) NOT NULL DEFAULT '',
+        date_from VARCHAR(10) NOT NULL,
+        date_to VARCHAR(10) NOT NULL,
+        rate2 INT NOT NULL,
+        rate4 INT NOT NULL
+    )$tail");
+    $pdo->exec("CREATE TABLE IF NOT EXISTS settings (
+        k VARCHAR(30) NOT NULL PRIMARY KEY,
+        v VARCHAR(30) NOT NULL DEFAULT ''
+    )$tail");
     $pdo->exec("CREATE TABLE IF NOT EXISTS blocks (
         id $pk,
         date_from VARCHAR(10) NOT NULL,
@@ -93,4 +105,29 @@ function conflict($in, $out, $ignoreId = 0, $withBlocks = true) {
     if ($n > 0) return true;
     if (!$withBlocks) return false;
     return q("SELECT COUNT(*) FROM blocks WHERE date_from < ? AND date_to >= ?", [$out, $in])->fetchColumn() > 0;
+}
+
+// ---- cijene: osnovna cijena (config) + sezone (datumski rasponi) + doplata za vikend (pet/sub noć) + popust za duži boravak ----
+function pricing_settings() {
+    $d = ['weekend_extra' => 0, 'disc7' => 0, 'disc14' => 0];
+    foreach (q("SELECT k, v FROM settings")->fetchAll() as $r) if (isset($d[$r['k']])) $d[$r['k']] = (int)$r['v'];
+    return $d;
+}
+function pricing_seasons() {
+    return q("SELECT id, name, date_from, date_to, rate2, rate4 FROM seasons ORDER BY date_from")->fetchAll();
+}
+// Ukupna cijena za nocenja [in, out) i broj osoba ('2' ili '4'). Vraca total, nights, discount (%), avg po noci.
+function quote($in, $out, $g) {
+    $c = cfg(); $st = pricing_settings(); $seasons = pricing_seasons();
+    $sum = 0; $n = 0;
+    foreach (each_night($in, $out) as $d) {
+        $rate = (int)$c['rates'][$g];
+        foreach ($seasons as $s) if ($d >= $s['date_from'] && $d <= $s['date_to']) { $rate = (int)($g === '2' ? $s['rate2'] : $s['rate4']); break; }
+        $dow = (int)(new DateTime($d))->format('N');
+        if ($dow === 5 || $dow === 6) $rate += $st['weekend_extra'];
+        $sum += $rate; $n++;
+    }
+    $disc = $n >= 14 ? $st['disc14'] : ($n >= 7 ? $st['disc7'] : 0);
+    $total = (int)round($sum * (100 - $disc) / 100);
+    return ['total' => $total, 'nights' => $n, 'discount' => $disc, 'avg' => $n ? (int)round($total / $n) : 0];
 }

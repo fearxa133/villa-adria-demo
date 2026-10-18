@@ -29,7 +29,7 @@ if (q("SELECT COUNT(*) FROM bookings WHERE email = ? AND status = 'pending'", [$
 $pdo = db();
 $pdo->beginTransaction();
 if (conflict($ci, $co)) { $pdo->rollBack(); fail('Taj termin je u međuvremenu zauzet. Odaberite drugi.', 409); }
-$price = $nights * (int)$c['rates'][$g];
+$price = quote($ci, $co, $g)['total'];
 q("INSERT INTO bookings (name, email, phone, guests, check_in, check_out, price_total, status, source, note, created_at) VALUES (?,?,?,?,?,?,?,'pending','web',?,?)",
   [$name, $email, $phone, $g, $ci, $co, $price, $note, date('Y-m-d H:i:s')]);
 $id = $pdo->lastInsertId();

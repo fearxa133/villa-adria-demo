@@ -50,7 +50,7 @@ case 'booking_save':
     if (!valid_date($cur['check_in']) || !valid_date($cur['check_out']) || $cur['check_out'] <= $cur['check_in']) fail('Neispravni datumi.');
     if (mb_strlen($cur['note']) > 600) fail('Napomena je predugačka.');
     $nights = nights_between($cur['check_in'], $cur['check_out']);
-    if ($cur['price_total'] === null || $cur['price_total'] === '') $cur['price_total'] = $nights * (int)$c['rates'][(string)$cur['guests']];
+    if ($cur['price_total'] === null || $cur['price_total'] === '') $cur['price_total'] = quote($cur['check_in'], $cur['check_out'], (string)$cur['guests'])['total'];
     $cur['price_total'] = (int)$cur['price_total']; $cur['paid_amount'] = (int)$cur['paid_amount'];
     if ($cur['price_total'] < 0 || $cur['paid_amount'] < 0) fail('Iznosi ne mogu biti negativni.');
     if ($cur['status'] !== 'cancelled' && conflict($cur['check_in'], $cur['check_out'], $id)) fail('Termin se preklapa sa drugom rezervacijom ili blokiranim danima.', 409);
@@ -81,6 +81,29 @@ case 'block_add':
 
 case 'block_delete':
     q("DELETE FROM blocks WHERE id = ?", [(int)($in['id'] ?? 0)]);
+    out(['ok' => true]);
+
+case 'pricing':
+    out(['rates' => $c['rates'], 'settings' => pricing_settings(), 'seasons' => pricing_seasons()]);
+
+case 'pricing_save':
+    foreach (['weekend_extra' => 200, 'disc7' => 50, 'disc14' => 50] as $k => $max) {
+        $v = (int)($in[$k] ?? 0); if ($v < 0 || $v > $max) fail('Neispravna vrijednost: ' . $k);
+        q("DELETE FROM settings WHERE k = ?", [$k]); q("INSERT INTO settings (k, v) VALUES (?, ?)", [$k, (string)$v]);
+    }
+    out(['ok' => true]);
+
+case 'season_add':
+    $f = valid_date($in['date_from'] ?? ''); $t = valid_date($in['date_to'] ?? '');
+    $r2 = (int)($in['rate2'] ?? 0); $r4 = (int)($in['rate4'] ?? 0);
+    if (!$f || !$t || $t < $f) fail('Neispravni datumi sezone.');
+    if ($r2 < 1 || $r2 > 2000 || $r4 < 1 || $r4 > 2000) fail('Unesite cijene (KM po noći).');
+    if (q("SELECT COUNT(*) FROM seasons WHERE date_from <= ? AND date_to >= ?", [$t, $f])->fetchColumn() > 0) fail('Sezona se preklapa s postojećom.', 409);
+    q("INSERT INTO seasons (name, date_from, date_to, rate2, rate4) VALUES (?,?,?,?,?)", [mb_substr(trim((string)($in['name'] ?? '')), 0, 60), $f, $t, $r2, $r4]);
+    out(['ok' => true]);
+
+case 'season_delete':
+    q("DELETE FROM seasons WHERE id = ?", [(int)($in['id'] ?? 0)]);
     out(['ok' => true]);
 
 case 'stats':

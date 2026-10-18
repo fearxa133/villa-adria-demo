@@ -97,6 +97,7 @@
     <div class="tabs" id="tabs">
       <button data-tab="list" class="on">Rezervacije</button>
       <button data-tab="cal">Kalendar</button>
+      <button data-tab="price">Cijene</button>
       <button data-tab="stats">Statistika</button>
     </div>
     <button class="btn ghost sm" id="logout">Odjava</button>
@@ -104,6 +105,7 @@
 
   <main>
     <section id="tab-list">
+      <div id="soon"></div>
       <div class="bar">
         <div class="chips" id="chips"></div>
         <span class="sp"></span>
@@ -122,6 +124,26 @@
       </div>
       <h3 style="margin:22px 0 4px;font-size:15px">Blokirani periodi</h3>
       <div id="blkList"></div>
+    </section>
+
+    <section id="tab-price" hidden>
+      <div class="blockbox">
+        <h3 style="font-size:15px;margin-bottom:6px">Osnovna cijena po noći</h3>
+        <div class="nt" id="baseRates"></div>
+        <div class="nt" style="margin-top:4px">Osnovne cijene se mijenjaju u <code>api/config.php</code> (rates). Ispod su sezone koje ih zamjenjuju za odabrane datume.</div>
+      </div>
+      <h3 style="margin:22px 0 8px;font-size:15px">Sezone</h3>
+      <div class="blockbox">
+        <div class="two"><label>Naziv<input id="seName" maxlength="60" placeholder="npr. Ljeto"></label><label>1–2 osobe (KM/noć)<input id="seR2" type="number" min="1"></label></div>
+        <div class="two"><label>Od<input id="seFrom" type="date"></label><label>Do (uključivo)<input id="seTo" type="date"></label></div>
+        <div class="two"><label>3–4 osobe (KM/noć)<input id="seR4" type="number" min="1"></label><button class="btn" id="seAdd" style="align-self:end">Dodaj sezonu</button></div>
+      </div>
+      <div id="seList"></div>
+      <h3 style="margin:22px 0 8px;font-size:15px">Vikend i duži boravak</h3>
+      <div class="blockbox">
+        <div class="two"><label>Doplata za noć petak/subota (KM)<input id="stWe" type="number" min="0" max="200"></label><label>Popust od 7 noći (%)<input id="st7" type="number" min="0" max="50"></label></div>
+        <div class="two"><label>Popust od 14 noći (%)<input id="st14" type="number" min="0" max="50"></label><button class="btn" id="stSave" style="align-self:end">Sačuvaj</button></div>
+      </div>
     </section>
 
     <section id="tab-stats" hidden>
@@ -185,18 +207,40 @@
     const [b, k] = await Promise.all([run(api('bookings')), run(api('blocks'))]);
     bookings = b.bookings; blocks = k.blocks; render();
   }
-  function render() { if (tab === 'list') renderList(); else if (tab === 'cal') renderCal(); else renderStats(); }
+  function render() { if (tab === 'list') renderList(); else if (tab === 'cal') renderCal(); else if (tab === 'price') renderPrice(); else renderStats(); }
 
   $('#tabs').addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return; tab = b.dataset.tab;
     document.querySelectorAll('#tabs button').forEach(x => x.classList.toggle('on', x === b));
-    ['list', 'cal', 'stats'].forEach(t => $('#tab-' + t).hidden = t !== tab);
+    ['list', 'cal', 'price', 'stats'].forEach(t => $('#tab-' + t).hidden = t !== tab);
     render();
   });
 
   // ---- lista rezervacija ----
   const CH = [['all', 'Sve'], ['pending', 'Na čekanju'], ['confirmed', 'Potvrđene'], ['cancelled', 'Otkazane']];
+  // podsjetnik: dolasci i odlasci u narednih 7 dana (potvrđene rezervacije)
+  function renderSoon() {
+    const t0 = new Date(); t0.setHours(0, 0, 0, 0); const lim = ISO(new Date(t0.getTime() + 7 * 864e5)), now = ISO(t0), ev = [];
+    bookings.filter(b => b.status === 'confirmed').forEach(b => {
+      if (b.check_in >= now && b.check_in <= lim) ev.push([b.check_in, '↓ Dolazak', b]);
+      if (b.check_out >= now && b.check_out <= lim) ev.push([b.check_out, '↑ Odlazak', b]);
+    });
+    ev.sort((x, y) => x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0);
+    const day = d => d === now ? 'Danas' : d === ISO(new Date(t0.getTime() + 864e5)) ? 'Sutra' : fmtD(d).slice(0, 5);
+    $('#soon').innerHTML = '<div class="blockbox" style="margin-bottom:14px"><b style="font-size:14px">Narednih 7 dana</b>' + (ev.length ? ev.map(e => '<div class="nt" style="margin-top:6px;color:var(--ink)"><b>' + day(e[0]) + '</b> · ' + e[1] + ' · ' + esc(e[2].name) + (e[2].phone ? ' · ' + esc(e[2].phone) : '') + '</div>').join('') : '<div class="nt" style="margin-top:6px">Nema dolazaka ni odlazaka.</div>') + '</div>';
+  }
+  // ---- cijene ----
+  async function renderPrice() {
+    const j = await run(api('pricing'));
+    $('#baseRates').textContent = '1–2 osobe: ' + j.rates['2'] + ' KM · 3–4 osobe: ' + j.rates['4'] + ' KM';
+    $('#seList').innerHTML = j.seasons.length ? j.seasons.map(x => '<div class="bk"><div class="top"><b>' + esc(x.name || 'Sezona') + '</b><span class="nt">' + fmtD(x.date_from) + ' – ' + fmtD(x.date_to) + ' · ' + x.rate2 + ' / ' + x.rate4 + ' KM</span><span class="acts"><button class="btn bad sm" data-sd="' + x.id + '">Obriši</button></span></div></div>').join('') : '<div class="empty">Nema sezona — važe osnovne cijene.</div>';
+    $('#stWe').value = j.settings.weekend_extra; $('#st7').value = j.settings.disc7; $('#st14').value = j.settings.disc14;
+  }
+  $('#seAdd').onclick = async () => { await run(api('season_add', { name: $('#seName').value, date_from: $('#seFrom').value, date_to: $('#seTo').value, rate2: +$('#seR2').value, rate4: +$('#seR4').value })); ['#seName', '#seFrom', '#seTo', '#seR2', '#seR4'].forEach(x => $(x).value = ''); toast('Sezona dodana.'); renderPrice(); };
+  $('#seList').addEventListener('click', async e => { const b = e.target.closest('[data-sd]'); if (!b || !confirm('Obrisati sezonu?')) return; await run(api('season_delete', { id: +b.dataset.sd })); renderPrice(); });
+  $('#stSave').onclick = async () => { await run(api('pricing_save', { weekend_extra: +$('#stWe').value || 0, disc7: +$('#st7').value || 0, disc14: +$('#st14').value || 0 })); toast('Sačuvano.'); };
   function renderList() {
+    renderSoon();
     $('#chips').innerHTML = CH.map(([k, l]) => '<button class="chip' + (filter === k ? ' on' : '') + '" data-f="' + k + '">' + l + ' (' + bookings.filter(b => k === 'all' || b.status === k).length + ')</button>').join('');
     const list = bookings.filter(b => filter === 'all' || b.status === filter);
     $('#bkList').innerHTML = list.length ? list.map(card).join('') : '<div class="empty">Nema rezervacija.</div>';

@@ -12,4 +12,4 @@ foreach (q("SELECT date_from, date_to FROM blocks WHERE date_to >= ?", [$today])
 }
 $booked = array_keys($set); sort($booked);
 header('Cache-Control: no-store');
-out(['booked' => $booked, 'rates' => cfg()['rates'], 'today' => $today, 'max_nights' => cfg()['max_nights']]);
+out(['booked' => $booked, 'rates' => cfg()['rates'], 'today' => $today, 'max_nights' => cfg()['max_nights'], 'seasons' => array_map(fn($s) => array_diff_key($s, ['id' => 0]), pricing_seasons()), 'settings' => pricing_settings()]);
