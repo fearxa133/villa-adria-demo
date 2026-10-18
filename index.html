@@ -699,8 +699,26 @@ window.__boot = function () {
   swapTex(texWood, 'floor_diff.jpg');
   const floorN = REAL ? loadMap('floor_nor.jpg', '#8080ff') : null, floorR = REAL ? loadMap('floor_rough.jpg', '#ffffff') : null;
   const texPlaster = loadMap('plaster_diff.jpg', '#d6d2ca'), texPlasterN = REAL ? loadMap('plaster_nor.jpg', '#8080ff') : null, texOak = loadMap('oak_diff.jpg', '#c9975c');
-  const texBathFloor = ctex(256, 256, (g, w, h) => { g.fillStyle = '#dde2e6'; g.fillRect(0, 0, w, h); g.fillStyle = '#aeb5bb'; for (let i = 0; i < 4; i++) { g.fillRect(i * 64, 0, 2, h); g.fillRect(0, i * 64, w, 2); } });
-  const texBlue = ctex(256, 256, (g, w, h) => { for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) { const k = rnd(i * 7 + j * 13), x = i * 64, y = j * 64; const gr = g.createLinearGradient(x, y, x + 64, y + 64); gr.addColorStop(0, 'rgb(' + (190 + k * 14 | 0) + ',' + (230 + k * 10 | 0) + ',' + (250 + k * 5 | 0) + ')'); gr.addColorStop(1, 'rgb(' + (160 + k * 14 | 0) + ',' + (210 + k * 10 | 0) + ',' + (240 + k * 6 | 0) + ')'); g.fillStyle = gr; g.fillRect(x, y, 64, 64); g.fillStyle = 'rgba(255,255,255,0.35)'; g.fillRect(x + 3, y + 3, 58, 2); g.fillRect(x + 3, y + 3, 2, 58); g.fillStyle = 'rgba(40,90,130,0.18)'; g.fillRect(x + 3, y + 59, 58, 2); g.fillRect(x + 59, y + 3, 2, 58); } g.fillStyle = '#e9f2f7'; for (let i = 0; i < 4; i++) { g.fillRect(i * 64 - 1, 0, 3, h); g.fillRect(0, i * 64 - 1, w, 3); } });
+  // bathroom: the real teal marble tiles from the scan (3 x 3 tiles per metre, green grout); the floor is laid on the diagonal like the real one
+  const marbleImg = new Image(), marbleCbs = []; marbleImg.onload = () => marbleCbs.forEach(f => f()); marbleImg.src = 'img/tex/real_marble.jpg';
+  function marbleTex(rot) {
+    const tex = ctex(510, 510, (g, w, h) => { g.fillStyle = '#7fb3b1'; g.fillRect(0, 0, w, h); });
+    const redraw = () => { const g = tex.image.getContext('2d'); for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) { const k = rnd(i * 7 + j * 13 + 3); g.save(); g.translate(i * 170 + 85, j * 170 + 85); g.rotate(Math.floor(k * 4) * Math.PI / 2); if (k > 0.5) g.scale(-1, 1); g.drawImage(marbleImg, -85, -85, 170, 170); g.restore(); } g.fillStyle = '#5f8c78'; for (let i = 0; i <= 3; i++) { g.fillRect(i * 170 - 2, 0, 4, 510); g.fillRect(0, i * 170 - 2, 510, 4); } tex.needsUpdate = true; };
+    marbleCbs.push(redraw); if (marbleImg.complete && marbleImg.naturalWidth) redraw();
+    if (rot) { tex.center.set(0.5, 0.5); tex.rotation = Math.PI / 4; } return tex;
+  }
+  const texBathFloor = marbleTex(true);
+  const texBlue = marbleTex(false);
+  // hall: grey ornamental cement tiles with round medallions (from the scan), one medallion = 2 x 2 tiles
+  const texHall = ctex(512, 512, (g, w, h) => {
+    const bg = g.createLinearGradient(0, 0, w, h); bg.addColorStop(0, '#a6a8ac'); bg.addColorStop(1, '#94969b'); g.fillStyle = bg; g.fillRect(0, 0, w, h);
+    for (let i = 0; i < 160; i++) { g.strokeStyle = 'rgba(' + (rnd(i) > 0.5 ? '60,62,68' : '230,232,236') + ',' + (0.05 + rnd(i + 9) * 0.07) + ')'; g.lineWidth = 1 + rnd(i + 3) * 2; g.beginPath(); const x = rnd(i * 3) * w, y = rnd(i * 5) * h; g.moveTo(x, y); g.bezierCurveTo(x + 40, y + 10, x + 20, y + 50, x + 70 * rnd(i + 1), y + 70); g.stroke(); }
+    const cx = w / 2, cy = h / 2, rg = g.createRadialGradient(cx, cy, 20, cx, cy, 200); rg.addColorStop(0, '#b3b5b9'); rg.addColorStop(1, '#a1a3a7'); g.fillStyle = rg; g.beginPath(); g.arc(cx, cy, 200, 0, 7); g.fill();
+    g.strokeStyle = '#26282c'; g.lineWidth = 8; g.beginPath(); g.arc(cx, cy, 214, 0, 7); g.stroke(); g.lineWidth = 2.5; g.beginPath(); g.arc(cx, cy, 198, 0, 7); g.stroke();
+    g.lineWidth = 5; g.lineCap = 'round'; for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4 + 0.39, r0 = 120; g.beginPath(); g.arc(cx + Math.cos(a) * r0, cy + Math.sin(a) * r0, 22, a, a + 4.6); g.stroke(); g.beginPath(); g.arc(cx + Math.cos(a + 0.4) * (r0 + 38), cy + Math.sin(a + 0.4) * (r0 + 38), 9, a, a + 4.2); g.stroke(); }
+    g.fillStyle = '#26282c'; [[0, 0], [w, 0], [0, h], [w, h]].forEach(([x, y]) => { for (let k = 0; k < 4; k++) { g.save(); g.translate(x, y); g.rotate(k * Math.PI / 2); g.beginPath(); g.ellipse(26, 0, 22, 8, 0, 0, 7); g.fill(); g.restore(); } g.strokeStyle = '#3a3c42'; g.lineWidth = 2; g.beginPath(); g.moveTo(x - 62, y); g.lineTo(x, y - 62); g.lineTo(x + 62, y); g.lineTo(x, y + 62); g.closePath(); g.stroke(); });
+    g.fillStyle = 'rgba(70,72,78,0.55)'; g.fillRect(w / 2 - 1.5, 0, 3, h); g.fillRect(0, h / 2 - 1.5, w, 3); g.fillRect(0, 0, 3, h); g.fillRect(0, 0, w, 3);
+  });
   const texQuilt = ctex(128, 128, (g, w, h) => { g.fillStyle = '#9fb4c8'; g.fillRect(0, 0, w, h); for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) { const gr = g.createRadialGradient(i * 32 + 16, j * 32 + 16, 2, i * 32 + 16, j * 32 + 16, 22); gr.addColorStop(0, 'rgba(255,255,255,0.08)'); gr.addColorStop(1, 'rgba(0,0,0,0.04)'); g.fillStyle = gr; g.fillRect(i * 32, j * 32, 32, 32); } g.fillStyle = 'rgba(60,80,105,0.16)'; for (let i = 0; i <= 4; i++) { g.fillRect(i * 32 - 1, 0, 2, h); g.fillRect(0, i * 32 - 1, w, 2); } });
   texQuilt.repeat.set(2, 2);
   const texTuft = ctex(128, 128, (g, w, h) => { g.fillStyle = '#c9c5bd'; g.fillRect(0, 0, w, h); for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) { const gr = g.createRadialGradient(i * 32 + 16, j * 32 + 16, 1, i * 32 + 16, j * 32 + 16, 20); gr.addColorStop(0, 'rgba(0,0,0,0.28)'); gr.addColorStop(0.2, 'rgba(255,255,255,0.12)'); gr.addColorStop(1, 'rgba(0,0,0,0.1)'); g.fillStyle = gr; g.fillRect(i * 32, j * 32, 32, 32); } });
@@ -715,7 +733,7 @@ window.__boot = function () {
   const plasterMat = hex => { const m = new THREE.MeshStandardMaterial({ color: hex, map: texPlaster, normalMap: texPlasterN, normalScale: new THREE.Vector2(0.55, 0.55), roughness: 0.93 }); m.userData.uvT = 2; return m; };
   const blueTile = new THREE.MeshStandardMaterial({ map: texBlue, roughness: 0.28, metalness: 0.03 }); blueTile.userData.uvT = 1;
   const M = {
-    lobby: plasterMat(0xe6d6a2), liv: plasterMat(0x8d8477), hall: plasterMat(0xb8ab95), bed: plasterMat(0xd9d6d0), kit: plasterMat(0xece5d6), ext: mat(0xc9c3b2), cap: mat(0xc9c3b2),
+    lobby: plasterMat(0xe6d6a2), liv: plasterMat(0xe8e4db), hall: plasterMat(0xe9e3d7), bed: plasterMat(0xece9e3), kit: plasterMat(0xece5d6), ext: mat(0xc9c3b2), cap: mat(0xc9c3b2),
     bath: blueTile,
   };
   const slatA = new THREE.MeshStandardMaterial({ color: 0xffffff, map: texOak, roughness: 0.6 }), slatB = new THREE.MeshStandardMaterial({ color: 0xd9c3a2, map: texOak, roughness: 0.6 });
@@ -808,7 +826,9 @@ window.__boot = function () {
   const stoneHall = new THREE.MeshStandardMaterial({ color: 0xcfc8bb, map: texStone, normalMap: terrN, normalScale: nS, roughness: 0.55 });
   const stoneKit = new THREE.MeshStandardMaterial({ color: 0xe9e1d2, map: texStone, normalMap: terrN, normalScale: nS, roughness: 0.5 });
   const bathFloor = new THREE.MeshStandardMaterial({ map: texBathFloor, roughness: 0.3 });
-  const floorSpec = { hall: [stoneHall, 1.4], living: [woodFloor, 0.8], bed: [woodFloor, 0.8], kitchen: [stoneKit, 1.4], bath: [bathFloor, 1] };
+  const hallTile = new THREE.MeshStandardMaterial({ map: texHall, roughness: 0.38 });
+  const palePlank = new THREE.MeshStandardMaterial({ map: loadMap('real_pale_wood.jpg', '#bdb4a8'), roughness: 0.62 });   // the living room's real pale laminate
+  const floorSpec = { hall: [hallTile, 1.2], living: [palePlank, 0.9], bed: [woodFloor, 0.8], kitchen: [stoneKit, 1.4], bath: [bathFloor, 1] };
   const ceilMat = new THREE.MeshStandardMaterial({ color: 0xf3f0ea, map: texPlaster, roughness: 0.96 });
   PLAN.rooms.forEach(r => {
     const fs = new THREE.Shape(r.poly.map(p => new THREE.Vector2(p[0], -p[1])));
@@ -837,7 +857,7 @@ window.__boot = function () {
   spot(-0.15, 1.0);
 
   // =========== LIVING ROOM ===========
-  const lightLiv = plight(0xffd0a0, 0.75, 8, 2.7, 2.4, -1.6);
+  const lightLiv = plight(0xffd0a0, 0.95, 8, 2.7, 2.4, -1.6);
   const wl = 0.65;                                                                                    // TV wall (west)
   for (let i = 0; i < 5; i++) box(0.04, 2.7, 0.07, i % 2 ? slatB : slatA, wl + 0.02, 1.4, -1.40 + i * 0.1, flat);   // slat panel behind the media unit, along the left edge of the TV (the doorway to the hall stays free)
   glow(0.02, 2.7, 0.03, 0xffc27a, wl + 0.03, 1.4, -1.47, flat);
@@ -908,7 +928,7 @@ window.__boot = function () {
   box(0.5, 0.4, 0.2, white, -2.85, 0.65, -1.28, flat); cyl(0.17, 0.2, 0.4, mat(0xf4f4f2, { roughness: 0.18 }), -2.85, 0.25, -1.05, flat, 18); box(0.4, 0.04, 0.45, white, -2.85, 0.49, -1.0, flat);   // toilet
   box(0.75, 0.75, 0.5, white, -2.05, 0.38, -1.12, flat); box(0.78, 0.04, 0.52, 0xd9dde0, -2.05, 0.77, -1.12, flat); cyl(0.2, 0.17, 0.08, mat(0xf4f4f2, { roughness: 0.18 }), -2.05, 0.82, -1.12, flat, 20);   // vanity + glossy basin
   cyl(0.012, 0.012, 0.22, 0xcfd3d8, -2.05, 0.95, -1.28, flat, 8);
-  box(0.8, 0.85, 0.03, mat(0xaec4d1, { roughness: 0.08, metalness: 0.1, emissive: 0x33434d }), -2.05, 1.75, -1.375, flat); glow(0.86, 0.02, 0.02, 0xfff0e0, -2.05, 2.2, -1.37, flat); glow(0.86, 0.02, 0.02, 0xfff0e0, -2.05, 1.3, -1.37, flat);   // mirror + LED
+  box(0.8, 0.85, 0.03, mat(0x8fa3ae, { roughness: 0.08, metalness: 0.1, emissive: 0x1c262c }), -2.05, 1.75, -1.375, flat); glow(0.86, 0.02, 0.02, 0xfff0e0, -2.05, 2.2, -1.37, flat); glow(0.86, 0.02, 0.02, 0xfff0e0, -2.05, 1.3, -1.37, flat);   // mirror + LED
   box(0.6, 0.85, 0.6, white, -1.3, 0.43, -1.07, flat); cyl(0.2, 0.2, 0.03, 0x4b5359, -1.3, 0.6, -0.76, flat, 20).rotation.x = Math.PI / 2;   // washing machine
   box(0.9, 0.06, 0.8, white, -2.7, 0.07, -0.33, flat);                                              // shower tray
   box(0.02, 2.0, 0.8, 0xcfeaf5, -2.25, 1.05, -0.33, flat, { transparent: true, opacity: 0.3 }); box(0.9, 2.0, 0.02, 0xcfeaf5, -2.7, 1.05, -0.73, flat, { transparent: true, opacity: 0.3 });
