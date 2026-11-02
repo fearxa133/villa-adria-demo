@@ -1201,7 +1201,7 @@ window.__boot = function () {
   function route(from, to) { const prev = { [from]: null }, q = [from]; while (q.length) { const c = q.shift(); if (c === to) break; (ADJ[c] || []).forEach(n => { if (!(n in prev)) { prev[n] = c; q.push(n); } }); } const out = []; for (let c = to; c; c = prev[c]) out.unshift(c); return out; }
   function wrapA(a) { while (a > Math.PI) a -= 2 * Math.PI; while (a < -Math.PI) a += 2 * Math.PI; return a; }
   function goRoom(i) {
-    i = (i + STOPS.length) % STOPS.length; W.room = i; W.exit = false; exiting = false; yawT = 0; pitchT = 0;
+    i = (i + STOPS.length) % STOPS.length; W.room = i; W.exit = false; exiting = false; yaw = wrapA(yaw); yawT = 0; pitchT = 0;
     const r = route(nearestNode(W.x, W.z), STOPS[i].node).map(k => NODES[k]);
     W.pts = [[W.x, W.z]].concat(r);
     if (W.pts.length > 1 && dist2(W.pts[0], W.pts[1]) < 0.15) W.pts.shift();
@@ -1223,20 +1223,20 @@ window.__boot = function () {
     W.pitch += (tp - W.pitch) * (1 - Math.exp(-dt * 3));
     W.phase += W.v * dt / STEP * Math.PI;
   }
-  function exitWalk() { if (!walking) return; exiting = true; W.exit = true; yawT = 0; pitchT = 0; W.pts = [[W.x, W.z]].concat(route(nearestNode(W.x, W.z), 'HS').map(k => NODES[k])); if (W.pts.length > 1 && dist2(W.pts[0], W.pts[1]) < 0.15) W.pts.shift(); }
+  function exitWalk() { if (!walking) return; exiting = true; W.exit = true; yaw = wrapA(yaw); yawT = 0; pitchT = 0; W.pts = [[W.x, W.z]].concat(route(nearestNode(W.x, W.z), 'HS').map(k => NODES[k])); if (W.pts.length > 1 && dist2(W.pts[0], W.pts[1]) < 0.15) W.pts.shift(); }
   window.__walk = { camera, toWorld: (x, y, z) => [Xo - z, y, Zo + x], names: STOPS.map(s => s.n), shorts: STOPS.map(s => s.s), go: goRoom, get room() { return W.room; }, get active() { return walking; },
     start(i) { pending = i; if (walking) { goRoom(i); } else { W.exit = false; exiting = false; setWalking(true); } }, exit: exitWalk,
     exitNow() { exiting = false; W.exit = false; W.pts = []; setWalking(false); },
     pose: () => ({ x: W.x, z: W.z, yaw: W.yaw + yaw }), moving: () => W.pts.length > 1 };
 
-  // look-around (mouse drag / horizontal touch drag) — only while inside the flat
+  // look-around (mouse drag / horizontal touch drag, full 360°) — only while inside the flat
   const inside = () => blend > 0.9;
   let dragging = false, tx = 0, tOn = false;
   addEventListener('pointerdown', e => { dragging = e.pointerType === 'mouse' && !e.target.closest('button,a,input,select,textarea,summary,.panel,nav,.lightbox'); });
   addEventListener('pointerup', () => { dragging = false; });
-  addEventListener('pointermove', e => { if (e.pointerType === 'mouse' && e.buttons === 1 && dragging && inside()) { yawT = Math.max(-1.1, Math.min(1.1, yawT - e.movementX * 0.005)); pitchT = Math.max(-0.35, Math.min(0.35, pitchT - e.movementY * 0.003)); } });
+  addEventListener('pointermove', e => { if (e.pointerType === 'mouse' && e.buttons === 1 && dragging && inside()) { yawT -= e.movementX * 0.005; pitchT = Math.max(-0.35, Math.min(0.35, pitchT - e.movementY * 0.003)); } });
   addEventListener('touchstart', e => { const t0 = e.touches[0]; tx = t0.clientX; window.__ty = t0.clientY; tOn = inside() && !e.target.closest('.panel,nav,button,a,input,select,textarea,.lightbox'); }, { passive: true });
-  addEventListener('touchmove', e => { if (!tOn) return; const t0 = e.touches[0], dx = t0.clientX - tx, dy = t0.clientY - window.__ty; tx = t0.clientX; window.__ty = t0.clientY; if (Math.abs(dx) > Math.abs(dy) * 1.2) { e.preventDefault(); yawT = Math.max(-1.1, Math.min(1.1, yawT - dx * 0.007)); } }, { passive: false });
+  addEventListener('touchmove', e => { if (!tOn) return; const t0 = e.touches[0], dx = t0.clientX - tx, dy = t0.clientY - window.__ty; tx = t0.clientX; window.__ty = t0.clientY; if (Math.abs(dx) > Math.abs(dy) * 1.2) { e.preventDefault(); yawT -= dx * 0.007; } }, { passive: false });
 
   // ---------- scroll -> keyframe ----------
   const tmpPos = new THREE.Vector3(), tmpLook = new THREE.Vector3(), tmpSky = new THREE.Color();
