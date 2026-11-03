@@ -544,6 +544,8 @@ window.__boot = function () {
     const m = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, y1 - y0, z1 - z0), [side, side, side, side, front, side]);
     m.position.set((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2); m.castShadow = true; m.receiveShadow = true; scene.add(m); return m;
   }
+  // parts that models/building.glb (tools/bake/building.py) replaces once it has loaded are built inside ext()
+  function ext(f) { const a = scene.children.length; f(); scene.children.slice(a).forEach(o => { o.userData.bx = 1; }); }
   const plaster = mat(plasterC), plinthM = mat(0x98a2b0), darkM = mat(0x15171b), whiteM = mat(0xf2f0ea);
 
   // ---------- paved square ----------
@@ -559,6 +561,7 @@ window.__boot = function () {
   }
 
   // ---------- the building: upper floors (weathered plaster, ribbon windows) ----------
+  ext(() => {
   const texMain = facadeTexes(FX1 - FX0, TOP - G, 2, 2.91, { cw: 2048, ch: 256, base: '#d4cfc0', tint: '#f3eee2', stain: '90,76,58', seed: 3 });
   const mainFacadeMat = facadeMat(texMain); mainFacadeMat.color.setHex(0xeae6da);
   block(FX0, FX1, -BDEPTH, 0, G, TOP, mainFacadeMat, plaster);
@@ -569,6 +572,7 @@ window.__boot = function () {
   for (let x = FX0 + 1; x < FX1; x += 2.2) box(0.05, 0.8, 0.05, 0x8a8a86, x, TOP + 1.3, -0.12);
   [[-12, -8], [-6, -9], [-1, -7], [5, -9], [11, -8], [17, -9], [24, -8]].forEach(([x, z]) => { box(0.8, 1.6, 0.8, 0xb9b3a2, x, TOP + 0.8, z); box(0.95, 0.12, 0.95, 0x777, x, TOP + 1.66, z); });
   [[2, -4], [10, -5], [19, -6]].forEach(([x, z]) => box(1.1, 0.7, 0.6, 0xb9bcc0, x, TOP + 0.35, z));
+  });
 
   // ---------- ground floor of the building ----------
   function fwall(x0, x1) { box(x1 - x0, G, 0.3, plaster, (x0 + x1) / 2, G / 2, -0.15); box(x1 - x0, 0.9, 0.06, plinthM, (x0 + x1) / 2, 0.45, 0.03); }
@@ -580,8 +584,7 @@ window.__boot = function () {
   }
   const shopGlass = [glassDark];
   // left: cafe + shop fronts
-  fwall(-16, -14.9); fwall(-3.0, -1.8);
-  box(14.5, 0.55, 0.3, plaster, -8.75, G - 0.275, -0.15);
+  ext(() => { fwall(-16, -14.9); fwall(-3.0, -1.8); box(14.5, 0.55, 0.3, plaster, -8.75, G - 0.275, -0.15); });
   box(11.6, G, 0.2, 0x1b1e24, -8.9, G / 2, -0.55);
   const shop = new THREE.Mesh(new THREE.PlaneGeometry(11.6, 1.9), glassDark); shop.position.set(-8.9, 1.3, -0.02); scene.add(shop);
   for (let i = 0; i <= 6; i++) box(0.07, 1.95, 0.08, 0x0d0e10, -14.7 + i * 1.93, 1.3, -0.01);
@@ -614,11 +617,14 @@ window.__boot = function () {
   box(0.5, 0.3, 0.02, 0xf2f2f2, 1.18, 1.65, -0.78); box(0.3, 0.42, 0.04, 0x9a9a9a, -1.15, 1.35, -0.78);             // plaque + intercom
   const porchLamp = new THREE.MeshBasicMaterial({ color: 0xdadada }); const pl = new THREE.Mesh(new THREE.SphereGeometry(0.1, 10, 8), porchLamp); pl.position.set(0, G - 0.5, -0.45); scene.add(pl);
   // between the entrance and the flat, and the rest of the ground floor
+  ext(() => {
   fwall(1.8, 3.91); gwin(2.85, 1.2, 1.0, 2.2, true); box(4.12, 0.12, 0.3, plaster, 5.97, G - 0.06, -0.15); box(4.12, 0.9, 0.06, plinthM, 5.97, 0.45, 0.03);   // (x 3.91..8.03 is the flat's own wall)
   fwall(8.03, FX1);
   for (let i = 0; i < 6; i++) gwin(9.9 + i * 3.4, 1.4, 1.0, 2.2, i % 2 === 0);
   box(0.1, G, BDEPTH, plaster, FX1, G / 2, -BDEPTH / 2); box(0.1, G, BDEPTH, plaster, FX0, G / 2, -BDEPTH / 2);
+  });
   // neighbours: tall ochre block to the left (set back), same-height block to the right, skyline
+  ext(() => {
   const texOchre = facadeTexes(24, 17.4, 6, 2.9, { ppm: 30, base: '#d3b57e', tint: '#f2d39a', stain: '110,85,50', seed: 9 });
   block(-40, -16, -14, -3, 0, 17.4, facadeMat(texOchre), mat(0xcfb37c));
   const roofShape = new THREE.Shape([new THREE.Vector2(3, 0), new THREE.Vector2(14, 0), new THREE.Vector2(8.5, 3.6)]);
@@ -626,6 +632,7 @@ window.__boot = function () {
   const roof = new THREE.Mesh(roofGeo, mat(0x6e4a3a)); roof.position.set(-40.2, 17.4, 0); roof.castShadow = true; scene.add(roof);
   const texRight = facadeTexes(22, TOP, 3, 2.9, { ppm: 32, base: '#d6d0c0', tint: '#f1ecdf', stain: '100,86,64', seed: 21 });
   block(FX1, FX1 + 22, -BDEPTH, 0, 0, TOP, facadeMat(texRight), plaster);
+  });
   const texCity = facadeTexes(20, 30, 10, 3, { ppm: 18, base: '#cfc7b6', tint: '#ece5d6', stain: '100,90,70', seed: 40 });
   const cityM = facadeMat(texCity);
   for (let i = 0; i < 16; i++) { const a = (0.35 + i / 15 * 1.3) * Math.PI, rr = 95 + (i % 4) * 14, hgt = 22 + (i * 53 % 24); const m = block(-10, 10, -10, 10, 0, hgt, cityM, plaster); m.position.set(7 + Math.cos(a) * rr * 1.3, hgt / 2, 18 + Math.sin(a) * rr); }
@@ -1122,7 +1129,7 @@ window.__boot = function () {
     scene.traverse(o => {
       if (!o.isMesh || skip.has(o) || !o.visible) return;
       const m = o.material; if (Array.isArray(m) || m.transparent) return;
-      const key = m.uuid + (o.castShadow ? 'c' : '') + (o.receiveShadow ? 'r' : '') + (o.userData.bk ? 'B' : '');
+      const key = m.uuid + (o.castShadow ? 'c' : '') + (o.receiveShadow ? 'r' : '') + (o.userData.bk ? 'B' : '') + (o.userData.bx ? 'X' : '');
       if (!buckets.has(key)) buckets.set(key, []); buckets.get(key).push(o);
     });
     buckets.forEach(list => {
@@ -1132,7 +1139,7 @@ window.__boot = function () {
       const pos = new Float32Array(n * 3), nor = new Float32Array(n * 3), uv = new Float32Array(n * 2); let po = 0, uo = 0;
       parts.forEach(g => { const c = g.attributes.position.count; pos.set(g.attributes.position.array, po); nor.set(g.attributes.normal.array, po); if (g.attributes.uv) uv.set(g.attributes.uv.array, uo); po += c * 3; uo += c * 2; g.dispose(); });
       const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pos, 3)); geo.setAttribute('normal', new THREE.BufferAttribute(nor, 3)); geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
-      const first = list[0], mesh = new THREE.Mesh(geo, first.material); mesh.userData.bk = first.userData.bk; mesh.castShadow = first.castShadow; mesh.receiveShadow = first.receiveShadow; scene.add(mesh);
+      const first = list[0], mesh = new THREE.Mesh(geo, first.material); mesh.userData.bk = first.userData.bk; mesh.userData.bx = first.userData.bx; mesh.castShadow = first.castShadow; mesh.receiveShadow = first.receiveShadow; scene.add(mesh);
       list.forEach(o => { o.parent.remove(o); o.geometry.dispose(); });
     });
   }
@@ -1160,6 +1167,33 @@ window.__boot = function () {
       old.forEach(o => { o.parent.remove(o); o.geometry.dispose(); });
       fakeLight.forEach(m => { m.visible = false; });
     }).catch(e => console.warn('baked flat not loaded, keeping the procedural one', e));
+
+    // the exterior: modelled in Blender from the street photos (tools/bake/building.py), lit live by the sun like the rest of
+    // the square; its baked map (AO x weathering) multiplies the diffuse colour of the plastered surfaces
+    Promise.all([
+      new Promise((res, rej) => gl.load('models/building.glb', res, null, rej)),
+      new Promise((res, rej) => new THREE.TextureLoader().load('models/' + (SMALL ? 'building_ao_2k.jpg' : 'building_ao.jpg'), res, null, rej))
+    ]).then(([gltf, ao]) => {
+      ao.flipY = false; ao.anisotropy = 4;
+      const plT = new THREE.TextureLoader().load('img/tex/facade_plaster.jpg'); plT.wrapS = plT.wrapT = THREE.MirroredRepeatWrapping; plT.anisotropy = 8;
+      const baked = m => { m.aoMap = ao; m.aoMapIntensity = 0; m.onBeforeCompile = s => { s.fragmentShader = s.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n\tdiffuseColor.rgb *= texture2D( aoMap, vUv2 ).rgb;'); }; return m; };
+      const S = (color, o) => new THREE.MeshStandardMaterial(Object.assign({ color, roughness: 0.85, metalness: 0.02 }, o || {}));
+      const lit = (color, em) => { const m = S(color, { emissive: em, emissiveIntensity: 0 }); facadeMats.push(m); return m; };
+      const M = {
+        wall: baked(S(0xfbf6ec, { map: plT, roughness: 0.95 })), ochre: baked(S(0xf6d79c, { map: plT, roughness: 0.95 })),
+        plinth: baked(S(0x98a2b0, { roughness: 0.9 })), roof: baked(S(0x7a4a36, { roughness: 0.9 })), deck: S(0x9a968e, { roughness: 1 }),
+        frame: S(0xf2f1ec, { roughness: 0.5 }), sill: S(0xa9adb1, { roughness: 0.45, metalness: 0.3 }), metal: S(0x3a3d40, { roughness: 0.5, metalness: 0.4 }),
+        glass: S(0x55667a, { roughness: 0.08, metalness: 0.2, transparent: true, opacity: 0.72, depthWrite: false }),
+        glassLit: (m => { facadeMats.push(m); return m; })(S(0x55667a, { roughness: 0.08, metalness: 0.2, transparent: true, opacity: 0.72, depthWrite: false, emissive: 0xffc27e, emissiveIntensity: 0 })),
+        room: S(0x1c1d20, { roughness: 1 }), roomLit: lit(0x1f1e1d, 0xffc27e), curtain: S(0xbdb7ad, { roughness: 1 }), curtainLit: lit(0xbfb7a8, 0xffd59c),
+        blind: S(0xe6e8ea, { roughness: 0.6 }), ac: S(0xdfe1e2, { roughness: 0.6 }), grille: S(0x2a2c2f, { roughness: 0.8 }),
+      };
+      gltf.scene.traverse(o => { if (!o.isMesh) return; o.material = M[o.material.name] || M.wall; o.castShadow = o.receiveShadow = true; });
+      scene.add(gltf.scene);
+      const old = []; scene.traverse(o => { if (o.userData.bx) old.push(o); });
+      old.forEach(o => { o.parent.remove(o); o.geometry.dispose(); });
+      renderer.shadowMap.needsUpdate = true;
+    }).catch(e => console.warn('baked building not loaded, keeping the procedural one', e));
   }
 
   const keys = [
