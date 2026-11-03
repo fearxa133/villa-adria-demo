@@ -422,22 +422,28 @@
 <script>
 window.__boot = function () {
   const canvas = document.getElementById('bg');
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   const SMALL = innerWidth < 760;
-  renderer.setPixelRatio(Math.min(devicePixelRatio, SMALL ? 1.5 : 2));
-  renderer.shadowMap.enabled = true;
+  // quality tier: 2 high, 1 medium, 0 lite. The first guess comes from the device (or what this device measured last
+  // visit); the frame loop then measures the real frame rate and steps down while it stays too low. ?q=0|1|2 pins it.
+  const qPin = /[?&]q=([012])/.exec(location.search), store = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+  const weak = SMALL || (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4;
+  let TIER = qPin ? +qPin[1] : store('vv.tier') !== null ? +store('vv.tier') : weak ? 1 : 2;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: TIER > 0 || devicePixelRatio < 2 });
+  const RES = ['_1k', '_2k', ''][TIER];          // baked maps: 1K / 2K / 4K
+  renderer.setPixelRatio(Math.min(devicePixelRatio, [1, 1.5, 2][TIER]));
+  renderer.shadowMap.enabled = TIER > 0;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x9ccfee);
-  scene.fog = new THREE.Fog(0x9ccfee, 50, 170);
+  scene.fog = new THREE.Fog(0x9ccfee, 50, TIER ? 170 : 110);
   const camera = new THREE.PerspectiveCamera(50, 1, 0.12, 420);
 
   const hemi = new THREE.HemisphereLight(0xffffff, 0x6a6a6a, 0.8);
   scene.add(hemi);
   const sun = new THREE.DirectionalLight(0xffffff, 1.0);
-  sun.castShadow = true;
-  sun.shadow.mapSize.set(SMALL ? 1024 : 2048, SMALL ? 1024 : 2048); sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.03;
+  sun.castShadow = TIER > 0;
+  sun.shadow.mapSize.set(TIER > 1 ? 2048 : 1024, TIER > 1 ? 2048 : 1024); sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.03;
   const sc = sun.shadow.camera; sc.left = -50; sc.right = 50; sc.top = 40; sc.bottom = -40; sc.near = 1; sc.far = 190;
   scene.add(sun);
   const sunBall = new THREE.Mesh(new THREE.SphereGeometry(4, 24, 16), new THREE.MeshBasicMaterial({ color: 0xfff3c4, fog: false }));
@@ -469,7 +475,7 @@ window.__boot = function () {
     const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h);
     const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 4; return t;
   }  // real (CC0) textures load in the background and replace the procedural placeholder: the scene never waits for them
-  const REAL = !SMALL;       // normal / roughness maps only on desktop; phones keep the cheap diffuse-only look
+  const REAL = TIER > 1;     // normal / roughness maps only on the high tier; the others keep the cheap diffuse-only look
   function swapTex(tex, file) { const img = new Image(); img.onload = () => { tex.image = img; tex.needsUpdate = true; }; img.src = 'img/tex/' + file; return tex; }
   function loadMap(file, ph) { return swapTex(ctex(4, 4, (g, w, h) => { g.fillStyle = ph; g.fillRect(0, 0, w, h); }), file); }
 
@@ -635,7 +641,8 @@ window.__boot = function () {
   });
   const texCity = facadeTexes(20, 30, 10, 3, { ppm: 18, base: '#cfc7b6', tint: '#ece5d6', stain: '100,90,70', seed: 40 });
   const cityM = facadeMat(texCity);
-  for (let i = 0; i < 16; i++) { const a = (0.35 + i / 15 * 1.3) * Math.PI, rr = 95 + (i % 4) * 14, hgt = 22 + (i * 53 % 24); const m = block(-10, 10, -10, 10, 0, hgt, cityM, plaster); m.position.set(7 + Math.cos(a) * rr * 1.3, hgt / 2, 18 + Math.sin(a) * rr); }
+  const skyline = [];
+  for (let i = 0; i < 16; i++) { const a = (0.35 + i / 15 * 1.3) * Math.PI, rr = 95 + (i % 4) * 14, hgt = 22 + (i * 53 % 24); const m = block(-10, 10, -10, 10, 0, hgt, cityM, plaster); m.position.set(7 + Math.cos(a) * rr * 1.3, hgt / 2, 18 + Math.sin(a) * rr); m.visible = TIER > 0; skyline.push(m); }
 
   // ---------- the square: playground, trees, benches, wall ----------
   cyl(4.2, 4.2, 0.03, 0x4c5057, 9, 0.02, 11, scene, 48); cyl(3.9, 3.9, 0.035, 0x9aa0a8, 9, 0.021, 11, scene, 48); cyl(3.7, 3.7, 0.04, 0x4c5057, 9, 0.022, 11, scene, 48);
@@ -1147,11 +1154,14 @@ window.__boot = function () {
 
   // swap the procedural interior for the baked one once it has loaded: geometry from models/flat.glb, its materials are the
   // site's own (M<i> = BAKE.mats[i]) turned unlit and lit only by the Blender lightmap, so light, shadow and bounce are all baked
-  if (!/nobake|export/.test(location.search)) {
-    const gl = new THREE.GLTFLoader(), dl = new THREE.DRACOLoader(); dl.setDecoderPath('js/draco/'); gl.setDRACOLoader(dl);
+  const BAKED = !/nobake|export/.test(location.search);
+  const gl = new THREE.GLTFLoader(), dl = new THREE.DRACOLoader(); dl.setDecoderPath('js/draco/'); gl.setDRACOLoader(dl);
+  let flatReq = !BAKED;            // the baked flat (~2 MB) is fetched only when the visitor heads for the flat (see frame)
+  function loadFlat() {
+    flatReq = true;
     Promise.all([
       new Promise((res, rej) => gl.load('models/flat.glb', res, null, rej)),
-      new Promise((res, rej) => new THREE.TextureLoader().load('models/' + (SMALL ? 'flat_lm_2k.jpg' : 'flat_lm.jpg'), res, null, rej)),
+      new Promise((res, rej) => new THREE.TextureLoader().load('models/flat_lm' + RES + '.jpg', res, null, rej)),
       fetch('models/flat_lm.json').then(r => r.json())
     ]).then(([gltf, lm, info]) => {
       lm.flipY = false; lm.anisotropy = 4;
@@ -1167,12 +1177,14 @@ window.__boot = function () {
       old.forEach(o => { o.parent.remove(o); o.geometry.dispose(); });
       fakeLight.forEach(m => { m.visible = false; });
     }).catch(e => console.warn('baked flat not loaded, keeping the procedural one', e));
+  }
 
+  if (BAKED) {
     // the exterior: modelled in Blender from the street photos (tools/bake/building.py), lit live by the sun like the rest of
     // the square; its baked map (AO x weathering) multiplies the diffuse colour of the plastered surfaces
     Promise.all([
       new Promise((res, rej) => gl.load('models/building.glb', res, null, rej)),
-      new Promise((res, rej) => new THREE.TextureLoader().load('models/' + (SMALL ? 'building_ao_2k.jpg' : 'building_ao.jpg'), res, null, rej))
+      new Promise((res, rej) => new THREE.TextureLoader().load('models/building_ao' + RES + '.jpg', res, null, rej))
     ]).then(([gltf, ao]) => {
       ao.flipY = false; ao.anisotropy = 4;
       const plT = new THREE.TextureLoader().load('img/tex/facade_plaster.jpg'); plT.wrapS = plT.wrapT = THREE.MirroredRepeatWrapping; plT.anisotropy = 8;
@@ -1305,10 +1317,37 @@ window.__boot = function () {
   }
   addEventListener('resize', resize); resize(); onScroll();
 
+  // ---------- quality: live step-down + idle throttling ----------
+  function applyTier(t) {
+    TIER = t; renderer.setPixelRatio(Math.min(devicePixelRatio, [1, 1.5, 2][t]));
+    const mats = new Set(); scene.traverse(o => { if (o.material) [].concat(o.material).forEach(m => mats.add(m)); });
+    if (t < 2) mats.forEach(m => { if (m.normalMap || m.roughnessMap) { m.normalMap = m.roughnessMap = null; m.needsUpdate = true; } });
+    if (t < 1) {
+      renderer.shadowMap.enabled = false; sun.castShadow = false; mats.forEach(m => { m.needsUpdate = true; });
+      skyline.forEach(m => { m.visible = false; }); scene.fog.far = 110;
+    }
+  }
+  let lastInput = 0, lastDraw = 0, wasBusy = false, qN = 0, qT = 0, qSince = performance.now() + 2500, qSaved = false;
+  const poke = () => { lastInput = performance.now(); };
+  ['scroll', 'pointermove', 'pointerdown', 'touchmove', 'wheel', 'keydown', 'resize'].forEach(ev => addEventListener(ev, poke, { passive: true }));
+  function measure(now, gap) {                       // called for frames drawn at full rate only
+    if (now < qSince || gap > 700) return;           // skip start-up, loading hitches and tab switches
+    qN++; qT += gap; if (qT < 2500) return;
+    const fps = qN * 1000 / qT; qN = qT = 0;
+    if (fps < 28 && TIER > 0 && !qPin) { applyTier(TIER - 1); qSince = now + 1500; qSaved = false; }
+    if (!qSaved && !qPin) { qSaved = true; try { localStorage.setItem('vv.tier', String(fps > 55 && TIER < 2 && !weak ? TIER + 1 : TIER)); } catch (e) {} }
+  }
+
   // ---------- main loop ----------
   const clock = new THREE.Clock();
   const lampDay = new THREE.Color(0xcfcfcf), lampNight = new THREE.Color(0xffd9a0), tmpC = new THREE.Color();
   function frame() {
+    // nothing moving (no scroll, input, walk or camera easing): only the trees, swings and fire animate, 20 fps is plenty
+    const now = performance.now(), busy = walking || blend > 0.005 || Math.abs(target - progress) > 0.002 || Math.abs(mx - smx) + Math.abs(my - smy) > 0.003 || now - lastInput < 600;
+    if (!busy && now - lastDraw < 50) { requestAnimationFrame(frame); return; }
+    if (busy && wasBusy) measure(now, now - lastDraw);
+    lastDraw = now; wasBusy = busy;
+    if (!flatReq && (walking || target > 2.2)) loadFlat();
     const dt = Math.min(clock.getDelta(), 0.05), t = clock.elapsedTime;
     progress += ((walking ? 3 : target) - progress) * 0.06;
     smx += (mx - smx) * 0.05; smy += (my - smy) * 0.05;
