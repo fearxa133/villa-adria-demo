@@ -10,9 +10,9 @@
 <meta property="og:site_name" content="Apartmani LED Vječna Vatra">
 <meta property="og:title" content="Apartmani LED Vječna Vatra – Sarajevo Centar">
 <meta property="og:description" content="Novouređen apartman u centru Sarajeva, 20 metara od Vječne vatre. Pogledajte ga u 3D, prošetajte kroz stan i rezervišite termin online.">
-<meta property="og:image" content="img/foto/dnevni.jpg">
+<meta property="og:image" content="img/galerija/web/01.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Apartment","name":"Apartmani LED Vječna Vatra","description":"Novouređen apartman u centru Sarajeva, 20 metara od Vječne vatre.","address":{"@type":"PostalAddress","streetAddress":"Branilaca Sarajeva 39","addressLocality":"Sarajevo","addressCountry":"BA"},"numberOfRooms":2,"floorSize":{"@type":"QuantitativeValue","value":42,"unitCode":"MTK"},"amenityFeature":[{"@type":"LocationFeatureSpecification","name":"WiFi","value":true},{"@type":"LocationFeatureSpecification","name":"Air conditioning","value":true}],"image":"img/foto/dnevni.jpg","priceRange":"90-110 KM","availableLanguage":["bs","en","de","tr"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Apartment","name":"Apartmani LED Vječna Vatra","description":"Novouređen apartman u centru Sarajeva, 20 metara od Vječne vatre.","address":{"@type":"PostalAddress","streetAddress":"Branilaca Sarajeva 39","addressLocality":"Sarajevo","addressCountry":"BA"},"numberOfRooms":2,"floorSize":{"@type":"QuantitativeValue","value":42,"unitCode":"MTK"},"amenityFeature":[{"@type":"LocationFeatureSpecification","name":"WiFi","value":true},{"@type":"LocationFeatureSpecification","name":"Air conditioning","value":true}],"image":"img/galerija/web/01.jpg","priceRange":"90-110 KM","availableLanguage":["bs","en","de","tr"]}</script>
 <style>
   :root { --ink:#0e2233; --accent:#ffa24c; --glass:rgba(14,16,22,.66); }
   * { box-sizing:border-box; margin:0; padding:0; }
@@ -42,6 +42,9 @@
   .eyebrow { text-transform:uppercase; letter-spacing:.22em; font-size:13px; margin-bottom:16px; color:var(--accent); font-weight:700; }
   .btn { display:inline-block; margin-top:26px; padding:15px 32px; border-radius:999px; background:var(--accent); color:#1a1208; font-weight:800; text-decoration:none; border:0; font-size:16px; cursor:pointer; box-shadow:0 10px 30px rgba(255,162,76,.4); transition:transform .2s; }
   .btn:hover { transform:translateY(-3px); }
+  .herobtns { display:flex; flex-wrap:wrap; gap:10px; margin-top:26px; } .herobtns .btn { margin-top:0; }
+  .btn.alt { background:rgba(255,255,255,.1); color:#fff; border:1px solid rgba(255,255,255,.35); box-shadow:none; padding:14px 22px; font-size:15px; }
+  .btn.alt:hover { background:rgba(255,255,255,.2); }
   .ghost { width:100%; margin-top:12px; padding:12px; border-radius:12px; border:1px dashed rgba(255,255,255,.4); background:rgba(255,255,255,.06); color:#fff; font-weight:700; font-size:14px; cursor:pointer; }
   .ghost.on { background:var(--accent); color:#1a1208; border-style:solid; border-color:var(--accent); }
   .ghost:disabled { opacity:.35; cursor:not-allowed; }
@@ -89,10 +92,17 @@
   .msgr { display:flex; gap:10px; }
 
   /* ---------- floating buttons ---------- */
-  .fabs { position:fixed; right:20px; bottom:20px; z-index:20; display:flex; flex-direction:column; gap:10px; }
-  .fab { display:flex; align-items:center; justify-content:center; gap:8px; border:0; color:#fff; font-weight:800; font-size:14px; padding:12px 18px; border-radius:999px; cursor:pointer; box-shadow:0 10px 26px rgba(0,0,0,.4); }
+  /* chat buttons: round logo buttons, a fixed stack in the right gutter on wide screens, inside the nav bar on smaller ones */
+  .fabs { position:fixed; right:22px; bottom:22px; z-index:20; display:flex; flex-direction:column; gap:10px; }
+  .fab { display:flex; align-items:center; justify-content:center; gap:8px; border:0; color:#fff; font-weight:800; font-size:14px; padding:12px 18px; border-radius:999px; cursor:pointer; box-shadow:0 10px 26px rgba(0,0,0,.4); transition:transform .2s; }
+  .fabs .fab, .navfabs .fab { width:52px; height:52px; padding:0; border-radius:50%; }
+  .fab svg { width:30px; height:30px; display:block; }
+  .fab:hover { transform:scale(1.08); }
   .fab.wa { background:#25d366; } .fab.vb { background:#7360f2; }
+  .navfabs { display:none; gap:8px; }
+  .navfabs .fab { width:36px; height:36px; box-shadow:none; } .navfabs .fab svg { width:22px; height:22px; }
   .msgr .fab { box-shadow:none; flex:1; }
+  @media (min-width:1101px) { section { padding-right:max(6vw, 100px); } section.center { padding-left:max(6vw, 100px); } }   /* keep panels clear of the chat stack */
   .toast { position:fixed; bottom:90px; left:50%; transform:translate(-50%,20px); background:#fff; color:var(--ink); padding:12px 20px; border-radius:12px; font-size:14px; font-weight:600; opacity:0; pointer-events:none; transition:.25s; z-index:80; box-shadow:0 10px 30px rgba(0,0,0,.4); max-width:calc(100% - 28px); text-align:center; }
   .toast.show { opacity:1; transform:translate(-50%,0); }
 
@@ -144,6 +154,21 @@
   .lightbox figure { max-width:min(1100px,100%); text-align:center; }
   .lightbox img { max-width:100%; max-height:78vh; border-radius:14px; box-shadow:0 20px 60px rgba(0,0,0,.6); }
   .lightbox figcaption { margin-top:14px; font-size:14px; opacity:.85; line-height:1.5; }
+  .lbnav { display:none; position:absolute; top:50%; transform:translateY(-50%); width:52px; height:52px; border-radius:50%; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.1); color:#fff; font-size:30px; line-height:1; cursor:pointer; }
+  .lbnav:hover { background:var(--accent); color:#1a1208; border-color:var(--accent); }
+  .lbnav.prev { left:20px; } .lbnav.next { right:20px; }
+  .lightbox.gal .lbnav { display:block; }
+  .lightbox.gal figcaption b { margin-right:8px; } .lightbox.gal figcaption i { font-style:normal; opacity:.6; margin-left:8px; }
+  /* gallery: a large lead photo, the rest in a 4-column grid of cropped thumbnails */
+  .galpanel { max-width:1080px; width:100%; text-align:left; }
+  .galgrid { display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:150px; gap:10px; margin-top:20px; }
+  .galgrid button { position:relative; padding:0; border:0; border-radius:14px; overflow:hidden; cursor:zoom-in; background:rgba(255,255,255,.08); }
+  .galgrid button:first-child { grid-column:span 2; grid-row:span 2; }
+  .galgrid button:nth-last-child(-n+2) { grid-column:span 2; }                                  /* 11 photos fill the 4-column grid evenly */
+  .galgrid img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s ease; }
+  .galgrid button:hover img { transform:scale(1.05); }
+  .galgrid span { position:absolute; left:10px; bottom:8px; font-size:12px; font-weight:700; color:#fff; text-shadow:0 1px 6px rgba(0,0,0,.7); }
+  .galgrid button:focus-visible { outline:3px solid var(--accent); outline-offset:2px; }
   .lbx { position:absolute; top:16px; right:18px; width:44px; height:44px; border-radius:50%; border:0; background:rgba(255,255,255,.16); color:#fff; font-size:26px; cursor:pointer; }
   .cmp { position:fixed; inset:0; z-index:0; display:none; pointer-events:none; clip-path:inset(0 50% 0 0); }
   .cmp.show { display:block; }
@@ -174,6 +199,7 @@
   @media (max-width:1100px) {
     .menubtn { display:inline-flex; }
     nav ul { display:none; }
+    .fabs { display:none !important; } .navfabs { display:flex; }
     body.menu-open nav ul { display:flex; flex-direction:column; gap:2px; position:absolute; top:100%; left:0; right:0; background:rgba(14,16,22,.97); padding:8px 5vw 14px; border-bottom:1px solid rgba(255,255,255,.15); }
     body.menu-open nav ul li a { display:block; padding:12px 6px; font-size:16px; border-bottom:1px solid rgba(255,255,255,.08); }
     .ref { width:210px; left:16px; bottom:84px; } .refthumb img { height:132px; }
@@ -188,11 +214,12 @@
     h1 { font-size:32px; } h2 { font-size:26px; margin-bottom:10px; } p { font-size:15.5px; line-height:1.5; }
     .eyebrow { font-size:11.5px; margin-bottom:10px; }
     .btn { padding:13px 26px; margin-top:18px; }
+    .herobtns { margin-top:16px; gap:8px; } .herobtns .btn { flex:1 1 100%; text-align:center; padding:12px 16px; } .herobtns .btn.alt { flex:1 1 40%; font-size:13.5px; padding:11px 10px; }
     .scroll-hint { display:none; }
     .card { padding:13px 15px; } .card .price { font-size:20px; }
     .stats { gap:16px; margin-top:16px; } .stats b { font-size:24px; }
-    .fabs { right:10px; bottom:10px; flex-direction:row; gap:6px; }
-    .fab { padding:10px 14px; font-size:13px; }
+    .msgr .fab { padding:10px 14px; font-size:13px; }
+    .navr { gap:6px; } .navfabs { gap:6px; } .navfabs .fab { width:34px; height:34px; } .navfabs .fab svg { width:20px; height:20px; }
     .toast { bottom:70px; width:calc(100% - 28px); }
     .row { grid-template-columns:1fr; } .book { gap:16px; } .day { font-size:12px; border-radius:8px; } .calgrid { gap:3px; }
     form { padding:14px; }
@@ -204,6 +231,10 @@
     .refthumb .tag i { width:5px; height:5px; box-shadow:0 0 0 2px rgba(111,220,155,.25); }
     .refthumb .cap { left:7px; bottom:5px; font-size:10.5px; } .refthumb .zoom { display:none; }
     .planbox { padding:16px; }
+    #galerija { align-items:center; }
+    .galgrid { grid-template-columns:repeat(2,1fr); grid-auto-rows:120px; gap:8px; margin-top:14px; }
+    .lbnav { width:42px; height:42px; font-size:24px; top:auto; bottom:18px; transform:none; } .lbnav.prev { left:calc(50% - 52px); } .lbnav.next { right:calc(50% - 52px); }
+    .lightbox.gal figure { margin-bottom:56px; }
     /* walkthrough becomes a compact bar at the bottom so the 3D stays visible */
     #setnja { padding:90px 10px 10px; }
     #setnja .panel { padding:10px 10px 8px; border-radius:18px; background:rgba(14,16,22,.8); }
@@ -265,18 +296,19 @@
     <li><a href="#cijene" data-i18n="nav.prices">Cijene</a></li>
     <li><a href="#unutra" data-i18n="nav.interior">Enterijer</a></li>
     <li><a href="#setnja" data-i18n="nav.walk">Šetnja</a></li>
+    <li><a href="#galerija" data-i18n="nav.gallery">Galerija</a></li>
     <li><a href="#lokacija" data-i18n="nav.location">Lokacija</a></li>
     <li><a href="#rezervacija" data-i18n="nav.book">Rezervacija</a></li>
   </ul>
-  <div class="navr"><select id="langSel" data-i18n-aria="nav.lang" aria-label="Jezik"><option value="bs">BS</option><option value="en">EN</option><option value="de">DE</option><option value="tr">TR</option></select>
+  <div class="navr"><span class="navfabs"><a class="fab wa" href="https://wa.me/38763711520" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4.2A11.8 11.8 0 0 0 5.9 22.1L4.3 27.7l5.8-1.5A11.8 11.8 0 1 0 16 4.2z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path transform="translate(9.6 9.6) scale(.54)" fill="currentColor" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></a><a class="fab vb" href="viber://chat?number=%2B38763711520" aria-label="Viber" title="Viber"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M9 4.5h14a5 5 0 0 1 5 5v8.5a5 5 0 0 1-5 5h-7.5l-5 4.3V23H9a5 5 0 0 1-5-5V9.5a5 5 0 0 1 5-5z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path transform="translate(10 7.8) scale(.5)" fill="currentColor" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/><path d="M17 8.6a5 5 0 0 1 4.4 4.4M17 11.3a2.4 2.4 0 0 1 1.8 1.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a></span><select id="langSel" data-i18n-aria="nav.lang" aria-label="Jezik"><option value="bs">BS</option><option value="en">EN</option><option value="de">DE</option><option value="tr">TR</option></select>
   <button type="button" class="menubtn" id="menuBtn" data-i18n-aria="nav.menu" aria-label="Meni">☰</button></div>
 </nav>
 <div class="toast" id="toast"></div>
 <div id="loader"><div class="ring"></div><div data-i18n="load">Učitavanje 3D prikaza…</div></div>
 <div class="hscard" id="hsCard"></div>
 <div class="fabs">
-  <button type="button" class="fab wa" data-toast-k="wa">WhatsApp</button>
-  <button type="button" class="fab vb" data-toast-k="vb">Viber</button>
+  <a class="fab wa" href="https://wa.me/38763711520" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4.2A11.8 11.8 0 0 0 5.9 22.1L4.3 27.7l5.8-1.5A11.8 11.8 0 1 0 16 4.2z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path transform="translate(9.6 9.6) scale(.54)" fill="currentColor" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></a>
+  <a class="fab vb" href="viber://chat?number=%2B38763711520" aria-label="Viber" title="Viber"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M9 4.5h14a5 5 0 0 1 5 5v8.5a5 5 0 0 1-5 5h-7.5l-5 4.3V23H9a5 5 0 0 1-5-5V9.5a5 5 0 0 1 5-5z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path transform="translate(10 7.8) scale(.5)" fill="currentColor" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/><path d="M17 8.6a5 5 0 0 1 4.4 4.4M17 11.3a2.4 2.4 0 0 1 1.8 1.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
 </div>
 
 <section id="top" data-key="0">
@@ -284,7 +316,11 @@
     <div class="eyebrow" data-i18n="hero.eyebrow">Sarajevo – Centar</div>
     <h1 data-i18n="hero.h1">Vaš dom u srcu Sarajeva.</h1>
     <p style="margin-top:18px" data-i18n="hero.p">Novouređen apartman svega 20 metara od Vječne vatre. Istražite ga u 3D — skrolajte i uđite unutra.</p>
-    <a class="btn" href="#rezervacija" data-i18n="hero.cta">Rezerviši termin</a>
+    <div class="herobtns">
+      <a class="btn" href="#rezervacija" data-i18n="hero.cta">Rezerviši termin</a>
+      <a class="btn alt" href="#setnja" data-i18n="hero.walk">Pogledaj 3D prikaz stana</a>
+      <a class="btn alt" href="#galerija" data-i18n="hero.gal">Pogledaj galeriju</a>
+    </div>
   </div>
   <div class="scroll-hint" data-i18n="hero.scroll">Skrolaj ↓</div>
 </section>
@@ -342,6 +378,15 @@
   </div>
 </section>
 
+<section id="galerija" class="center" data-key="4">
+  <div class="panel galpanel">
+    <div class="eyebrow" data-i18n="gal.eyebrow">Galerija</div>
+    <h2 data-i18n="gal.h2">Pogledajte stan.</h2>
+    <p data-i18n="gal.p">Stvarne fotografije apartmana — kliknite na sliku da je uvećate.</p>
+    <div class="galgrid" id="galGrid"></div>
+  </div>
+</section>
+
 <section id="lokacija" class="right" data-key="5">
   <div class="panel">
     <div class="eyebrow" data-i18n="loc.eyebrow">Lokacija</div>
@@ -384,7 +429,8 @@
         <input class="hp" id="bkHp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
         <div class="sum" id="calSum"></div>
         <button class="btn" id="bkSubmit" style="margin-top:2px" data-i18n="book.submit">Pošalji upit</button>
-        <div class="msgr"><button type="button" class="fab wa" data-toast-k="wa">WhatsApp</button><button type="button" class="fab vb" data-toast-k="vb">Viber</button></div>
+        <p class="note" style="margin-top:2px;text-align:center" data-i18n="book.after">Nakon slanja upita javit ćemo vam se uskoro.</p>
+        <div class="msgr"><a class="fab wa" href="https://wa.me/38763711520" target="_blank" rel="noopener">WhatsApp</a><a class="fab vb" href="viber://chat?number=%2B38763711520">Viber</a></div>
       </form>
     </div>
   </div>
@@ -401,7 +447,9 @@
 </div>
 <div class="lightbox" id="lightbox" hidden>
   <button type="button" class="lbx" id="lbClose" data-i18n-aria="close" aria-label="Zatvori">×</button>
+  <button type="button" class="lbnav prev" id="lbPrev" data-i18n-aria="gal.prev" aria-label="Prethodna">‹</button>
   <figure><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
+  <button type="button" class="lbnav next" id="lbNext" data-i18n-aria="gal.next" aria-label="Sljedeća">›</button>
 </div>
 <div class="lightbox" id="planModal" hidden>
   <button type="button" class="lbx" id="planClose" data-i18n-aria="close" aria-label="Zatvori">×</button>
@@ -670,7 +718,7 @@ window.__boot = function () {
   const lampMats = [porchLamp];
   [[-15, 14], [16, 6], [-1.5, 17]].forEach(([x, z]) => { cyl(0.05, 0.07, 4.8, 0x15171b, x, 2.4, z, scene, 8); box(0.8, 0.05, 0.05, 0x15171b, x + 0.4, 4.8, z); const m = new THREE.MeshBasicMaterial({ color: 0xdadada }); lampMats.push(m); const b = new THREE.Mesh(new THREE.SphereGeometry(0.2, 12, 10), m); b.position.set(x + 0.8, 4.7, z); scene.add(b); });
 
-  // ---------- stairwell: lobby behind the entrance + passage to the flat (lobby x -1.1..1.1, z -0.9..-5.8) ----------
+  // ---------- stairwell: lobby behind the entrance + passage to the flat (lobby x -1.1..0.9, z -0.9..-5.8) ----------
   const lobM = mat(0xe6d6a2), dadoM = mat(0x66625b);
   function scaleFace(geo, face, su, sv) { const uv = geo.attributes.uv; for (let i = face * 4; i < face * 4 + 4; i++) uv.setXY(i, uv.getX(i) * su, uv.getY(i) * sv); uv.needsUpdate = true; }
   const texStone = ctex(256, 256, (g, w, h) => { for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) { const k = rnd(i * 5 + j * 11); g.fillStyle = 'rgb(' + (216 + k * 10 | 0) + ',' + (208 + k * 10 | 0) + ',' + (194 + k * 10 | 0) + ')'; g.fillRect(i * 128, j * 128, 128, 128); } g.fillStyle = '#b4aa98'; g.fillRect(0, 0, w, 3); g.fillRect(0, 0, 3, h); g.fillRect(126, 0, 3, h); g.fillRect(0, 126, w, 3); });
@@ -678,14 +726,14 @@ window.__boot = function () {
   const lobFloor = box(2.3, 0.04, 4.9, new THREE.MeshStandardMaterial({ color: 0xb3b0aa, map: texStone, normalMap: terrN, normalScale: new THREE.Vector2(0.6, 0.6), roughness: 0.5 }), 0.05, -0.005, -3.35);
   scaleFace(lobFloor.geometry, 2, 2.3 / 0.7, 4.9 / 0.7);                                               // terrazzo, 0.7 m tile
   box(0.2, G, 4.9, lobM, -1.2, G / 2, -3.35);                                                           // west wall
-  box(0.1, G, 3.51, lobM, 1.15, G / 2, -2.655); box(0.1, G, 0.56, lobM, 1.15, G / 2, -5.52); box(0.1, G - 2.1, 0.83, lobM, 1.15, 2.1 + (G - 2.1) / 2, -4.825);   // east wall with the opening to the flat
+  box(0.1, G, 3.53, lobM, 0.93, G / 2, -2.665); box(0.1, G, 0.52, lobM, 0.93, G / 2, -5.54); box(0.1, G - 2.1, 0.85, lobM, 0.93, 2.1 + (G - 2.1) / 2, -4.855);   // east wall with the opening to the flat
   box(2.6, G, 0.2, lobM, 0, G / 2, -5.9);                                                               // end wall
   box(2.2, 0.1, 4.9, 0xf0e8d0, 0, G - 0.05, -3.35); box(2.2, 0.36, 0.42, 0xe9e0c5, 0, G - 0.28, -3.2);    // ceiling + soffit
-  box(0.03, 0.5, 4.9, dadoM, -1.08, 0.25, -3.35); box(0.03, 0.5, 4.9, dadoM, 1.08, 0.25, -3.35);
+  box(0.03, 0.5, 4.9, dadoM, -1.08, 0.25, -3.35); box(0.03, 0.5, 4.9, dadoM, 0.86, 0.25, -3.35);
   box(2.2, 0.05, 0.05, 0x777, 0, G - 0.14, -1.6); box(2.2, 0.05, 0.05, 0x777, 0, G - 0.14, -4.7);       // conduits
   box(0.06, 2.05, 0.92, 0x6b2e1c, -1.07, 1.03, -2.2); box(0.04, 2.1, 1.05, 0xd8c690, -1.09, 1.05, -2.2); box(0.04, 0.05, 0.12, 0x999, -1.03, 1.0, -1.9);   // neighbour's brown door
-  box(0.3, 0.7, 0.55, 0xe6b800, -1.0, 1.6, -4.1); box(0.3, 0.7, 0.5, 0xe6b800, 1.0, 1.85, -1.5); cyl(0.04, 0.04, 1.4, 0xd9a900, 1.05, 2.1, -1.5, scene, 8);   // yellow gas meter boxes
-  box(0.04, 2.15, 0.06, 0xd8c690, 1.1, 1.08, -5.28); box(0.04, 2.15, 0.06, 0xd8c690, 1.1, 1.08, -4.37); box(0.04, 0.07, 0.95, 0xd8c690, 1.1, 2.15, -4.825);   // architrave of the flat door
+  box(0.3, 0.7, 0.55, 0xe6b800, -1.0, 1.6, -4.1); box(0.3, 0.7, 0.5, 0xe6b800, 0.78, 1.85, -1.5); cyl(0.04, 0.04, 1.4, 0xd9a900, 0.83, 2.1, -1.5, scene, 8);   // yellow gas meter boxes
+  box(0.04, 2.15, 0.06, 0xd8c690, 0.88, 1.08, -5.31); box(0.04, 2.15, 0.06, 0xd8c690, 0.88, 1.08, -4.40); box(0.04, 0.07, 0.97, 0xd8c690, 0.88, 2.15, -4.855);   // architrave of the flat door
   box(0.8, 0.02, 0.6, 0x4a4540, 0.35, 0.05, -4.2);                                                      // doormat
   const lightLobby = new THREE.PointLight(0xffd9a0, 0.85, 8); lightLobby.position.set(0, 2.4, -3.0); scene.add(lightLobby);
   glow(0.4, 0.04, 0.4, 0xffe2b0, 0, G - 0.12, -1.8); glow(0.4, 0.04, 0.4, 0xffe2b0, 0, G - 0.12, -4.3);
@@ -694,20 +742,20 @@ window.__boot = function () {
   //  THE APARTMENT — modelled from the Polycam scan (metres: x east, z south)
   //  Interior doorways were not in the scan, so they are placed logically.
   // =====================================================================
-  const Xo = 4.09, Zo = -4.75, WH = 2.78, WT = 0.1;     // the flat sits in the ground floor: right of the entrance, door facing the stairwell
+  const Xo = 4.09, Zo = -4.75, WH = 2.71, WT = 0.1;     // the flat sits in the ground floor: right of the entrance, door facing the stairwell
   const flat = new THREE.Group(); flat.position.set(Xo, 0, Zo); flat.rotation.y = -Math.PI / 2; scene.add(flat);
 
   const PLAN = {
     rooms: [
-      { id: 'hall',    n: 'Hodnik',        poly: [[-0.89,-1.03],[0.60,-1.03],[0.60,2.89],[-0.89,2.89]] },
+      { id: 'hall',    n: 'Hodnik',        poly: [[-0.89,-0.97],[0.60,-0.97],[0.60,3.08],[-0.89,3.08]] },
       { id: 'living',  n: 'Dnevni boravak', poly: [[0.60,-3.94],[4.70,-3.94],[4.70,0.18],[0.60,0.18]] },
-      { id: 'bed',     n: 'Spavaća soba',  poly: [[-3.21,-3.94],[0.60,-3.94],[0.60,-1.03],[-0.89,-1.03],[-0.89,-1.44],[-3.21,-1.44]] },
-      { id: 'kitchen', n: 'Kuhinja',       poly: [[-4.70,-3.94],[-3.21,-3.94],[-3.21,0.13],[-4.70,0.13]] },
-      { id: 'bath',    n: 'Kupatilo',      poly: [[-3.21,-1.44],[-0.89,-1.44],[-0.89,0.13],[-3.21,0.13]] },
+      { id: 'bed',     n: 'Spavaća soba',  poly: [[-3.21,-3.94],[0.60,-3.94],[0.60,-0.97],[-0.89,-0.97],[-0.89,-1.46],[-3.21,-1.46]] },
+      { id: 'kitchen', n: 'Kuhinja',       poly: [[-4.70,-3.94],[-3.21,-3.94],[-3.21,0.10],[-4.70,0.10]] },
+      { id: 'bath',    n: 'Kupatilo',      poly: [[-3.21,-1.46],[-0.89,-1.46],[-0.89,0.33],[-3.21,0.33]] },
     ],
-    windows: [[4.70,-1.30,4.70,-0.07],[4.70,-2.17,4.70,-1.63],[4.70,-3.87,4.70,-2.51],[-4.70,-3.81,-4.70,-2.52],[-4.70,-2.21,-4.70,-1.60],[-4.70,-1.26,-4.70,0.00]],
-    furn: [[0.65,-3.35,1.55,-1.35],[1.5,-0.75,3.7,0.13],[3.72,-2.98,4.58,-2.12],[2.1,-2.28,3.1,-1.62],[1.75,-3.89,3.95,-3.49],[0.62,-3.89,1.55,-3.84],[-3.16,-3.81,-1.11,-2.19],[-0.5,-3.89,0.5,-3.34],[-0.12,-2.62,0.52,-1.98],[-4.65,-0.51,-3.26,0.08],[-4.65,-1.2,-4.23,-0.51],[-4.6,-3.45,-3.8,-2.65],[-3.16,-0.82,-2.26,0.08],[-3.16,-1.29,-2.65,-0.87],[-2.45,-1.39,-1.35,-0.89],[-1.34,-1.39,-0.94,-0.97]],
-    doors: [[0.60,-0.83,0.60,-0.03],[-0.89,-0.70,-0.89,0.05],[-0.55,-1.03,0.25,-1.03],[-3.21,-2.20,-3.21,-1.49]],
+    windows: [[4.70,-1.23,4.70,0.04],[4.70,-2.23,4.70,-1.61],[4.70,-3.88,4.70,-2.52],[-4.70,-3.84,-4.70,-2.54],[-4.70,-2.22,-4.70,-1.57],[-4.70,-1.34,-4.70,-0.14]],
+    furn: [[0.59,-3.45,1.69,-1.39],[2.08,-1.34,4.28,-0.44],[3.61,-0.22,4.65,0.1],[3.75,-3.26,4.65,-2.4],[3.95,-2.2,4.45,-1.7],[2.53,-2.73,3.38,-1.9],[1.79,-3.89,3.59,-3.49],[0.62,-3.89,1.55,-3.84],[-3.16,-3.9,-1.11,-2.45],[-0.59,-3.89,0.31,-3.34],[-0.29,-3.06,0.43,-2.34],[-4.65,-0.51,-3.26,0.05],[-4.65,-1.2,-4.23,-0.51],[-4.62,-2.77,-3.82,-1.97],[-4.59,-3.91,-4.07,-3.41],[-3.16,-0.57,-2.26,0.28],[-3.16,-1.01,-2.6,-0.59],[-2.45,-1.41,-1.35,-0.91],[-1.34,-1.41,-0.94,-0.99]],
+    doors: [[0.60,-0.68,0.60,0.07],[-0.89,-0.70,-0.89,0.05],[-0.55,-0.97,0.25,-0.97],[-3.21,-2.20,-3.21,-1.51]],
   };
   window.__PLAN = PLAN;
 
@@ -741,8 +789,8 @@ window.__boot = function () {
   const texTuft = ctex(128, 128, (g, w, h) => { g.fillStyle = '#ecebe7'; g.fillRect(0, 0, w, h); for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) { const x = i * 32 + (j % 2) * 16 + 8, y = j * 32 + 16, gr = g.createRadialGradient(x, y, 1, x, y, 16); gr.addColorStop(0, 'rgba(0,0,0,0.22)'); gr.addColorStop(0.25, 'rgba(255,255,255,0.1)'); gr.addColorStop(1, 'rgba(0,0,0,0.05)'); g.fillStyle = gr; g.fillRect(x - 16, y - 16, 32, 32); g.fillStyle = '#d8d8dc'; g.fillRect(x - 1.5, y - 1.5, 3, 3); } });
   const texLam = ctex(128, 256, (g, w, h) => { g.fillStyle = '#f2f0ea'; g.fillRect(0, 0, w, h); for (let i = 0; i < 90; i++) { g.fillStyle = 'rgba(150,140,125,' + (0.03 + rnd(i) * 0.05) + ')'; g.fillRect(rnd(i * 3) * w, 0, 1, h); } });
   const quiltM = new THREE.MeshStandardMaterial({ map: texQuilt, roughness: 0.95 }), tuftM = new THREE.MeshStandardMaterial({ map: texTuft, roughness: 0.95 }), lamM = new THREE.MeshStandardMaterial({ map: texLam, roughness: 0.55 });
-  const texZebra = ctex(64, 256, (g, w, h) => { for (let i = 0; i < 16; i++) { g.fillStyle = i % 2 ? '#8e949c' : '#eef0f2'; g.fillRect(0, i * 16, w, 16); } });
-  const texPic = ctex(160, 200, (g, w, h) => { g.fillStyle = '#e6e2da'; g.fillRect(0, 0, w, h); g.fillStyle = '#3a3a3a'; for (let i = 0; i < 9; i++) { const bh = 40 + (i * 37 % 70); g.fillRect(8 + i * 17, h - 30 - bh, 13, bh); } g.fillStyle = '#777'; g.fillRect(0, h - 30, w, 30); g.fillStyle = '#222'; g.fillRect(70, 30, 3, 90); });
+  const texZebra = ctex(64, 256, (g, w, h) => { for (let i = 0; i < 32; i++) { g.fillStyle = i % 2 ? '#2f3135' : '#5c6066'; g.fillRect(0, i * 8, w, 8); } for (let i = 0; i < 60; i++) { g.fillStyle = 'rgba(200,204,210,0.08)'; g.fillRect(rnd(i) * w, 0, 1, h); } });   // charcoal zebra blinds (photos)
+  const texLeaf = ctex(120, 160, (g, w, h) => { g.fillStyle = '#ece8e1'; g.fillRect(0, 0, w, h); g.strokeStyle = '#6d6a64'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(60, 150); g.quadraticCurveTo(54, 90, 66, 20); g.stroke(); for (let i = 0; i < 6; i++) { const y = 130 - i * 19, s = i % 2 ? 1 : -1; g.fillStyle = 'rgba(' + (150 + i * 8) + ',' + (146 + i * 8) + ',' + (136 + i * 6) + ',0.75)'; g.beginPath(); g.ellipse(60 + s * 16, y, 17 - i, 9 - i * 0.6, s * 0.5, 0, 7); g.fill(); g.stroke(); } });
   const texWelcome = ctex(256, 90, (g, w, h) => { g.fillStyle = '#1d1d1f'; g.fillRect(0, 0, w, h); g.fillStyle = '#e3c27a'; g.font = 'italic 40px Georgia, serif'; g.textAlign = 'center'; g.fillText('Welcome', w / 2, 52); g.font = '14px Arial'; g.fillText('LED Vječna Vatra', w / 2, 76); });
   const texTV = ctex(320, 180, (g, w, h) => { const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, '#05081a'); gr.addColorStop(.7, '#18203d'); gr.addColorStop(.82, '#c2541c'); gr.addColorStop(1, '#2a1208'); g.fillStyle = gr; g.fillRect(0, 0, w, h); g.fillStyle = '#fff'; for (let i = 0; i < 90; i++) g.fillRect(rnd(i) * w, rnd(i + 50) * h * 0.7, 1 + (rnd(i + 7) > 0.85), 1); g.fillStyle = '#140b08'; g.beginPath(); g.moveTo(0, 150); g.lineTo(90, 132); g.lineTo(200, 140); g.lineTo(320, 128); g.lineTo(320, 180); g.lineTo(0, 180); g.fill(); [['#ff6a00', 34, 62], ['#ffb300', 22, 44], ['#fff1a8', 10, 24]].forEach(([c, rw, rh]) => { g.fillStyle = c; g.beginPath(); g.moveTo(160 - rw, 158); g.quadraticCurveTo(160 - rw * 0.6, 158 - rh * 0.8, 160, 158 - rh); g.quadraticCurveTo(160 + rw * 0.6, 158 - rh * 0.8, 160 + rw, 158); g.fill(); }); });
   // chevron rug (living), wall-tile border band (bathroom), interior door with black inlay lines, glazed sliding door
@@ -760,6 +808,7 @@ window.__boot = function () {
     bath: blueTile,
   };
   const venM = new THREE.MeshStandardMaterial({ map: loadMap('real_venetian.jpg', '#d6d7d5'), roughness: 0.42, metalness: 0.06 }); venM.userData.uvT = 1.3;   // venetian plaster accent walls
+  const hallVen = new THREE.MeshStandardMaterial({ color: 0xc4c5c6, map: venM.map, roughness: 0.45, metalness: 0.06 }); hallVen.userData.uvT = 1.3;   // the hall's darker grey venetian wall
   const oakM = new THREE.MeshStandardMaterial({ color: 0xffffff, map: texOak, emissive: 0x2a1f12, roughness: 0.55 });   // lighter honey oak than the floor texture
   const doorM = new THREE.MeshStandardMaterial({ map: texDoor, roughness: 0.5 }), slideM = new THREE.MeshStandardMaterial({ map: texSlide, roughness: 0.4 });
   const borderM = new THREE.MeshStandardMaterial({ map: texBorder, roughness: 0.3 }); borderM.userData.uvT = 0.33; borderM.userData.uvV = 0.06;
@@ -787,11 +836,11 @@ window.__boot = function () {
   const win = (a, b, y0, y1) => ({ a, b, y0: y0 === undefined ? 1.0 : y0, y1: y1 === undefined ? 2.2 : y1 });
 
   // casing around an opening + glass/blinds for windows
-  function casing(axis, fixed, a, b, top) {
+  function casing(axis, fixed, a, b, top, c) {
     TAG = 'trim';
-    const t = 0.05, d = 0.14;
-    if (axis === 'x') { box(d, top, t, white, fixed, top / 2, a, flat); box(d, top, t, white, fixed, top / 2, b, flat); box(d, t, b - a + t, white, fixed, top, (a + b) / 2, flat); }
-    else { box(t, top, d, white, a, top / 2, fixed, flat); box(t, top, d, white, b, top / 2, fixed, flat); box(b - a + t, t, d, white, (a + b) / 2, top, fixed, flat); }
+    const t = 0.05, d = 0.14; c = c || white;
+    if (axis === 'x') { box(d, top, t, c, fixed, top / 2, a, flat); box(d, top, t, c, fixed, top / 2, b, flat); box(d, t, b - a + t, c, fixed, top, (a + b) / 2, flat); }
+    else { box(t, top, d, c, a, top / 2, fixed, flat); box(t, top, d, c, b, top / 2, fixed, flat); box(b - a + t, t, d, c, (a + b) / 2, top, fixed, flat); }
     TAG = '';
   }
   const blindWhite = new THREE.MeshStandardMaterial({ map: ctex(32, 128, (g, w, h) => { for (let i = 0; i < 16; i++) { g.fillStyle = '#eef0f2'; g.fillRect(0, i * 8, w, 6); g.fillStyle = '#9ea4aa'; g.fillRect(0, i * 8 + 6, w, 2); } }), roughness: 0.8, side: THREE.DoubleSide });
@@ -809,56 +858,57 @@ window.__boot = function () {
     TAG = 'trim';
     const len = b - a, h = y1 - y0, cy = (y0 + y1) / 2, c = (a + b) / 2;
     const g = new THREE.Mesh(new THREE.PlaneGeometry(len, h), glass); flat.add(g);
-    const bl = new THREE.Mesh(new THREE.PlaneGeometry(len - 0.04, h * 0.3), blind === 'zebra' ? blindZebra : blindWhite); if (blind) flat.add(bl);
-    if (axis === 'x') { g.rotation.y = Math.PI / 2; g.position.set(fixed, cy, c); bl.rotation.y = inward > 0 ? Math.PI / 2 : -Math.PI / 2; bl.position.set(fixed + inward * 0.07, y1 - h * 0.15, c);
+    const bh = blind === 'zebra' ? h * 0.62 : h * 0.3, bl = new THREE.Mesh(new THREE.PlaneGeometry(len - 0.04, bh), blind === 'zebra' ? blindZebra : blindWhite); if (blind) flat.add(bl);
+    if (axis === 'x') { g.rotation.y = Math.PI / 2; g.position.set(fixed, cy, c); bl.rotation.y = inward > 0 ? Math.PI / 2 : -Math.PI / 2; bl.position.set(fixed + inward * 0.07, y1 - bh / 2, c);
       box(0.12, 0.05, len + 0.1, white, fixed, y1, c, flat); box(0.12, 0.05, len + 0.1, white, fixed, y0, c, flat); box(0.12, h, 0.05, white, fixed, cy, a, flat); box(0.12, h, 0.05, white, fixed, cy, b, flat);
       box(0.26, 0.04, len + 0.12, sill || white, fixed + inward * 0.09, y0, c, flat); if (len > 1) box(0.1, h, 0.04, white, fixed, cy, c, flat); }
-    else { g.position.set(c, cy, fixed); bl.rotation.y = inward > 0 ? 0 : Math.PI; bl.position.set(c, y1 - h * 0.15, fixed + inward * 0.07);
+    else { g.position.set(c, cy, fixed); bl.rotation.y = inward > 0 ? 0 : Math.PI; bl.position.set(c, y1 - bh / 2, fixed + inward * 0.07);
       box(len + 0.1, 0.05, 0.12, white, c, y1, fixed, flat); box(len + 0.1, 0.05, 0.12, white, c, y0, fixed, flat); box(0.05, h, 0.12, white, a, cy, fixed, flat); box(0.05, h, 0.12, white, b, cy, fixed, flat);
       box(len + 0.12, 0.04, 0.26, sill || white, c, y0, fixed + inward * 0.09, flat); if (len > 1) box(0.04, h, 0.1, white, c, cy, fixed, flat); }
     TAG = '';
   }
 
   // ----- walls (see scan; finishes from the photos of the renovated flat) -----
-  // east outer (living): street windows with white blinds, venetian plaster below the oak sills
-  wall('x', 4.70, -3.94, 0.18, M.ext, M.liv, [win(-3.87, -2.51), win(-2.17, -1.63), win(-1.30, -0.07)]);
-  [[-3.87, -2.51], [-2.17, -1.63], [-1.30, -0.07]].forEach(w => windowOn('x', 4.70, w[0], w[1], 1.0, 2.2, -1, 'white', oakM));
+  // east outer (living): street windows with grey zebra blinds, venetian plaster below the oak sills
+  wall('x', 4.70, -3.94, 0.18, M.ext, M.liv, [win(-3.88, -2.52), win(-2.23, -1.61), win(-1.23, 0.04)]);
+  [[-3.88, -2.52], [-2.23, -1.61], [-1.23, 0.04]].forEach(w => windowOn('x', 4.70, w[0], w[1], 1.0, 2.2, -1, 'zebra', oakM));
   vpanel('x', 4.70, -3.94, 0.18, 0, 0.98, venM, -1);
-  // west outer (kitchen): courtyard windows, oak sills, no blinds
-  wall('x', -4.70, -3.94, 0.13, M.kit, M.ext, [win(-3.81, -2.52), win(-2.21, -1.60), win(-1.26, 0.0)]);
-  [[-3.81, -2.52], [-2.21, -1.60], [-1.26, 0.0]].forEach(w => windowOn('x', -4.70, w[0], w[1], 1.0, 2.2, 1, null, oakM));
+  // west outer (kitchen): courtyard windows, oak sills, zebra blinds
+  wall('x', -4.70, -3.94, 0.10, M.kit, M.ext, [win(-3.84, -2.54), win(-2.22, -1.57), win(-1.34, -0.14)]);
+  [[-3.84, -2.54], [-2.22, -1.57], [-1.34, -0.14]].forEach(w => windowOn('x', -4.70, w[0], w[1], 1.0, 2.2, 1, 'zebra', oakM));
   // north outer (kitchen | bedroom | living): the living side is the TV wall in venetian plaster (the old opening is closed behind the slat panel)
   wall('z', -3.94, -4.70, -3.21, M.kit, M.ext);
   wall('z', -3.94, -3.21, 0.60, M.bed, M.ext);
   wall('z', -3.94, 0.60, 4.70, venM, M.ext);
   // south outer
   wall('z', 0.18, 0.60, 4.70, M.ext, M.liv);
-  wall('z', 0.13, -4.70, -3.21, M.ext, M.kit);
-  wall('z', 0.13, -3.21, -0.89, M.ext, M.bath);
+  wall('z', 0.10, -4.70, -3.21, M.ext, M.kit);
+  wall('z', 0.33, -3.21, -0.89, M.ext, M.bath);                                                         // the bathroom reaches 0.23 m further south than the kitchen
   // entrance wall (hall south) with the front door opening
-  wall('z', 2.89, -0.89, 0.60, M.lobby, M.hall, [door(-0.49, 0.34)]);
+  wall('z', 3.08, -0.89, 0.60, M.lobby, M.hall, [door(-0.53, 0.32)]);
   // hall west: bedroom nook | bath door | exterior
-  wall('x', -0.89, -1.44, -1.03, M.bed, M.bath);
-  wall('x', -0.89, -1.03, 0.13, M.hall, M.bath, [door(-0.70, 0.05)]);
-  wall('x', -0.89, 0.13, 2.89, M.hall, M.ext);
+  wall('x', -0.89, -1.46, -0.97, M.bed, M.bath);
+  wall('x', -0.89, -0.97, 0.33, hallVen, M.bath, [door(-0.70, 0.05)]);                              // grey venetian plaster along the hall's west side
+  wall('x', -0.89, 0.33, 3.08, hallVen, M.ext);
   // hall east: bedroom/living | living door | exterior
-  wall('x', 0.60, -3.94, -1.03, M.liv, M.bed);
-  wall('x', 0.60, -1.03, 0.18, M.liv, M.hall, [door(-0.83, -0.03)]);
-  wall('x', 0.60, 0.18, 2.89, M.ext, M.hall);
+  wall('x', 0.60, -3.94, -0.97, M.liv, M.bed);
+  wall('x', 0.60, -0.97, 0.18, M.liv, M.hall, [door(-0.68, 0.07)]);
+  wall('x', 0.60, 0.18, 3.08, M.ext, M.hall);
   // hall north end with door to the bedroom
-  wall('z', -1.03, -0.89, 0.60, M.hall, M.bed, [door(-0.55, 0.25)]);
+  wall('z', -0.97, -0.89, 0.60, M.hall, M.bed, [door(-0.55, 0.25)]);
   // bedroom | bath
-  wall('z', -1.44, -3.26, -0.89, M.bath, M.bed);
+  wall('z', -1.46, -3.26, -0.89, M.bath, M.bed);
   // bedroom | kitchen: the headboard wall is venetian plaster; sliding glazed door to the kitchen
-  wall('x', -3.21, -3.94, -1.49, venM, M.kit, [door(-2.20, -1.49)]);
-  wall('x', -3.21, -1.39, 0.13, M.bath, M.kit);
-  casing('x', 0.60, -0.83, -0.03, 2.1); casing('x', -0.89, -0.70, 0.05, 2.1); casing('z', -1.03, -0.55, 0.25, 2.1); casing('x', -3.21, -2.20, -1.49, 2.1); casing('z', 2.89, -0.49, 0.34, 2.1);
+  wall('x', -3.21, -3.94, -1.51, venM, M.kit, [door(-2.20, -1.51)]);
+  wall('x', -3.21, -1.41, 0.10, M.bath, M.kit); wall('x', -3.21, 0.10, 0.33, M.bath, M.ext);
+  const frameK = 0x161616;                                                                              // interior doors sit in black frames
+  casing('x', 0.60, -0.68, 0.07, 2.1, frameK); casing('x', -0.89, -0.70, 0.05, 2.1, frameK); casing('z', -0.97, -0.55, 0.25, 2.1, frameK); casing('x', -3.21, -2.20, -1.51, 2.1, frameK); casing('z', 3.08, -0.53, 0.32, 2.1);
   // front door of the flat: white panel door standing open, swung into the hall (clear of the casing)
-  box(0.05, 2.1, 0.82, white, -0.43, 1.05, 2.39, flat); box(0.02, 0.8, 0.5, 0xeceae4, -0.40, 1.4, 2.39, flat); box(0.02, 0.8, 0.5, 0xeceae4, -0.40, 0.6, 2.39, flat); box(0.04, 0.05, 0.14, 0x222222, -0.39, 1.05, 2.08, flat);
-  const welcome = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.14), new THREE.MeshBasicMaterial({ map: texWelcome })); welcome.rotation.y = Math.PI / 2; welcome.position.set(-0.378, 1.78, 2.39); flat.add(welcome);
+  box(0.05, 2.1, 0.82, white, -0.47, 1.05, 2.58, flat); box(0.02, 0.8, 0.5, 0xeceae4, -0.44, 1.4, 2.58, flat); box(0.02, 0.8, 0.5, 0xeceae4, -0.44, 0.6, 2.58, flat); box(0.04, 0.05, 0.14, 0x222222, -0.43, 1.05, 2.27, flat);
+  const welcome = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.14), new THREE.MeshBasicMaterial({ map: texWelcome })); welcome.rotation.y = Math.PI / 2; welcome.position.set(-0.418, 1.78, 2.58); flat.add(welcome);
   // interior doors: white leaves with the black diagonal inlay lines (as in the bedroom photo)
-  box(0.8, 2.05, 0.04, doorM, 1.0, 1.03, -0.08, flat); box(0.04, 0.03, 0.12, 0x111111, 1.32, 1.02, -0.13, flat);        // living door, open against the south wall
-  box(0.04, 2.05, 0.8, doorM, 0.21, 1.03, -1.47, flat); box(0.12, 0.03, 0.04, 0x111111, 0.16, 1.02, -1.79, flat);        // bedroom door, open into the room
+  box(0.8, 2.05, 0.04, doorM, 1.0, 1.03, 0.05, flat); box(0.04, 0.03, 0.12, 0x111111, 1.32, 1.02, 0.0, flat);        // living door, open against the south wall
+  box(0.04, 2.05, 0.8, doorM, 0.21, 1.03, -1.41, flat); box(0.12, 0.03, 0.04, 0x111111, 0.16, 1.02, -1.73, flat);        // bedroom door, open into the room
   box(0.8, 2.05, 0.04, doorM, -1.32, 1.03, 0.03, flat);                                                                   // bathroom door, open against the outer wall
   box(0.04, 2.04, 0.78, slideM, -3.31, 1.04, -2.56, flat); box(0.06, 0.06, 1.6, 0x161616, -3.31, 2.12, -2.2, flat);      // kitchen sliding door (glazed) pushed back on its black track
 
@@ -869,6 +919,7 @@ window.__boot = function () {
   const darkPlank = new THREE.MeshStandardMaterial({ map: loadMap('real_dark_floor.jpg', '#3d3a37'), roughness: 0.62 });                   // bedroom + dining: dark grey oak laminate
   const floorSpec = { hall: [hallTile, 1.2], living: [palePlank, 0.9], bed: [darkPlank, 1.1], kitchen: [darkPlank, 1.1], bath: [bathFloor, 1] };
   const ceilMat = new THREE.MeshStandardMaterial({ color: 0xf6f5f2, map: texPlaster, roughness: 0.96 });
+
   PLAN.rooms.forEach(r => {
     const fs = new THREE.Shape(r.poly.map(p => new THREE.Vector2(p[0], -p[1])));
     const fg = new THREE.ExtrudeGeometry(fs, { depth: 0.25, bevelEnabled: false }); fg.rotateX(-Math.PI / 2); fg.translate(0, -0.23, 0);
@@ -904,16 +955,16 @@ window.__boot = function () {
 
   // =========== HALL ===========
   const lightHall = plight(0xffd9a0, 0.68, 7, -0.15, 2.4, 1.0);
-  box(0.9, 0.02, 3.5, 0x6b6660, -0.15, 0.04, 0.9, flat);                                              // runner
   // facing the front door: slat wall + mirror + console on the left (east wall), framed Sarajevo prints on the right (west wall)
-  for (let i = 0; i < 9; i++) box(0.05, 2.7, 0.15, i % 2 ? slatB : slatA, 0.52, 1.4, 0.75 + i * 0.22, flat);   // slat panel (east wall)
+  for (let i = 0; i < 9; i++) box(0.05, WH - 0.08, 0.15, i % 2 ? slatB : slatA, 0.52, (WH - 0.08) / 2 + 0.02, 0.75 + i * 0.22, flat);   // slat panel (east wall)
   glow(0.02, 1.4, 0.8, 0xffe2b0, 0.485, 1.75, 1.45, flat);                                               // mirror backlight
   box(0.01, 1.32, 0.72, mat(0xa9b3b8, { roughness: 0.05, metalness: 0.3, emissive: 0x1e2326 }), 0.47, 1.75, 1.45, flat);   // mirror
   box(0.4, 0.5, 1.17, graphite, 0.28, 0.62, 1.365, flat); box(0.42, 0.05, 1.21, oak, 0.28, 0.9, 1.365, flat); plant(0.28, 1.0, 0.7, 0x2a2a2a);  // floating console
   glow(0.04, 0.03, 1.17, 0xffc27a, 0.16, 0.35, 1.365, flat);
-  [[0.55, 0.42, 0.62], [1.05, 0.42, 0.62], [1.6, 0.52, 0.78]].forEach(([z, w, h]) => { box(0.04, h + 0.1, w + 0.08, 0x151515, -0.82, 1.6, z, flat); const p = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: texPic })); p.rotation.y = Math.PI / 2; p.position.set(-0.797, 1.6, z); flat.add(p); });
-  glow(1.2, 0.03, 0.03, 0xffe2b0, -0.15, WH - 0.04, -0.6, flat); glow(1.2, 0.03, 0.03, 0xffe2b0, -0.15, WH - 0.04, 2.6, flat); glow(0.03, 0.03, 3.2, 0xffe2b0, -0.7, WH - 0.04, 1.0, flat); glow(0.03, 0.03, 3.2, 0xffe2b0, 0.4, WH - 0.04, 1.0, flat);
+  glow(1.2, 0.03, 0.03, 0xffe2b0, -0.15, WH - 0.04, -0.6, flat); glow(1.2, 0.03, 0.03, 0xffe2b0, -0.15, WH - 0.04, 2.8, flat); [[-0.6, 0.3], [0.75, 2.8]].forEach(([a, b]) => [-0.7, 0.4].forEach(x => glow(0.03, 0.03, b - a, 0xffe2b0, x, WH - 0.04, (a + b) / 2, flat)));   // LED cove, broken by the soffit
+  box(1.49, WH - 2.05, 0.39, M.hall, -0.145, (WH + 2.05) / 2, 0.525, flat);   // dropped ceiling across the hall (scan: underside at 2.05 m)
   spot(-0.15, 1.0);
+  box(0.6, 0.012, 0.09, 0x1a1a1a, -0.25, WH - 0.006, 2.55, flat); box(0.12, 0.012, 0.12, 0xf3f3f1, 0.25, WH - 0.006, 2.75, flat);   // black linear vent + sensor in the ceiling by the front door
 
   // =========== LIVING ROOM — TV wall north, street windows east, door from the hall in the south-west corner ===========
   const lightLiv = plight(0xffd0a0, 0.95, 8, 2.7, 2.4, -1.6);
@@ -921,29 +972,34 @@ window.__boot = function () {
   box(0.93, WH - 0.1, 0.02, 0x1b1815, 1.085, (WH - 0.1) / 2, zw + 0.01, flat);                        // slat panel: dark felt backing ...
   for (let i = 0; i < 20; i++) box(0.028, WH - 0.12, 0.022, i % 3 ? slatA : slatB, 0.645 + i * 0.046, (WH - 0.12) / 2 + 0.01, zw + 0.03, flat);   // ... with oak slats
   glow(0.015, WH - 0.12, 0.02, 0xffc27a, 1.565, (WH - 0.12) / 2, zw + 0.015, flat); glow(0.95, 0.015, 0.02, 0xffc27a, 1.085, WH - 0.1, zw + 0.015, flat);   // LED strip down its edge and along the cornice
-  const ux = 2.85, uz = zw + 0.2;                                                                     // floating media unit: oak carcass, graphite doors, open middle with the fireplace
-  box(2.2, 0.55, 0.4, oakM, ux, 0.425, uz, flat);
-  box(0.58, 0.49, 0.02, 0x34363a, ux - 0.78, 0.425, uz + 0.205, flat); box(0.58, 0.49, 0.02, 0x34363a, ux + 0.78, 0.425, uz + 0.205, flat);
-  box(0.95, 0.2, 0.012, 0x8f6a42, ux, 0.565, uz + 0.207, flat);                                          // open niche
-  box(0.95, 0.22, 0.02, 0x0b0b0b, ux, 0.3, uz + 0.205, flat);
-  const fire = glow(0.86, 0.08, 0.012, 0xd65cff, ux, 0.27, uz + 0.212, flat);                          // electric fireplace (purple LED flames)
-  glow(2.1, 0.02, 0.03, 0xffc27a, ux, 0.14, uz + 0.12, flat);                                          // LED under the unit
-  box(0.4, 0.02, 0.22, 0x111111, ux - 0.1, 0.71, uz, flat); box(0.06, 0.1, 0.03, 0x111111, ux - 0.1, 0.76, uz - 0.05, flat);
-  box(1.0, 0.6, 0.05, 0x0b0b0b, ux - 0.1, 1.11, uz - 0.07, flat);                                      // TV standing on the unit
-  const tv = new THREE.Mesh(new THREE.PlaneGeometry(0.96, 0.56), new THREE.MeshBasicMaterial({ map: texTV })); tv.position.set(ux - 0.1, 1.11, uz - 0.044); flat.add(tv);
-  cyl(0.04, 0.06, 0.24, 0xb9aa98, ux + 0.85, 0.82, uz, flat, 10);                                      // little sculpture
+  const ux = 2.69, uz = zw + 0.2;                                                                     // floating media unit: oak carcass, graphite doors, open middle with the fireplace
+  box(1.8, 0.55, 0.4, oakM, ux, 0.425, uz, flat);
+  box(0.5, 0.49, 0.02, 0x34363a, ux - 0.6, 0.425, uz + 0.205, flat); box(0.5, 0.49, 0.02, 0x34363a, ux + 0.6, 0.425, uz + 0.205, flat);
+  box(0.66, 0.2, 0.012, 0x8f6a42, ux, 0.565, uz + 0.207, flat);                                          // open niche
+  box(0.66, 0.22, 0.02, 0x0b0b0b, ux, 0.3, uz + 0.205, flat);
+  const fire = glow(0.6, 0.1, 0.012, 0xff5a1f, ux, 0.28, uz + 0.212, flat);                            // electric fireplace insert (red-orange flames)
+  glow(1.7, 0.02, 0.03, 0xffc27a, ux, 0.14, uz + 0.12, flat);                                          // LED under the unit
+  box(0.4, 0.02, 0.22, 0x111111, ux + 0.07, 0.71, uz, flat); box(0.06, 0.1, 0.03, 0x111111, ux + 0.07, 0.76, uz - 0.05, flat);
+  box(1.0, 0.6, 0.05, 0x0b0b0b, ux + 0.07, 1.11, uz - 0.07, flat);                                     // TV standing on the unit
+  const tv = new THREE.Mesh(new THREE.PlaneGeometry(0.96, 0.56), new THREE.MeshBasicMaterial({ map: texTV })); tv.position.set(ux + 0.07, 1.11, uz - 0.044); flat.add(tv);
+  cyl(0.04, 0.06, 0.24, 0xb9aa98, ux + 0.7, 0.82, uz, flat, 10);                                       // little sculpture
   [[4.2, 2.05], [3.92, 1.78], [4.22, 1.5]].forEach(([x, y]) => box(0.5, 0.04, 0.2, 0x161616, x, y, zw + 0.1, flat));   // floating black shelves
   ball(0.06, 0x3c8f50, 4.3, 1.56, zw + 0.1, flat);
   cyl(0.07, 0.07, 0.44, 0xc62828, 4.15, 0.27, zw + 0.2, flat, 14); box(0.2, 0.04, 0.2, 0x151515, 4.15, 0.04, zw + 0.2, flat);   // fire extinguisher
   sofa(1.1, -2.35, 'e', 2.0, 0x585c63, 0x5d6168);                                                     // dark grey velvet sofa bed along the west wall ...
   box(0.62, 0.03, 1.75, 0xb6b8ba, 1.18, 0.525, -2.35, flat); box(0.04, 0.5, 1.75, 0xb6b8ba, 0.79, 0.72, -2.35, flat);   // ... under a light grey knitted throw
   box(0.14, 0.4, 0.42, 0x4b4f55, 0.88, 0.72, -3.0, flat); box(0.14, 0.4, 0.42, 0x4b4f55, 0.88, 0.72, -1.7, flat);
-  sofa(2.6, -0.3, 'n', 2.2, 0xd8d9da, 0xdedfe0);                                                      // light grey sofa facing the TV
-  piece(4.15, -2.55, 'w', [[0.85, 0.3, 0.82, 0xd5d6d7, 0, 0.2, 0], [0.55, 0.16, 0.55, 0xdcdddd, 0, 0.43, 0.1], [0.55, 0.45, 0.2, 0xdcdddd, 0, 0.65, -0.28], [0.15, 0.6, 0.85, 0xd5d6d7, -0.35, 0.35, 0], [0.15, 0.6, 0.85, 0xd5d6d7, 0.35, 0.35, 0]]);   // armchair by the windows
-  const rug = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.012, 1.6), new THREE.MeshStandardMaterial({ map: texRug, roughness: 1 })); rug.position.set(2.65, 0.03, -1.95); rug.receiveShadow = true; flat.add(rug);   // grey chevron rug
-  { const top = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.05, 36), oakM); top.scale.set(1, 1, 0.66); top.position.set(2.6, 0.42, -1.95); top.castShadow = true; flat.add(top); }   // oval oak coffee table ...
-  [[2.3, -1.85], [2.85, -2.12], [2.85, -1.75]].forEach(([x, z]) => cyl(0.085, 0.085, 0.38, oakM, x, 0.2, z, flat, 16));   // ... on three round legs
-  [[2.5, -1.95], [2.62, -1.9], [2.74, -1.98]].forEach(([x, z]) => box(0.04, 0.02, 0.15, 0x111111, x, 0.455, z, flat));   // remotes
+  sofa(3.18, -0.89, 'n', 2.2, 0xd8d9da, 0xdedfe0);                                                    // light grey sofa facing the TV, pulled off the south wall (scan) ...
+  box(1.0, 0.025, 0.32, 0x151515, 4.13, 0.8, -0.06, flat); [[3.65, -0.19], [4.61, -0.19], [3.65, 0.07], [4.61, 0.07]].forEach(([x, z]) => box(0.02, 0.8, 0.02, 0x151515, x, 0.4, z, flat));   // ... with a black metal console behind it
+  [[3.9, 0x4f8fb3], [4.15, 0xe0b23a], [4.38, 0xd8d2c6]].forEach(([x, c]) => box(0.22, 0.012, 0.28, c, x, 0.82, -0.06, flat));   // magazines
+  piece(4.2, -2.83, 'w', [[0.86, 0.3, 0.82, 0xd5d6d7, 0, 0.2, 0], [0.56, 0.16, 0.55, 0xdcdddd, 0, 0.43, 0.1], [0.56, 0.45, 0.2, 0xdcdddd, 0, 0.65, -0.28], [0.15, 0.6, 0.85, 0xd5d6d7, -0.355, 0.35, 0], [0.15, 0.6, 0.85, 0xd5d6d7, 0.355, 0.35, 0]]);   // armchair by the windows ...
+  { const p = box(0.46, 0.42, 0.46, 0xd5d6d7, 4.2, 0.21, -1.95, flat); p.userData.soft = 1; }          // ... and its pouf
+  const rug = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.012, 1.6), new THREE.MeshStandardMaterial({ map: texRug, roughness: 1 })); rug.position.set(2.85, 0.03, -2.2); rug.receiveShadow = true; flat.add(rug);   // grey chevron rug
+  { const top = new THREE.Mesh(new THREE.CylinderGeometry(0.43, 0.43, 0.05, 36), oakM); top.scale.set(1, 1, 0.95); top.position.set(2.95, 0.38, -2.31); top.castShadow = true; flat.add(top); }   // pebble-shaped oak coffee table ...
+  [[2.72, -2.25], [3.15, -2.5], [3.15, -2.1]].forEach(([x, z]) => cyl(0.085, 0.085, 0.34, oakM, x, 0.18, z, flat, 16));   // ... on three round legs
+  [[2.85, -2.31], [2.97, -2.26], [3.09, -2.34]].forEach(([x, z]) => box(0.04, 0.02, 0.15, 0x111111, x, 0.415, z, flat));   // remotes
+  box(0.86, 0.28, 0.2, 0xf6f6f4, 4.15, 2.36, 0.03, flat); box(0.7, 0.03, 0.02, 0xcfd3d8, 4.15, 2.25, -0.075, flat);   // split air-conditioner high on the south wall
+  [[3.05, 1.72, 0.15, 0xd9c6ab], [3.42, 1.62, 0.14, 0xc49a74], [3.78, 1.76, 0.15, 0xe6dccd]].forEach(([x, y, r, c]) => { const d = cyl(r, r, 0.02, c, x, y, 0.12, flat, 28); d.rotation.x = Math.PI / 2; });   // three round decor plates
   box(0.12, 0.2, 0.05, 0xf3f3f1, 0.66, 1.45, -1.12, flat);                                            // intercom by the door
   { const A = [1.25, -3.4], B = [4.15, -3.15], Cc = [2.75, -0.8], O = [2.75, -2.45];                // black triangular track light
     rail(A[0], A[1], B[0], B[1]); rail(B[0], B[1], Cc[0], Cc[1]); rail(Cc[0], Cc[1], A[0], A[1]); rail(B[0], B[1], O[0], O[1]); rail(O[0], O[1], A[0], A[1]);
@@ -951,19 +1007,23 @@ window.__boot = function () {
 
   // =========== BEDROOM — venetian headboard wall (west), wardrobe north, TV east ===========
   const lightBed = plight(0xf2f1ff, 0.42, 7, -1.5, 2.3, -2.6);
-  box(2.05, 0.32, 1.62, 0xe8e6e1, -2.135, 0.18, -3.0, flat);                                           // white upholstered bed base
-  box(1.98, 0.25, 1.54, 0x6a6d72, -2.13, 0.46, -3.0, flat);                                            // mattress (grey sides)
-  box(1.72, 0.04, 1.62, quiltM, -1.99, 0.6, -3.0, flat);                                               // grey quilted cover
-  box(0.42, 0.13, 0.66, 0xf3f3f1, -2.88, 0.66, -3.38, flat); box(0.42, 0.13, 0.66, 0xf3f3f1, -2.88, 0.66, -2.62, flat);   // pillows
-  box(0.1, 1.15, 1.72, tuftM, -3.11, 0.62, -3.0, flat);                                                // tufted white headboard
-  box(0.3, 0.06, 0.4, 0xf6f6f4, -1.75, 0.65, -3.25, flat); box(0.3, 0.06, 0.4, 0xf6f6f4, -1.75, 0.65, -2.72, flat); box(0.14, 0.1, 0.32, 0x45484d, -1.75, 0.66, -2.98, flat);   // towels
-  box(0.2, 0.28, 0.85, 0xf6f6f4, -3.07, 2.38, -3.0, flat); box(0.02, 0.03, 0.7, 0xcfd3d8, -2.965, 2.27, -3.0, flat);   // split air-conditioner above the bed
-  box(1.0, 2.1, 0.55, lamM, 0.0, 1.07, -3.615, flat); box(0.006, 2.04, 0.01, 0xd6d3cc, 0.0, 1.07, -3.336, flat);       // white two-door wardrobe
-  box(0.015, 0.3, 0.02, 0x9a9a9a, -0.05, 1.2, -3.32, flat); box(0.015, 0.3, 0.02, 0x9a9a9a, 0.05, 1.2, -3.32, flat);
+  const bz = -3.17;
+  box(2.05, 0.32, 1.45, 0xe8e6e1, -2.135, 0.18, bz, flat);                                             // white upholstered bed base
+  box(1.98, 0.25, 1.38, 0x6a6d72, -2.13, 0.46, bz, flat);                                              // mattress (grey sides)
+  box(1.72, 0.04, 1.46, quiltM, -1.99, 0.6, bz, flat);                                                 // grey quilted cover
+  box(0.42, 0.13, 0.6, 0xf3f3f1, -2.88, 0.66, bz - 0.34, flat); box(0.42, 0.13, 0.6, 0xf3f3f1, -2.88, 0.66, bz + 0.34, flat);   // pillows
+  box(0.1, 1.15, 1.55, tuftM, -3.11, 0.62, bz, flat);                                                  // tufted white headboard ...
+  for (let i = 0; i < 6; i++) for (let j = 0; j < 3; j++) ball(0.012, 0xf2f6ff, -3.055, 0.55 + j * 0.2 + (i % 2) * 0.1, bz - 0.6 + i * 0.24, flat, 1, 1, 1);   // ... with crystal buttons
+  box(0.3, 0.06, 0.4, 0xf6f6f4, -1.75, 0.65, bz - 0.25, flat); box(0.3, 0.06, 0.4, 0xf6f6f4, -1.75, 0.65, bz + 0.28, flat); box(0.14, 0.1, 0.32, 0x45484d, -1.75, 0.66, bz + 0.02, flat);   // towels
+  box(0.2, 0.28, 0.85, 0xf6f6f4, -3.07, 2.36, -3.3, flat); box(0.02, 0.03, 0.7, 0xcfd3d8, -2.965, 2.25, -3.3, flat);   // split air-conditioner above the bed
+  [[-2.35, 0.36, 0.5], [-1.7, 0.42, 0.56]].forEach(([x, w, h]) => { box(w + 0.06, h + 0.06, 0.025, 0xf4f4f2, x, 1.55, -3.876, flat); const p = new THREE.Mesh(new THREE.PlaneGeometry(w - 0.06, h - 0.06), new THREE.MeshBasicMaterial({ map: texLeaf })); p.position.set(x, 1.55, -3.862); flat.add(p); });   // two botanical prints over the bed
+  box(0.9, 2.1, 0.55, lamM, -0.14, 1.07, -3.615, flat); box(0.006, 2.04, 0.01, 0xd6d3cc, -0.14, 1.07, -3.336, flat);   // white two-door wardrobe
+  box(0.015, 0.3, 0.02, 0x9a9a9a, -0.19, 1.2, -3.32, flat); box(0.015, 0.3, 0.02, 0x9a9a9a, -0.09, 1.2, -3.32, flat);
   box(0.05, 0.62, 1.1, 0x0b0b0b, 0.53, 1.55, -2.3, flat); box(0.006, 0.57, 1.04, mat(0x15191e, { roughness: 0.15 }), 0.503, 1.55, -2.3, flat);   // wall TV
   box(0.2, 0.03, 1.0, 0x161616, 0.45, 1.08, -2.3, flat);                                               // black shelf under it
-  cyl(0.32, 0.32, 0.04, 0x5f6a66, 0.2, 0.66, -2.3, flat, 28); cyl(0.04, 0.06, 0.6, 0x2a2522, 0.2, 0.34, -2.3, flat, 10); cyl(0.2, 0.22, 0.04, 0x2a2522, 0.2, 0.02, -2.3, flat, 16);   // marble pedestal table
-  cyl(0.06, 0.04, 0.14, 0x9fd8c8, 0.2, 0.75, -2.3, flat, 10);
+  cyl(0.36, 0.36, 0.035, mat(0x8d9193, { roughness: 0.25 }), 0.07, 0.56, -2.7, flat, 32);            // round grey marble table ...
+  cyl(0.3, 0.3, 0.04, mat(0xa9874a, { metalness: 0.7, roughness: 0.35 }), 0.07, 0.52, -2.7, flat, 24);  // ... on a brass apron
+  [0, 2.094, 4.189].forEach(a => { const l = cyl(0.022, 0.016, 0.54, mat(0xa9874a, { metalness: 0.7, roughness: 0.35 }), 0.07 + Math.cos(a) * 0.22, 0.26, -2.7 + Math.sin(a) * 0.22, flat, 8); l.rotation.z = Math.cos(a) * 0.25; l.rotation.x = -Math.sin(a) * 0.25; });   // and three splayed brass legs
   box(0.82, 1.18, 0.04, mat(0xc9c7c2, { metalness: 0.6, roughness: 0.35 }), -2.0, 1.5, -1.51, flat); box(0.66, 1.02, 0.01, mat(0x9aa7ae, { roughness: 0.05, metalness: 0.2, emissive: 0x1a2024 }), -2.0, 1.5, -1.535, flat);   // ornate silver mirror
   rail(-2.45, -2.75, -1.15, -2.75); [-2.2, -1.8, -1.4].forEach(x => tspot(x, -2.75));                  // black track with three spots
 
@@ -988,24 +1048,25 @@ window.__boot = function () {
   box(0.26, 0.04, 0.26, 0xf3f3f1, -3.905, 1.6, -0.1, flat);                                            // plates on the shelf
   box(0.42, 0.25, 0.3, 0xf2f2f2, -4.47, 1.045, -0.6, flat); box(0.02, 0.16, 0.2, 0x222222, -4.255, 1.05, -0.62, flat);   // microwave
   cyl(0.08, 0.09, 0.22, 0x31b4d6, -4.45, 1.03, -1.02, flat, 14);                                       // turquoise kettle
-  cyl(0.4, 0.4, 0.03, 0xf3f2ef, -4.2, 0.74, -3.05, flat, 36);                                          // round white table ...
-  [[0.2, 0.2], [-0.2, 0.2], [0.2, -0.2], [-0.2, -0.2]].forEach(([dx, dz]) => { const l = cyl(0.018, 0.014, 0.76, 0xc89c68, -4.2 + dx * 1.2, 0.37, -3.05 + dz * 1.2, flat, 8); l.rotation.z = -dx * 0.5; l.rotation.x = dz * 0.5; });   // ... on splayed wood legs
+  cyl(0.4, 0.4, 0.03, 0xf3f2ef, -4.22, 0.74, -2.37, flat, 36);                                         // round white table ...
+  [[0.2, 0.2], [-0.2, 0.2], [0.2, -0.2], [-0.2, -0.2]].forEach(([dx, dz]) => { const l = cyl(0.018, 0.014, 0.76, 0xc89c68, -4.22 + dx * 1.2, 0.37, -2.37 + dz * 1.2, flat, 8); l.rotation.z = -dx * 0.5; l.rotation.x = dz * 0.5; });   // ... on splayed wood legs
   function chair(x, z, f) {                                                                           // grey upholstered shell chair, f = +1 faces south, -1 faces north
     box(0.46, 0.08, 0.44, 0x7b7e83, x, 0.47, z, flat); box(0.46, 0.46, 0.07, 0x7b7e83, x, 0.73, z - f * 0.22, flat);
     [[0.18, 0.17], [-0.18, 0.17], [0.18, -0.17], [-0.18, -0.17]].forEach(([dx, dz]) => cyl(0.014, 0.012, 0.44, 0xc89c68, x + dx, 0.22, z + dz, flat, 6));
   }
-  chair(-4.2, -3.6, 1); chair(-4.2, -2.5, -1);
-  box(0.3, 0.4, 0.12, 0xf4f4f2, -4.3, 1.6, -3.83, flat); box(0.04, 0.14, 0.01, 0xd32f2f, -4.3, 1.6, -3.766, flat); box(0.14, 0.04, 0.01, 0xd32f2f, -4.3, 1.6, -3.766, flat);   // first-aid cabinet
-  dome(-3.95, -0.6); dome(-3.95, -2.9);
+  chair(-4.22, -2.88, 1); chair(-4.22, -1.86, -1);
+  box(0.5, 0.56, 0.5, 0xf4f4f2, -4.33, 0.28, -3.66, flat); box(0.012, 0.02, 0.2, 0x9a9a9a, -4.074, 0.5, -3.66, flat);   // white mini fridge in the corner ...
+  box(0.2, 0.4, 0.32, 0xf4f4f2, -4.36, 0.76, -3.66, flat); box(0.006, 0.14, 0.04, 0xd32f2f, -4.257, 0.76, -3.66, flat); box(0.006, 0.04, 0.14, 0xd32f2f, -4.257, 0.76, -3.66, flat);   // ... with the first-aid cabinet on top
+  dome(-3.95, -0.6); dome(-3.95, -2.37);
 
   // =========== BATHROOM — teal marble to the ceiling, quadrant shower, long counter over the washing machine ===========
   const lightBath = plight(0xfff1dc, 0.8, 5.5, -2.05, 2.3, -0.5);
-  const sw = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 0.12, 24, 1, false, Math.PI / 2, Math.PI / 2), mat(0xf6f6f4, { roughness: 0.25 })); sw.position.set(-3.16, 0.06, 0.08); flat.add(sw);   // quadrant shower tray
-  const sg = new THREE.Mesh(new THREE.CylinderGeometry(0.88, 0.88, 1.9, 24, 1, true, Math.PI / 2, Math.PI / 2), new THREE.MeshStandardMaterial({ color: 0xcfe3e6, roughness: 0.3, transparent: true, opacity: 0.4, side: THREE.DoubleSide, depthWrite: false })); sg.position.set(-3.16, 1.07, 0.08); flat.add(sg);   // frosted curved doors
-  box(0.025, 1.9, 0.025, 0xcfd3d8, -2.28, 1.07, 0.06, flat); box(0.025, 1.9, 0.025, 0xcfd3d8, -3.14, 1.07, -0.8, flat);
-  cyl(0.23, 0.23, 0.78, mat(0xeef0f2, { roughness: 0.2 }), -2.5, 2.2, -0.15, flat, 24);                // water heater above the shower
-  box(0.18, 0.38, 0.42, 0xf4f4f2, -3.08, 0.82, -1.08, flat);                                           // toilet: cistern ...
-  cyl(0.17, 0.19, 0.38, mat(0xf4f4f2, { roughness: 0.18 }), -2.86, 0.19, -1.08, flat, 18); box(0.42, 0.04, 0.38, 0xf6f6f4, -2.84, 0.4, -1.08, flat);   // ... bowl + seat
+  const sw = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 0.12, 24, 1, false, Math.PI / 2, Math.PI / 2), mat(0xf6f6f4, { roughness: 0.25 })); sw.position.set(-3.16, 0.06, 0.28); flat.add(sw);   // quadrant shower tray
+  const sg = new THREE.Mesh(new THREE.CylinderGeometry(0.88, 0.88, 1.9, 24, 1, true, Math.PI / 2, Math.PI / 2), new THREE.MeshStandardMaterial({ color: 0xcfe3e6, roughness: 0.3, transparent: true, opacity: 0.4, side: THREE.DoubleSide, depthWrite: false })); sg.position.set(-3.16, 1.07, 0.28); flat.add(sg);   // frosted curved doors
+  box(0.025, 1.9, 0.025, 0xcfd3d8, -2.28, 1.07, 0.26, flat); box(0.025, 1.9, 0.025, 0xcfd3d8, -3.14, 1.07, -0.6, flat);
+  cyl(0.23, 0.23, 0.78, mat(0xeef0f2, { roughness: 0.2 }), -2.5, 2.2, 0.05, flat, 24);                // water heater above the shower
+  box(0.18, 0.38, 0.42, 0xf4f4f2, -3.08, 0.82, -0.8, flat);                                           // toilet: cistern ...
+  cyl(0.17, 0.19, 0.38, mat(0xf4f4f2, { roughness: 0.18 }), -2.86, 0.19, -0.8, flat, 18); box(0.42, 0.04, 0.38, 0xf6f6f4, -2.84, 0.4, -0.8, flat);   // ... bowl + seat
   box(1.1, 0.04, 0.5, 0xf1f1ef, -1.9, 0.86, -1.14, flat); box(1.1, 0.015, 0.5, 0x2d2f33, -1.9, 0.833, -1.14, flat);   // white counter with a dark edge
   cyl(0.2, 0.17, 0.05, mat(0xf8f8f6, { roughness: 0.12 }), -2.15, 0.885, -1.16, flat, 22); cyl(0.012, 0.012, 0.16, 0xcfd3d8, -2.15, 0.95, -1.34, flat, 8);   // basin + tap
   box(0.6, 0.82, 0.55, 0xdfe1e3, -1.65, 0.41, -1.14, flat); { const d = cyl(0.17, 0.17, 0.03, 0x4b5359, -1.65, 0.44, -0.86, flat, 22); d.rotation.x = Math.PI / 2; }   // washing machine
@@ -1013,9 +1074,9 @@ window.__boot = function () {
   box(0.75, 0.12, 0.15, oakM, -2.0, 1.55, -1.315, flat); glow(0.72, 0.015, 0.02, 0xfff0e0, -2.0, 1.485, -1.26, flat);   // ... with an oak niche and LED below
   box(0.4, 2.45, 0.42, 0x2d2f33, -1.14, 1.225, -1.18, flat); box(0.36, 0.38, 0.02, oakM, -1.14, 1.55, -0.965, flat);   // tall graphite cabinet with an open oak niche
   [[-1.22, 0xf0f0f0], [-1.12, 0x9fd3e6], [-1.03, 0xe9e2f2]].forEach(([x, c]) => cyl(0.035, 0.035, 0.22, c, x, 1.48, -1.05, flat, 10));
-  vpanel('x', -3.21, -1.39, 0.08, 1.28, 1.34, borderM, 1); vpanel('z', -1.44, -3.16, -0.94, 1.28, 1.34, borderM, 1); vpanel('z', 0.13, -3.16, -0.94, 1.28, 1.34, borderM, -1);   // decor border band
+  vpanel('x', -3.21, -1.41, 0.28, 1.28, 1.34, borderM, 1); vpanel('z', -1.46, -3.16, -0.94, 1.28, 1.34, borderM, 1); vpanel('z', 0.33, -3.16, -0.94, 1.28, 1.34, borderM, -1);   // decor border band
   box(0.02, 0.42, 0.36, white, -3.15, 2.22, -0.88, flat); box(0.01, 0.34, 0.28, mat(0x7f9db0, { emissive: 0x24323c }), -3.14, 2.22, -0.88, flat);   // small high window
-  dome(-2.05, -0.62);
+  dome(-2.05, -0.56);
 
   // ---------- the courtyard behind the flat (seen from the kitchen windows): grass, hedge, trees, the neighbouring block ----------
   {
@@ -1036,7 +1097,7 @@ window.__boot = function () {
   const C = h => new THREE.Color(h);
   // ---------- cheap "baked" realism: skirting boards, ambient-occlusion decals, light pools, small details ----------
   TAG = 'trim';
-  const doorSegs = PLAN.doors.concat([[-0.49, 2.89, 0.34, 2.89]]);
+  const doorSegs = PLAN.doors.concat([[-0.53, 3.08, 0.32, 3.08]]);
   const cent = poly => { let x = 0, z = 0; poly.forEach(q => { x += q[0]; z += q[1]; }); return [x / poly.length, z / poly.length]; };
   function roomEdges(poly) {          // wall segments of a room (door openings cut out), with the inward normal
     const out = [], c = cent(poly);
@@ -1069,9 +1130,9 @@ window.__boot = function () {
   }
   [[4.3, 0.13, 0, -1, 0.3], [1.75, 0.13, 0, -1, 0.3], [4.2, -3.89, 0, 1, 0.3], [4.65, -3.5, -1, 0, 0.3],            // living
    [-1.0, -3.89, 0, 1, 0.3], [0.55, -1.7, -1, 0, 0.3],                                                               // bedroom
-   [-4.5, 0.06, 0, -1, 1.1], [-3.4, 0.06, 0, -1, 1.1],                                                               // kitchen (above the worktop)
-   [-1.4, -1.39, 0, 1, 1.15]].forEach(o => outlet(o[0], o[1], o[2], o[3], o[4], false));
-  [[0.65, -3.55, 1, 0, 1.2], [0.55, 0.2, -1, 0, 1.2], [0.42, -1.08, 0, -1, 1.2], [-3.26, -1.3, -1, 0, 1.2], [-0.94, -0.9, -1, 0, 1.2]].forEach(o => outlet(o[0], o[1], o[2], o[3], o[4], true));
+   [-4.5, 0.05, 0, -1, 1.1], [-3.4, 0.05, 0, -1, 1.1],                                                               // kitchen (above the worktop)
+   [-1.4, -1.41, 0, 1, 1.15]].forEach(o => outlet(o[0], o[1], o[2], o[3], o[4], false));
+  [[0.65, -3.55, 1, 0, 1.2], [0.55, 0.2, -1, 0, 1.2], [0.42, -1.02, 0, -1, 1.2], [-3.26, -1.3, -1, 0, 1.2], [-0.94, -0.9, -1, 0, 1.2]].forEach(o => outlet(o[0], o[1], o[2], o[3], o[4], true));
   cyl(0.06, 0.06, 0.025, 0xf5f5f2, -0.15, WH - 0.0125, 2.0, flat, 16);                                                // smoke detector in the hall
   const texVent = ctex(64, 40, (g, w, h) => { g.fillStyle = '#f2f2ef'; g.fillRect(0, 0, w, h); g.fillStyle = '#8c8c88'; for (let i = 0; i < 7; i++) g.fillRect(6, 6 + i * 4.6, 52, 2); });
   const vent = new THREE.Mesh(new THREE.PlaneGeometry(0.22, 0.14), new THREE.MeshStandardMaterial({ map: texVent, roughness: 0.6 })); vent.rotation.y = -Math.PI / 2; vent.position.set(-0.935, 2.32, -0.95); flat.add(vent);   // bathroom vent
@@ -1224,12 +1285,12 @@ window.__boot = function () {
   //  WALKER — a person walking through the flat: follows the doorways, turns, bobs
   //  positions are in flat (scan) coordinates; world = (Xo - z, Zo + x)
   // =====================================================================
-  const NODES = { HS: [0.05, 2.5], H: [-0.12, -0.45], LD: [0.45, -0.43], L1: [1.35, -0.45], L2: [1.85, -1.05], LIV: [3.35, -1.05],
-    BD: [-0.15, -1.03], BI: [-0.15, -1.8], KD: [-3.21, -1.85], K1: [-3.5, -2.3], KS: [-3.65, -3.5], WD: [-0.89, -0.33], BA: [-1.15, -0.4] };
+  const NODES = { HS: [0.05, 2.7], H: [-0.12, -0.35], LD: [0.45, -0.3], L1: [1.35, -0.4], L2: [1.85, -1.55], LIV: [2.55, -1.62],
+    BD: [-0.15, -0.97], BI: [-0.15, -1.8], KD: [-3.21, -1.85], K1: [-3.5, -2.3], KS: [-3.65, -3.5], WD: [-0.89, -0.33], BA: [-1.15, -0.4] };
   const EDGES = [['HS','H'],['H','LD'],['LD','L1'],['L1','L2'],['L2','LIV'],['H','BD'],['BD','BI'],['BI','KD'],['KD','K1'],['K1','KS'],['H','WD'],['WD','BA']];
   const ADJ = {}; EDGES.forEach(e => { (ADJ[e[0]] = ADJ[e[0]] || []).push(e[1]); (ADJ[e[1]] = ADJ[e[1]] || []).push(e[0]); });
   const STOPS = [
-    { n: 'Hodnik',         s: 'Hodnik',   node: 'H',   look: [-0.1, 1.5, 2.89] },
+    { n: 'Hodnik',         s: 'Hodnik',   node: 'H',   look: [-0.1, 1.5, 3.08] },
     { n: 'Dnevni boravak', s: 'Dnevni',   node: 'LIV', look: [2.6, 1.2, -3.89] },
     { n: 'Spavaća soba',   s: 'Spavaća',  node: 'BI',  look: [-3.0, 1.1, -2.7] },
     { n: 'Kuhinja',        s: 'Kuhinja',  node: 'KS',  look: [-3.95, 1.15, 0.08] },
@@ -1505,11 +1566,11 @@ function initUI() {
 
   // ---- virtual walkthrough UI: floor plan first, the walk starts on demand ----
   const REF = [
-    { src: 'img/hodnik.jpg', cap: 'room.0' },
-    { src: 'img/foto/dnevni.jpg', cap: 'room.1' },
-    { src: 'img/foto/spavaca.jpg', cap: 'room.2' },
-    { src: 'img/foto/kuhinja.jpg', cap: 'room.3' },
-    { src: 'img/foto/kupatilo.jpg', cap: 'room.4' },
+    { src: 'img/foto/hodnik_2026.jpg', cap: 'room.0' },
+    { src: 'img/galerija/web/01.jpg', cap: 'room.1' },
+    { src: 'img/foto/spavaca_2026.jpg', cap: 'room.2' },
+    { src: 'img/galerija/web/10.jpg', cap: 'room.3' },
+    { src: 'img/galerija/web/11.jpg', cap: 'room.4' },
   ];
   let wi = 0, secVisible = false, walking = false;
   const walkNav = $('#walkNav');
@@ -1553,9 +1614,29 @@ function initUI() {
     setTimeout(() => { refImg.src = r.src; refImg.alt = t('ref.photo') + t(r.cap); $('#refCap').textContent = t(r.cap); refImg.classList.remove('swap'); }, 180);
   }
   function refVis() { ref.classList.toggle('show', walking && secVisible && !!REF[wi]); }
-  $('#refOpen').addEventListener('click', () => { const r = REF[wi]; if (!r) return; $('#lbImg').src = r.src; $('#lbImg').alt = t(r.cap); $('#lbCap').innerHTML = '<b>' + t(r.cap) + '</b>' + t('ref.lb'); lb.hidden = false; });
+  $('#refOpen').addEventListener('click', () => { const r = REF[wi]; if (!r) return; lb.classList.remove('gal'); $('#lbImg').src = r.src; $('#lbImg').alt = t(r.cap); $('#lbCap').innerHTML = '<b>' + t(r.cap) + '</b>' + t('ref.lb'); lb.hidden = false; });
   $('#lbClose').addEventListener('click', () => { lb.hidden = true; });
   lb.addEventListener('click', e => { if (e.target === lb) lb.hidden = true; });
+
+  // ---- photo gallery (img/galerija/web: NN.jpg full size, NN_t.jpg thumbnail; captions gal.N + room name) ----
+  const GAL = [[1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 2], [8, 2], [9, 3], [10, 3], [11, 4]];   // [photo number, room index]
+  const galSrc = (n, th) => 'img/galerija/web/' + String(n).padStart(2, '0') + (th ? '_t' : '') + '.jpg';
+  let gi = 0;
+  function drawGal() {
+    $('#galGrid').innerHTML = GAL.map(([n, r], i) => '<button type="button" data-g="' + i + '" aria-label="' + t('room.' + r) + ': ' + t('gal.' + n) + '"><img src="' + galSrc(n, i > 0) + '" alt="" loading="lazy" decoding="async"><span>' + t('room.' + r) + '</span></button>').join('');
+  }
+  function showGal(i) {
+    gi = (i + GAL.length) % GAL.length; const [n, r] = GAL[gi];
+    $('#lbImg').src = galSrc(n); $('#lbImg').alt = t('room.' + r) + ': ' + t('gal.' + n);
+    $('#lbCap').innerHTML = '<b>' + t('room.' + r) + '</b>' + t('gal.' + n) + '<i>' + (gi + 1) + ' / ' + GAL.length + '</i>';
+    new Image().src = galSrc(GAL[(gi + 1) % GAL.length][0]);                                          // preload the next one
+  }
+  drawGal();
+  $('#galGrid').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; lb.classList.add('gal'); showGal(+b.dataset.g); lb.hidden = false; $('#lbClose').focus(); });
+  $('#lbPrev').addEventListener('click', () => showGal(gi - 1)); $('#lbNext').addEventListener('click', () => showGal(gi + 1));
+  document.addEventListener('keydown', e => { if (lb.hidden || !lb.classList.contains('gal')) return; if (e.key === 'ArrowLeft') showGal(gi - 1); else if (e.key === 'ArrowRight') showGal(gi + 1); });
+  { let sx = null; lb.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true }); lb.addEventListener('touchend', e => { if (sx === null || !lb.classList.contains('gal')) return; const dx = e.changedTouches[0].clientX - sx; sx = null; if (Math.abs(dx) > 50) showGal(gi + (dx < 0 ? 1 : -1)); }, { passive: true }); }
+  window.addEventListener('langchange', () => { drawGal(); if (!lb.hidden && lb.classList.contains('gal')) showGal(gi); });
 
   // ---- 3D <-> photo slider ----
   const cmp = $('#cmp'), cmpH = $('#cmpHandle'), cmpImg = $('#cmpImg'), cmpBtn = $('#cmpBtn');
@@ -1593,7 +1674,7 @@ function initUI() {
     PLAN.rooms.forEach(r => { h += '<polygon class="pw" points="' + r.poly.map(p => p.join(',')).join(' ') + '"/>'; });
     PLAN.windows.forEach(w => { h += '<line class="pwin" x1="' + w[0] + '" y1="' + w[1] + '" x2="' + w[2] + '" y2="' + w[3] + '"/>'; });
     PLAN.doors.forEach(d => { h += '<line x1="' + d[0] + '" y1="' + d[1] + '" x2="' + d[2] + '" y2="' + d[3] + '" stroke="#2a2018" stroke-width=".12" pointer-events="none"/>'; });
-    h += '<line x1="-0.49" y1="2.89" x2="0.34" y2="2.89" stroke="#10131a" stroke-width=".14"/><line class="pdoor" x1="-0.49" y1="2.89" x2="-0.49" y2="2.06"/><path class="pdoor dash" d="M 0.34 2.89 A 0.83 0.83 0 0 0 -0.49 2.06"/><text class="pt sm" x="-.08" y="3.14">' + t('planm.entry') + '</text>';
+    h += '<line x1="-0.53" y1="3.08" x2="0.32" y2="3.08" stroke="#10131a" stroke-width=".14"/><line class="pdoor" x1="-0.53" y1="3.08" x2="-0.53" y2="2.23"/><path class="pdoor dash" d="M 0.32 3.08 A 0.85 0.85 0 0 0 -0.53 2.23"/><text class="pt sm" x="-.1" y="3.33">' + t('planm.entry') + '</text>';
     PLAN.rooms.forEach((r, ri) => { const c = polyC(r.poly), a = polyArea(r.poly), y = r.id === 'bath' ? c[1] - 0.05 : c[1]; h += '<text class="pt" x="' + c[0] + '" y="' + y + '">' + t('room.' + ri) + '</text><text class="pt sm" x="' + c[0] + '" y="' + (y + 0.24) + '">' + fmtA(a) + ' m²</text>'; });
     if (live) h += '<g id="planMe"><path class="pcone" d="M0 0 L-.28 .75 Q0 .9 .28 .75 Z"/><circle class="pme" r=".11"/></g>';
     el.innerHTML = h + '</svg>';
@@ -1603,9 +1684,8 @@ function initUI() {
   function updMe() { const g = $('#planMe'); if (!g) return; const p = window.__walk.pose(); g.setAttribute('transform', 'translate(' + p.x.toFixed(3) + ' ' + p.z.toFixed(3) + ') rotate(' + (-p.yaw * 180 / Math.PI).toFixed(1) + ')'); $$('#planSvg .rm').forEach(r => r.classList.toggle('cur', +r.dataset.w === window.__walk.room)); }
   function openPlan() {
     renderPlan($('#planSvg'), walking, i => { closePlan(); if (walking) goWalk(i); else { $('#setnja').scrollIntoView({ behavior: 'instant' }); startWalk(i); } });
-    const total = PLAN.rooms.reduce((s, r) => s + polyArea(r.poly), 0);
     $('#planLegend').innerHTML = '<span><i style="background:rgba(255,162,76,.5)"></i>' + t('planm.l1') + '</span><span><i style="background:#7ec8ff"></i>' + t('planm.l2') + '</span><span><i style="background:rgba(255,255,255,.3)"></i>' + t('planm.l3') + '</span>';
-    $('#planFoot').textContent = t('planm.foot', { n: Math.round(total) });
+    $('#planFoot').textContent = t('planm.foot', { n: 40 });
     updMe(); planModal.hidden = false; clearInterval(planTimer); planTimer = setInterval(updMe, 90);
   }
   function closePlan() { planModal.hidden = true; clearInterval(planTimer); }

@@ -157,7 +157,7 @@ if os.environ.get('PREVIEW'):
     sc.render.resolution_x, sc.render.resolution_y = 800, 600
     sc.cycles.samples = 128; sc.cycles.use_denoising = True
     sc.view_settings.view_transform = 'AgX'
-    views = {'hall': ((-0.15, 1.6, -0.6), (-0.15, 1.2, 2.89)), 'living': ((3.9, 1.6, -0.5), (2.5, 1.0, -3.9)),
+    views = {'hall': ((-0.15, 1.6, -0.6), (-0.15, 1.2, 3.08)), 'living': ((3.9, 1.6, -0.5), (2.5, 1.0, -3.9)),
              'bedroom': ((-0.6, 1.6, -1.7), (-2.6, 0.9, -3.3)), 'kitchen': ((-3.9, 1.6, -3.6), (-3.9, 1.0, 0.1)),
              'bath': ((-1.0, 1.6, -0.5), (-2.9, 1.0, -0.2))}
     for name, (p, t) in views.items():
