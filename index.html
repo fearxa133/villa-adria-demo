@@ -979,9 +979,9 @@ window.__boot = function () {
   box(0.66, 0.22, 0.02, 0x0b0b0b, ux, 0.3, uz + 0.205, flat);
   const fire = glow(0.6, 0.1, 0.012, 0xff5a1f, ux, 0.28, uz + 0.212, flat);                            // electric fireplace insert (red-orange flames)
   glow(1.7, 0.02, 0.03, 0xffc27a, ux, 0.14, uz + 0.12, flat);                                          // LED under the unit
-  box(0.4, 0.02, 0.22, 0x111111, ux + 0.07, 0.71, uz, flat); box(0.06, 0.1, 0.03, 0x111111, ux + 0.07, 0.76, uz - 0.05, flat);
-  box(1.0, 0.6, 0.05, 0x0b0b0b, ux + 0.07, 1.11, uz - 0.07, flat);                                     // TV standing on the unit
-  const tv = new THREE.Mesh(new THREE.PlaneGeometry(0.96, 0.56), new THREE.MeshBasicMaterial({ map: texTV })); tv.position.set(ux + 0.07, 1.11, uz - 0.044); flat.add(tv);
+  box(0.4, 0.02, 0.22, 0x111111, ux, 0.71, uz, flat); box(0.06, 0.1, 0.03, 0x111111, ux, 0.76, uz - 0.05, flat);
+  box(1.0, 0.6, 0.05, 0x0b0b0b, ux, 1.11, uz - 0.07, flat);                                     // TV standing on the unit
+  const tv = new THREE.Mesh(new THREE.PlaneGeometry(0.96, 0.56), new THREE.MeshBasicMaterial({ map: texTV })); tv.position.set(ux, 1.11, uz - 0.044); flat.add(tv);
   cyl(0.04, 0.06, 0.24, 0xb9aa98, ux + 0.7, 0.82, uz, flat, 10);                                       // little sculpture
   [[4.2, 2.05], [3.92, 1.78], [4.22, 1.5]].forEach(([x, y]) => box(0.5, 0.04, 0.2, 0x161616, x, y, zw + 0.1, flat));   // floating black shelves
   ball(0.06, 0x3c8f50, 4.3, 1.56, zw + 0.1, flat);
@@ -1179,7 +1179,7 @@ window.__boot = function () {
 
   // ---------- baked model: the static interior is rebuilt and light-baked in Blender (tools/bake/), then swapped in as one glTF ----------
   // material order here is the contract with the .glb: its materials are named M<index into BAKE.mats>
-  const BAKE = { mats: [] };
+  const BAKE = { mats: [] }, BV = '2026110302';   // BV: bump on every re-bake, so a cached older .glb can never meet this material order
   flat.traverse(o => {
     if (!o.isMesh || !o.visible || o === fire) return;
     const ms = [].concat(o.material), m = ms[0];       // walls and floors carry one material per face group
@@ -1221,9 +1221,9 @@ window.__boot = function () {
   function loadFlat() {
     flatReq = true;
     Promise.all([
-      new Promise((res, rej) => gl.load('models/flat.glb', res, null, rej)),
-      new Promise((res, rej) => new THREE.TextureLoader().load('models/flat_lm' + RES + '.jpg', res, null, rej)),
-      fetch('models/flat_lm.json').then(r => r.json())
+      new Promise((res, rej) => gl.load('models/flat.glb?v=' + BV, res, null, rej)),
+      new Promise((res, rej) => new THREE.TextureLoader().load('models/flat_lm' + RES + '.jpg?v=' + BV, res, null, rej)),
+      fetch('models/flat_lm.json?v=' + BV).then(r => r.json())
     ]).then(([gltf, lm, info]) => {
       lm.flipY = false; lm.anisotropy = 4;
       const lmI = Math.pow(info.scale, 1 / 2.2) * (info.exposure || 1), made = {};   // the pipeline is gamma-naive: the map holds sRGB(irradiance / scale)
