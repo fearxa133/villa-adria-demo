@@ -1594,8 +1594,16 @@ function initUI() {
   addEventListener('scroll', () => { if (walking && Math.abs(scrollY - lockY) > 1) scrollTo({ top: lockY, behavior: 'instant' }); }, { passive: true });
   ['wheel', 'touchmove'].forEach(ev => addEventListener(ev, e => { if (walking && !e.target.closest('.walknav, .planbox, .lightbox')) e.preventDefault(); }, { passive: false }));
   addEventListener('keydown', e => { if (walking && [' ', 'PageUp', 'PageDown', 'Home', 'End', 'ArrowUp', 'ArrowDown'].includes(e.key) && !e.target.closest('input, textarea, select')) e.preventDefault(); });
+  // lock inside the range where the sticky panel is pinned, otherwise the neighbouring sections stay on top of the walk
+  function pinWalk() {
+    const sec = $('#setnja'), cs = getComputedStyle(sec), top = sec.getBoundingClientRect().top + scrollY;
+    const min = top + parseFloat(cs.paddingTop), max = top + sec.offsetHeight - parseFloat(cs.paddingBottom) - $('#walkStick').offsetHeight;
+    lockY = Math.min(max, Math.max(min, scrollY));
+    if (Math.abs(scrollY - lockY) > 1) scrollTo({ top: lockY, behavior: 'instant' });
+  }
+  addEventListener('resize', () => { if (walking) pinWalk(); });
   addEventListener('walkstate', e => {
-    walking = e.detail.active; document.body.classList.toggle('walking', walking); if (walking) lockY = scrollY;
+    walking = e.detail.active; document.body.classList.toggle('walking', walking); if (walking) pinWalk();
     $('#planView').hidden = walking; $('#walkView').hidden = !walking; $('#walkExit').disabled = false;
     if (walking) paintWalk(); else { cmpOn = false; cmpRender(); refVis(); }
   });
